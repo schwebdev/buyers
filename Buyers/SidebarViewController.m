@@ -36,47 +36,6 @@
     [self.revealViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - Table view data source
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-    // Return the number of sections.
-    return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    // Return the number of rows in the section.
-    return [self.menuItems count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    NSString *CellIdentifier = [self.menuItems objectAtIndex:indexPath.row];
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.backgroundColor = [UIColor colorWithRed:229/255.0f green:229/255.0f blue:229/255.0f alpha:1];
-    switch (indexPath.row) {
-        case 2:
-            
-            break;
-            
-        default:
-            break;
-    }
-    return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];
-    if(indexPath.row == 0) {
-        //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"alert" message:[NSString stringWithFormat:@"home click %@",[_menuItems objectAtIndex:indexPath.row]] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-        //[alert show];
-        
-        [self.revealViewController dismissViewControllerAnimated:YES completion:nil];
-    }
-}
-
 - (void) prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     //NSIndexPath *indexPath = [self.tableView indexPathForSelectedRow];

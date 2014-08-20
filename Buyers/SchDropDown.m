@@ -76,23 +76,30 @@
         
         UIView *popoverView = [[UIView alloc] init];
         
-        UIPickerView *picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 280, 180)];
+//        UIPickerView *picker = [[UIPickerView alloc] initWithFrame:CGRectMake(0, 0, 280, 180)];
+//        //picker.backgroundColor = [UIColor redColor];
+//        picker.delegate = self;
+//        picker.dataSource = self;
+//        [popoverView addSubview:picker];
+
+        UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 280, 200) style:UITableViewStylePlain];
         //picker.backgroundColor = [UIColor redColor];
-        picker.delegate = self;
-        picker.dataSource = self;
-        [popoverView addSubview:picker];
+        table.separatorInset = UIEdgeInsetsZero;
+        table.delegate = self;
+        table.dataSource = self;
+        [popoverView addSubview:table];
         
         popoverContent.view = popoverView;
         
         self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
         self.popover.delegate = self;
-        [self.popover setPopoverContentSize:CGSizeMake(280, 180) animated:NO];
+        [self.popover setPopoverContentSize:CGSizeMake(280, 200) animated:NO];
         
         if(![self.text isEqualToString:@""]) {
             for (int i = 0; i < self.listItems.count; i++) {
                 
                 if([self.text isEqualToString:self.listItems[i][[[self.listItems[i] allKeys] objectAtIndex:0]]]) {
-                    [picker selectRow:i inComponent:0 animated:NO];
+                    //[picker selectRow:i inComponent:0 animated:NO];
                 }
             }
         }
@@ -127,6 +134,41 @@
     self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     [self.popover dismissPopoverAnimated:YES];
 }
+
+
+
+#pragma mark - Table view data source
+
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    // Return the number of sections.
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.listItems.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    static NSString *CellIdentifier = @"cellID";//[self.listItems objectAtIndex:indexPath.row];
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+    }
+    NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
+    cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
+    self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    [self.popover dismissPopoverAnimated:YES];
+}
+
 
 
 @end

@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SchDropDown : UITextField <UITextFieldDelegate, UIPopoverControllerDelegate, UIPickerViewDelegate,UIPickerViewDataSource>
+@interface SchDropDown : UITextField <UITextFieldDelegate, UIPopoverControllerDelegate, UIPickerViewDelegate,UIPickerViewDataSource, UITableViewDataSource, UITableViewDelegate>
 
 @property UIPopoverController *popover;
 @property (nonatomic) NSMutableArray * listItems;

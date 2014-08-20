@@ -18,7 +18,7 @@
 
 - (IBAction)runReportClick:(id)sender {
     
-    if([self.reportType.getSelectedValue isEqualToString:@""]) {
+    if([self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
@@ -45,15 +45,16 @@
     self.reportList.text = @"";
     if(currentSwitch.tag == 0) {
         
-        self.reportList.listItems = [NSMutableArray arrayWithObjects:
-                               @{@"":@""},
-                               @{@"key1":@"2 value 1"},
-                               @{@"key2":@"2 value 2"},
-                               @{@"key3":@"v2 alue 3"}, nil];
+        NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
+        
+        self.reportList.listItems = [NSMutableArray array];
+        
+        for (NSString *report in reports) {
+            [self.reportList.listItems addObject:@{report:report}];
+        }
     } else {
         
         self.reportList.listItems = [NSMutableArray arrayWithObjects:
-                               @{@"":@""},
                                @{@"blah":@"blah"}, nil];
         
     }
@@ -78,14 +79,17 @@
     
     
     self.reportType.listItems = [NSMutableArray arrayWithObjects:
-                            @{@"":@""},
                             @{@"OrderVsIntakeReportViewController":@"Order vs Intake"}, nil];
     
-    self.reportList.listItems = [NSMutableArray arrayWithObjects:
-                           @{@"":@""},
-                           @{@"key1":@"2 value 1"},
-                           @{@"key2":@"2 value 2"},
-                           @{@"key3":@"v2 alue 3"}, nil];
+    
+    
+    NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
+    
+    self.reportList.listItems = [NSMutableArray array];
+    
+    for (NSString *report in reports) {
+        [self.reportList.listItems addObject:@{report:report}];
+    }
     //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
 }
 

@@ -13,6 +13,5 @@
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSString *reportType;
 
-- (void)preLoadView;
 
 @end

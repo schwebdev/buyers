@@ -11,6 +11,7 @@
 #import "SchTextField.h"
 @interface ReportViewController ()
 
+@property SchTextField *saveText;
 @property UIPopoverController *popover;
 @end
 
@@ -67,11 +68,18 @@
     
     NSData *pdfData = [self printToPDFWithRenderer:renderer paperRect:rect];
     
+    NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
     
-    NSString *savePath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:_fileName];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:reportsPath]) [[NSFileManager defaultManager] createDirectoryAtPath:reportsPath withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    NSString *savePath = [reportsPath stringByAppendingPathComponent:_fileName];
     [pdfData writeToFile: savePath  atomically: YES];
     
     NSLog(@"file path: %@", savePath);
+    
+    [self.popover dismissPopoverAnimated:YES];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", _fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+    [alert show];
 }
 
 //
@@ -95,7 +103,18 @@
 //    NSLog(@"file path: %@", documentDirectoryFileName);
 //}
 
-- (IBAction)saveReport:(id)sender {
+- (void)saveReport {
+    NSString *fileName = [self.saveText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    
+    if(fileName.length > 0) {
+        [self savePDFFromWebView:self.webView fileName:[NSString stringWithFormat:@"%@.pdf",fileName]];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please enter a file name"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    }
+}
+
+- (IBAction)saveClick:(id)sender {
     //[self createPDFFromUIVIew:self.webView saveToDocumentWithFileName:@"test.pdf"];
     //[self savePDFFromWebView:self.webView fileName:@"test2.pdf"];
     
@@ -105,14 +124,28 @@
     
     UIView *popoverView = [[UIView alloc] init];
     
-    SchTextField *saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
-    [popoverView addSubview:saveText];
+    self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
+    [popoverView addSubview:self.saveText];
+    
+    
+    UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];    
+    [saveConfirm setTitle:@"confirm" forState:UIControlStateNormal];
+    [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+    
+    //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
+    [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
+    
+    [saveConfirm setFrame:CGRectMake(60, 70, 150, 56)];
+    [saveConfirm addTarget:self action:@selector(saveReport) forControlEvents:UIControlEventTouchUpInside];
+    
+    [popoverView addSubview:saveConfirm];
     
     popoverContent.view = popoverView;
     
     self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
     self.popover.delegate = self;
-    [self.popover setPopoverContentSize:CGSizeMake(270, 70) animated:NO];
+    [self.popover setPopoverContentSize:CGSizeMake(270, 136) animated:NO];
     
     [self.popover presentPopoverFromBarButtonItem:btn permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     
@@ -127,13 +160,7 @@
     return self;
 }
 
-- (void)preLoadView {
-    
-    NSString *htmlFile = [[NSBundle mainBundle] pathForResource:@"OrderVsIntake" ofType:@"html"];
-    NSString *htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSUTF8StringEncoding error:nil];
-    
-    [self.webView loadHTMLString:htmlString baseURL:nil];
-}
+     
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -149,7 +176,7 @@
     
     [self.webView loadHTMLString:htmlString baseURL:nil];
     
-    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"save" style:UIBarButtonItemStylePlain target:self action:@selector(saveReport:)];
+    UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"save" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
     self.navigationItem.rightBarButtonItem = button;
     
 //    SchTextField *saveText = [[SchTextField alloc]initWithFrame:CGRectMake(400, 20, 200, 50)];
