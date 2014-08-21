@@ -8,13 +8,26 @@
 
 #import "ReportHomeViewController.h"
 #import "SWRevealViewController.h"
-
+#import "ReportViewController.h"
 @interface ReportHomeViewController ()
 
 @end
 
 @implementation ReportHomeViewController
 
+- (IBAction)viewReportClick:(id)sender {
+    
+    if([self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
+        vc.reportType = @"Order Vs Intake Report";
+        // [vc preLoadView];
+        
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 
 - (IBAction)runReportClick:(id)sender {
     

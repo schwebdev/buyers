@@ -341,6 +341,9 @@
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="viewReportClick:" destination="q89-YX-Bfy" eventType="touchUpInside" id="gQY-fR-aTC"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" id="52f-7V-XuT">
                                 <rect key="frame" x="562" y="250" width="412" height="50"/>
@@ -402,7 +405,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <webView contentMode="scaleToFill" id="pJr-Oe-mmW">
+                            <webView tag="1" contentMode="scaleToFill" scalesPageToFit="YES" id="pJr-Oe-mmW">
                                 <rect key="frame" x="0.0" y="85" width="1024" height="683"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -410,6 +413,14 @@
                                     <outlet property="delegate" destination="x01-Yd-2Ta" id="B2D-4Y-Tzp"/>
                                 </connections>
                             </webView>
+                            <view contentMode="scaleToFill" id="UXZ-2K-aNq" customClass="UIScrollView">
+                                <rect key="frame" x="0.0" y="85" width="1024" height="683"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                                <connections>
+                                    <outlet property="delegate" destination="x01-Yd-2Ta" id="8px-wf-AYM"/>
+                                </connections>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
@@ -417,6 +428,7 @@
                     <navigationItem key="navigationItem" id="Xwr-Nj-f5l"/>
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <connections>
+                        <outlet property="scrollView" destination="UXZ-2K-aNq" id="aRw-6i-U1x"/>
                         <outlet property="webView" destination="pJr-Oe-mmW" id="9jD-zZ-Jky"/>
                     </connections>
                 </viewController>

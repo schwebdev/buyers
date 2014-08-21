@@ -16,6 +16,5 @@
 
 - (IBAction)reportFilterChange:(id)sender;
 
-- (IBAction)runReportClick:(id)sender;
 
 @end
