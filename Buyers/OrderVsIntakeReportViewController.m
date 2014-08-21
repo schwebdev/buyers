@@ -21,6 +21,7 @@
     vc.reportType = @"Order Vs Intake Report";
    // [vc preLoadView];
     
+    [vc generateReport];
     
     [self.navigationController pushViewController:vc animated:YES];
 }

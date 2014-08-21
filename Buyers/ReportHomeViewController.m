@@ -23,8 +23,12 @@
     } else {
         ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
         vc.reportType = @"Order Vs Intake Report";
-        // [vc preLoadView];
         
+        [vc view];
+        NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
+        NSString *filePath = [reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        
+        [vc loadPDF:filePath];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -95,15 +99,7 @@
                             @{@"OrderVsIntakeReportViewController":@"Order vs Intake"}, nil];
     
     
-    
-    NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
-    
-    self.reportList.listItems = [NSMutableArray array];
-    
-    for (NSString *report in reports) {
-        [self.reportList.listItems addObject:@{report:report}];
-    }
-    //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
+        //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -115,6 +111,16 @@
     
     [self setMenuButton:2 title:@"reports 2"];
     [self setMenuButton:3 title:@"reports 3"];
+    
+    
+    NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
+    
+    self.reportList.listItems = [NSMutableArray array];
+    
+    for (NSString *report in reports) {
+        [self.reportList.listItems addObject:@{report:report}];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning

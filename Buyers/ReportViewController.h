@@ -10,9 +10,9 @@
 #import "SchPDFView.h"
 @interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UIScrollViewDelegate>
 
-@property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (strong, nonatomic) NSString *reportType;
 
-
+- (void)generateReport;
+- (void)loadPDF:(NSString *)fileName;
 @end
