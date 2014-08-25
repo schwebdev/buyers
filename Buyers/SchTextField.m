@@ -21,7 +21,7 @@
     self.borderStyle = UITextBorderStyleNone;
     self.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0f];
     self.textColor = [UIColor darkGrayColor];
-    [self.layer setBorderColor:[UIColor darkGrayColor].CGColor];
+    [self.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [self.layer setBorderWidth:2];
     [self.layer setCornerRadius:self.frame.size.height / 2];
     self.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);

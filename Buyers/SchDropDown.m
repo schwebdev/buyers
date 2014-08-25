@@ -27,7 +27,7 @@
     self.borderStyle = UITextBorderStyleNone;
     self.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0f];
     self.textColor = [UIColor darkGrayColor];
-    [self.layer setBorderColor:[UIColor darkGrayColor].CGColor];
+    [self.layer setBorderColor:[UIColor lightGrayColor].CGColor];
     [self.layer setBorderWidth:2];
     [self.layer setCornerRadius:self.frame.size.height / 2];
     self.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0);
@@ -159,6 +159,13 @@
     }
     NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
     cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    
+    UIView *bgColorView = [[UIView alloc] init];
+    bgColorView.backgroundColor = [UIColor clearColor];
+    bgColorView.layer.masksToBounds = YES;
+    cell.selectedBackgroundView = bgColorView;
+    
+    
     return cell;
 }
 

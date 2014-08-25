@@ -209,7 +209,11 @@
     self.navigationItem.rightBarButtonItem = button;
     
 }
-
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    
+}
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
@@ -234,12 +238,14 @@
 */
 
 - (void)generateReport {
+    
     NSString *htmlFile = [[NSBundle mainBundle] pathForResource:@"OrderVsIntake" ofType:@"html"];
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSUTF8StringEncoding error:nil];
     self.tempWebView = [[UIWebView alloc] init];
     [self.tempWebView loadHTMLString:htmlString baseURL:nil];
     self.tempWebView.delegate = self;
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportType ]]];
+    self.scrollView.hidden = YES;
 }
 - (void)loadPDF:(NSString *)fileName {
     
@@ -259,6 +265,11 @@
     
     pageView.pdf = pdf;
     
+    NSArray *viewsToRemove = [self.scrollView subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    
     [self.scrollView addSubview:pageView];
     
     [self.scrollView setContentSize:pageView.frame.size];
@@ -270,6 +281,8 @@
     
     NSLog(@"pageView size: %f x %f", pageView.frame.size.width, pageView.frame.size.height);
     NSLog(@"scrollView size: %f x %f", self.scrollView.frame.size.width, self.scrollView.frame.size.height);
+    
+    self.scrollView.hidden = NO;
     
 }
 - (void)webViewDidFinishLoad:(UIWebView *)webView {

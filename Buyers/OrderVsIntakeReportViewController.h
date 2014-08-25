@@ -10,8 +10,9 @@
 #import "BaseViewController.h"
 #import "SchTextField.h"
 
-@interface OrderVsIntakeReportViewController : BaseViewController
+@interface OrderVsIntakeReportViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UITableView *departmentsTable;
 - (IBAction)runReportClick:(id)sender;
 
 @end
