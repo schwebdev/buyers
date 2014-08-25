@@ -8,11 +8,11 @@
 
 #import "BaseViewController.h"
 #import "SchPDFView.h"
-@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UIScrollViewDelegate>
+@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate>
 
-@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+@property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSString *reportType;
 
 - (void)generateReport;
-- (void)loadPDF:(NSString *)fileName;
+- (void)loadReport:(NSString *)fileName;
 @end

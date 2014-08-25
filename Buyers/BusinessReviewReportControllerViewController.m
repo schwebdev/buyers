@@ -1,22 +1,21 @@
 //
-//  OrderVsIntakeReportViewController.m
+//  BusinessReviewReportControllerViewController.m
 //  Buyers
 //
-//  Created by webdevelopment on 15/08/2014.
+//  Created by webdevelopment on 25/08/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "OrderVsIntakeReportViewController.h"
+#import "BusinessReviewReportControllerViewController.h"
 #import "ReportViewController.h"
 
-@interface OrderVsIntakeReportViewController ()
+@interface BusinessReviewReportControllerViewController ()
 
 @property (nonatomic) NSMutableArray * departmentsList;
 
 @end
 
-@implementation OrderVsIntakeReportViewController
-
+@implementation BusinessReviewReportControllerViewController
 
 - (IBAction)runReportClick:(id)sender {
     
@@ -26,8 +25,8 @@
         NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
     }
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
-    vc.reportType = @"OrderVsIntake";
-   // [vc preLoadView];
+    vc.reportType = @"BusinessReview";
+    // [vc preLoadView];
     
     [vc view];
     [vc generateReport];
@@ -40,7 +39,7 @@
     [super viewDidLoad];
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"run and view" title2:@"reports" image:@"homeReportsLogo.png"];
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"order vs intake by week report"]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"business review report"]];
     
     CALayer *separator = [CALayer layer];
     separator.frame = CGRectMake(802, 100, 1, 589);
@@ -48,22 +47,22 @@
     [self.view.layer addSublayer:separator];
     
     self.departmentsList = [NSMutableArray arrayWithObjects:
-                      @{@"1":@"blah1"},
-                      @{@"2":@"blah2"},
-                      @{@"3":@"blah3"},
-                      @{@"4":@"blah4"},
-                      @{@"5":@"blah5"},
-                      @{@"6":@"blah6"},
-                      @{@"7":@"blah7"},
-                      @{@"8":@"blah8"},
-                      @{@"9":@"blah9"},
-                      @{@"10":@"blah10"},
-                      @{@"11":@"blah11"},
-                      @{@"12":@"blah12"},
-                      @{@"13":@"blah13"},
-                      @{@"14":@"blah14"},
-                      @{@"15":@"blah15"},
-                      nil];
+                            @{@"1":@"blah1"},
+                            @{@"2":@"blah2"},
+                            @{@"3":@"blah3"},
+                            @{@"4":@"blah4"},
+                            @{@"5":@"blah5"},
+                            @{@"6":@"blah6"},
+                            @{@"7":@"blah7"},
+                            @{@"8":@"blah8"},
+                            @{@"9":@"blah9"},
+                            @{@"10":@"blah10"},
+                            @{@"11":@"blah11"},
+                            @{@"12":@"blah12"},
+                            @{@"13":@"blah13"},
+                            @{@"14":@"blah14"},
+                            @{@"15":@"blah15"},
+                            nil];
 }
 
 - (void)didReceiveMemoryWarning
@@ -73,15 +72,15 @@
 }
 
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+ {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
@@ -113,4 +112,6 @@
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     [[tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
 }
+
+
 @end

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0B288A5F19A497D800F62B63 /* SchDropDown.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A5E19A497D800F62B63 /* SchDropDown.m */; };
 		0B288A6219A5E94700F62B63 /* SchPDFView.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A6119A5E94700F62B63 /* SchPDFView.m */; };
+		0B288A6519AB7AF100F62B63 /* BusinessReviewReportControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A6419AB7AF100F62B63 /* BusinessReviewReportControllerViewController.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -126,6 +127,8 @@
 		0B288A5E19A497D800F62B63 /* SchDropDown.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchDropDown.m; sourceTree = "<group>"; };
 		0B288A6019A5E94700F62B63 /* SchPDFView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SchPDFView.h; sourceTree = "<group>"; };
 		0B288A6119A5E94700F62B63 /* SchPDFView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SchPDFView.m; sourceTree = "<group>"; };
+		0B288A6319AB7AF100F62B63 /* BusinessReviewReportControllerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BusinessReviewReportControllerViewController.h; sourceTree = "<group>"; };
+		0B288A6419AB7AF100F62B63 /* BusinessReviewReportControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessReviewReportControllerViewController.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -400,10 +403,12 @@
 				0B7630A719A2479B00949155 /* reportTemplate */,
 				0BC036421993B5EB00B175AD /* ReportHomeViewController.h */,
 				0BC036431993B5EB00B175AD /* ReportHomeViewController.m */,
-				0B7630A1199E0BCD00949155 /* OrderVsIntakeReportViewController.h */,
-				0B7630A2199E0BCD00949155 /* OrderVsIntakeReportViewController.m */,
 				0B7630A419A2121700949155 /* ReportViewController.h */,
 				0B7630A519A2121700949155 /* ReportViewController.m */,
+				0B7630A1199E0BCD00949155 /* OrderVsIntakeReportViewController.h */,
+				0B7630A2199E0BCD00949155 /* OrderVsIntakeReportViewController.m */,
+				0B288A6319AB7AF100F62B63 /* BusinessReviewReportControllerViewController.h */,
+				0B288A6419AB7AF100F62B63 /* BusinessReviewReportControllerViewController.m */,
 			);
 			name = Reports;
 			sourceTree = "<group>";
@@ -702,6 +707,7 @@
 			files = (
 				0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */,
 				0B970B6B199376C9006D0358 /* PlayingCardCell.m in Sources */,
+				0B288A6519AB7AF100F62B63 /* BusinessReviewReportControllerViewController.m in Sources */,
 				0BC95642198FDABD00CD45D5 /* AppDelegate.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,

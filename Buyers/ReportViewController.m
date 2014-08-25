@@ -13,8 +13,7 @@
 
 @property SchTextField *saveText;
 @property UIPopoverController *popover;
-@property UIWebView *tempWebView;
-@property NSString *pdfPath;
+@property NSString *filePath;
 @end
 
 @implementation ReportViewController
@@ -105,11 +104,55 @@
 //    NSLog(@"file path: %@", documentDirectoryFileName);
 //}
 
+- (void)exportReportAsPDF {
+    
+    int height, width, header, sidespace;
+    height = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.height"] intValue] * 0.8; //1351;// * 0.805;
+    width = [[self.webView stringByEvaluatingJavaScriptFromString:@"document.width"] intValue] * 0.8; //2068;// * 0.805;
+    header = 0;
+    sidespace = 0;
+    NSLog(@"report size: %d x %d", width, height);
+    
+    //generate temp pdf
+    UIEdgeInsets pageMargins = UIEdgeInsetsMake(header, sidespace, header, sidespace);
+    
+    self.webView.viewPrintFormatter.contentInsets = pageMargins;
+    
+    UIPrintPageRenderer *renderer = [[UIPrintPageRenderer alloc] init];
+    
+    [renderer addPrintFormatter:self.webView.viewPrintFormatter startingAtPageAtIndex:0];
+    
+    CGRect rect = CGRectMake(0, 0, width, height);
+    
+    [renderer setValue:[NSValue valueWithCGRect:rect] forKey:@"paperRect"];
+    [renderer setValue:[NSValue valueWithCGRect:rect] forKey:@"printableRect"];
+    
+    
+    NSMutableData *pdfData = [NSMutableData data];
+    
+    UIGraphicsBeginPDFContextToData( pdfData, rect, nil );
+    
+    [renderer prepareForDrawingPages: NSMakeRange(0, renderer.numberOfPages)];
+    
+    CGRect bounds = UIGraphicsGetPDFContextBounds();
+    
+    for ( int i = 0 ; i < 1 ; i++ )
+    {
+        UIGraphicsBeginPDFPage();
+        
+        [renderer drawPageAtIndex: i inRect: bounds];
+    }
+    
+    UIGraphicsEndPDFContext();
+    
+    self.filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.pdf"];
+    [pdfData writeToFile: self.filePath  atomically: YES];
+}
 - (void)saveReport {
     NSString *fileName = [self.saveText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     
     if(fileName.length > 0) {
-        fileName = [fileName stringByAppendingString:@".pdf"];
+        fileName = [fileName stringByAppendingString:@".html"];
         
         //copy temp pdf
         NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
@@ -118,9 +161,17 @@
         
         NSString *savePath = [reportsPath stringByAppendingPathComponent:fileName];
         
-        NSLog(@"temp file path: %@", self.pdfPath);
+        NSLog(@"temp file path: %@", self.filePath);
         
-        [[NSFileManager defaultManager] copyItemAtPath:self.pdfPath toPath:savePath error:nil];
+        //[[NSFileManager defaultManager] copyItemAtPath:self.pdfPath toPath:savePath error:nil];
+        
+        
+        NSString *htmlString = [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+        
+        [htmlString writeToFile:savePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+        
+        NSLog(@"%@",htmlString);
+        
         
         [self.popover dismissPopoverAnimated:YES];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
@@ -169,25 +220,6 @@
     
 }
 
-//- (void)centerScrollViewContents {
-//    CGSize boundsSize = self.scrollView.bounds.size;
-//    CGRect contentsFrame = ((UIView*)self.scrollView.subviews[0]).frame;
-//    
-//    if(contentsFrame.size.width < boundsSize.width) {
-//        contentsFrame.origin.x = (boundsSize.width - contentsFrame.size.width) / 2.0f;
-//    } else {
-//        contentsFrame.origin.x = 0.0f;
-//    }
-//    
-//    if(contentsFrame.size.height < boundsSize.height) {
-//        contentsFrame.origin.y = (boundsSize.height - contentsFrame.size.height) / 2.0f;
-//    } else {
-//        contentsFrame.origin.y = 0.0f;
-//    }
-//    
-//    ((UIView*)self.scrollView.subviews[0]).frame = contentsFrame;
-//}
-
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
@@ -206,7 +238,9 @@
 
     
     UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"save" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
-    self.navigationItem.rightBarButtonItem = button;
+    UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"save pdf" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
+    //self.navigationItem.rightBarButtonItem = button;
+    self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:button,button2,nil];
     
 }
 - (void)viewWillAppear:(BOOL)animated {
@@ -240,111 +274,99 @@
 - (void)generateReport {
     
     NSString *htmlFile = [[NSBundle mainBundle] pathForResource:@"OrderVsIntake" ofType:@"html"];
+    
     NSString *htmlString = [NSString stringWithContentsOfFile:htmlFile encoding:NSUTF8StringEncoding error:nil];
-    self.tempWebView = [[UIWebView alloc] init];
-    [self.tempWebView loadHTMLString:htmlString baseURL:nil];
-    self.tempWebView.delegate = self;
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd  hh:mm:ss"];
+    
+    NSString *dateTime = [dateFormatter stringFromDate:[NSDate date]];
+    
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##TITLE##" withString:dateTime];
+    
+    NSString *htmlRows = @"";
+    
+    for (int i=0; i < 50; i++) {
+        htmlRows = [htmlRows stringByAppendingString:@"<tr>"];
+        htmlRows = [htmlRows stringByAppendingString:[NSString stringWithFormat:@"<td>BRAND%d</td>", i]];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>4976</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>47.26</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>26431</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>677068</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>&pound;25.62</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>23</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>444</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>-25987</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>-98%</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>11584</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>-665484</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>-98%</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>&pound;26.09</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>0</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"<td>-23</td>"];
+        htmlRows = [htmlRows stringByAppendingString:@"</tr>"];
+
+    }
+    
+    htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##ROWS##" withString:htmlRows];
+    
+    [self.webView loadHTMLString:htmlString baseURL:nil];
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportType ]]];
-    self.scrollView.hidden = YES;
+    self.webView.hidden = YES;
 }
-- (void)loadPDF:(NSString *)fileName {
+- (void)loadReport:(NSString *)fileName {
     
-    self.pdfPath = fileName;
+    self.filePath = fileName;
     
-    if([fileName rangeOfString:@"tmp.pdf"].location == NSNotFound) {
-        [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",fileName ]]];
-    }
-    NSLog(@"load pdf: %@", fileName);
-    CFURLRef pdfURL = CFURLCreateWithFileSystemPath(NULL, (CFStringRef)fileName, kCFURLPOSIXPathStyle, false);
-    CGPDFDocumentRef pdf = CGPDFDocumentCreateWithURL(pdfURL);
-    CGPDFPageRef page = CGPDFDocumentGetPage(pdf, 1);
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",fileName ]]];
     
-    CGRect rect = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
+    NSLog(@"load report: %@", fileName);
     
-    SchPDFView *pageView = [[SchPDFView alloc] initWithFrame:rect];
     
-    pageView.pdf = pdf;
+    NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] ;
     
-    NSArray *viewsToRemove = [self.scrollView subviews];
-    for (UIView *v in viewsToRemove) {
-        [v removeFromSuperview];
-    }
+    NSString *reportPath = [reportsPath stringByAppendingPathComponent:fileName];
     
-    [self.scrollView addSubview:pageView];
+    NSString *htmlString = [NSString stringWithContentsOfFile:reportPath encoding:NSUTF8StringEncoding error:nil];
+    [self.webView loadHTMLString:htmlString baseURL:nil];
+    self.webView.hidden = YES;
     
-    [self.scrollView setContentSize:pageView.frame.size];
-    CGFloat scaleWidth = self.scrollView.frame.size.width / self.scrollView.contentSize.width;
-    CGFloat scaleHeight = self.scrollView.frame.size.height / self.scrollView.contentSize.height;
+//    CFURLRef pdfURL = CFURLCreateWithFileSystemPath(NULL, (CFStringRef)fileName, kCFURLPOSIXPathStyle, false);
+//    CGPDFDocumentRef pdf = CGPDFDocumentCreateWithURL(pdfURL);
+//    CGPDFPageRef page = CGPDFDocumentGetPage(pdf, 1);
+//    
+//    CGRect rect = CGPDFPageGetBoxRect(page, kCGPDFMediaBox);
+//    
+//    SchPDFView *pageView = [[SchPDFView alloc] initWithFrame:rect];
+//    
+//    pageView.pdf = pdf;
+//    
+//    NSArray *viewsToRemove = [self.scrollView subviews];
+//    for (UIView *v in viewsToRemove) {
+//        [v removeFromSuperview];
+//    }
     
-    self.scrollView.minimumZoomScale = MAX(scaleWidth, scaleHeight);
-    self.scrollView.maximumZoomScale = 1.0f;
-    
-    NSLog(@"pageView size: %f x %f", pageView.frame.size.width, pageView.frame.size.height);
-    NSLog(@"scrollView size: %f x %f", self.scrollView.frame.size.width, self.scrollView.frame.size.height);
-    
-    self.scrollView.hidden = NO;
+//    [self.scrollView addSubview:pageView];
+//    
+//    [self.scrollView setContentSize:pageView.frame.size];
+//    CGFloat scaleWidth = self.scrollView.frame.size.width / self.scrollView.contentSize.width;
+//    CGFloat scaleHeight = self.scrollView.frame.size.height / self.scrollView.contentSize.height;
+//    
+//    self.scrollView.minimumZoomScale = MAX(scaleWidth, scaleHeight);
+//    self.scrollView.maximumZoomScale = 1.0f;
+//    
+//    NSLog(@"pageView size: %f x %f", pageView.frame.size.width, pageView.frame.size.height);
+//    NSLog(@"scrollView size: %f x %f", self.scrollView.frame.size.width, self.scrollView.frame.size.height);
     
 }
+
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
-    
-    if(webView.tag == 0) {
-        int height, width, header, sidespace;
-        height = [[webView stringByEvaluatingJavaScriptFromString:@"document.height"] intValue] * 0.8; //1351;// * 0.805;
-        width = [[webView stringByEvaluatingJavaScriptFromString:@"document.width"] intValue] * 0.8; //2068;// * 0.805;
-        header = 0;
-        sidespace = 0;
-        NSLog(@"report size: %d x %d", width, height);
-        
-        //generate temp pdf
-        UIEdgeInsets pageMargins = UIEdgeInsetsMake(header, sidespace, header, sidespace);
-        
-        webView.viewPrintFormatter.contentInsets = pageMargins;
-        
-        UIPrintPageRenderer *renderer = [[UIPrintPageRenderer alloc] init];
-        
-        [renderer addPrintFormatter:webView.viewPrintFormatter startingAtPageAtIndex:0];
-        
-        CGRect rect = CGRectMake(0, 0, width, height);
-        
-        [renderer setValue:[NSValue valueWithCGRect:rect] forKey:@"paperRect"];
-        [renderer setValue:[NSValue valueWithCGRect:rect] forKey:@"printableRect"];
-        
-        
-        NSMutableData *pdfData = [NSMutableData data];
-        
-        UIGraphicsBeginPDFContextToData( pdfData, rect, nil );
-        
-        [renderer prepareForDrawingPages: NSMakeRange(0, renderer.numberOfPages)];
-        
-        CGRect bounds = UIGraphicsGetPDFContextBounds();
-        
-        for ( int i = 0 ; i < 1 ; i++ )
-        {
-            UIGraphicsBeginPDFPage();
-            
-            [renderer drawPageAtIndex: i inRect: bounds];
-        }
-        
-        UIGraphicsEndPDFContext();
-        
-        self.pdfPath = [NSTemporaryDirectory() stringByAppendingPathComponent:@"tmp.pdf"];
-        [pdfData writeToFile: self.pdfPath  atomically: YES];
-        
-        
-        [self loadPDF:self.pdfPath];
-    }
+    self.webView.hidden = NO;
 }
 
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView {
-    return scrollView.subviews[0];
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView {
-    //[self centerScrollViewContents];
-}
-
-- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale {
-    
-}
 
 @end

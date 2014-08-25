@@ -22,13 +22,13 @@
         [alert show];
     } else {
         ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
-        vc.reportType = @"Order Vs Intake Report";
+        //vc.reportType = @"Order Vs Intake Report";
         
         [vc view];
-        NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
-        NSString *filePath = [reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        //NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
+        NSString *filePath = [self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         
-        [vc loadPDF:filePath];
+        [vc loadReport:filePath];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
@@ -39,7 +39,7 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"OrderVsIntakeReportViewController"];
+        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -96,7 +96,9 @@
     
     
     self.reportType.listItems = [NSMutableArray arrayWithObjects:
-                            @{@"OrderVsIntakeReportViewController":@"Order vs Intake"}, nil];
+                                 @{@"OrderVsIntakeReport":@"Order vs Intake Report"},
+                                 @{@"BusinessReviewReport":@"Business Review Report"},
+                                 nil];
     
     
         //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
