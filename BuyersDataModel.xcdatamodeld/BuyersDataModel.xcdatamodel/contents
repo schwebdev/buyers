@@ -25,17 +25,13 @@
         <relationship name="productMaterial" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="material" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Product" representedClassName="Product" syncable="YES">
-        <attribute name="productBrand" optional="YES" attributeType="String" maxValueString="100" syncable="YES"/>
-        <attribute name="productCategory" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="productCode" attributeType="String" minValueString="0" maxValueString="10" indexed="YES" syncable="YES"/>
-        <attribute name="productColour" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="productImageData" optional="YES" attributeType="Binary" syncable="YES"/>
-        <attribute name="productMaterial" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="productName" attributeType="String" maxValueString="50" indexed="YES" syncable="YES"/>
         <attribute name="productNotes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productPrice" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="productSupplier" optional="YES" attributeType="String" maxValueString="100" syncable="YES"/>
         <relationship name="brand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brand" inverseName="productBrand" inverseEntity="Brand" syncable="YES"/>
+        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductCategory" inverseName="productCategory" inverseEntity="ProductCategory" syncable="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Collection" inverseName="products" inverseEntity="Collection" syncable="YES"/>
         <relationship name="colour" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Colour" inverseName="productColour" inverseEntity="Colour" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Image" inverseName="product" inverseEntity="Image" syncable="YES"/>
@@ -43,10 +39,14 @@
         <relationship name="productOrder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderProduct" inverseEntity="ProductOrder" syncable="YES"/>
         <relationship name="supplier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Supplier" inverseName="productSupplier" inverseEntity="Supplier" syncable="YES"/>
     </entity>
+    <entity name="ProductCategory" representedClassName="ProductCategory" syncable="YES">
+        <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="productCategory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
+    </entity>
     <entity name="ProductOrder" representedClassName="ProductOrder" syncable="YES">
         <attribute name="productOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
-        <relationship name="orderCollection" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Collection" inverseName="collectionProductOrder" inverseEntity="Collection" syncable="YES"/>
-        <relationship name="orderProduct" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="productOrder" inverseEntity="Product" syncable="YES"/>
+        <relationship name="orderCollection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Collection" inverseName="collectionProductOrder" inverseEntity="Collection" syncable="YES"/>
+        <relationship name="orderProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="productOrder" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Supplier" representedClassName="Supplier" syncable="YES">
         <attribute name="supplierName" attributeType="String" maxValueString="100" syncable="YES"/>
@@ -58,8 +58,9 @@
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="298"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="238"/>
+        <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="73"/>
-        <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="88"/>
+        <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
     </elements>
 </model>

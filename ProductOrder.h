@@ -14,20 +14,7 @@
 @interface ProductOrder : NSManagedObject
 
 @property (nonatomic, retain) NSNumber * productOrder;
-@property (nonatomic, retain) NSSet *orderCollection;
-@property (nonatomic, retain) NSSet *orderProduct;
-@end
-
-@interface ProductOrder (CoreDataGeneratedAccessors)
-
-- (void)addOrderCollectionObject:(Collection *)value;
-- (void)removeOrderCollectionObject:(Collection *)value;
-- (void)addOrderCollection:(NSSet *)values;
-- (void)removeOrderCollection:(NSSet *)values;
-
-- (void)addOrderProductObject:(Product *)value;
-- (void)removeOrderProductObject:(Product *)value;
-- (void)addOrderProduct:(NSSet *)values;
-- (void)removeOrderProduct:(NSSet *)values;
+@property (nonatomic, retain) Collection *orderCollection;
+@property (nonatomic, retain) Product *orderProduct;
 
 @end

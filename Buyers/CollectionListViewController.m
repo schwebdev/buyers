@@ -9,6 +9,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "Product.h"
 #import "Image.h"
+#import "ProductOrder.h"
 
 
 #define LX_LIMITED_MOVEMENT 0
@@ -91,42 +92,6 @@ static const float kProductColumnSpacer = 14.0;
         
         for (int i = 0, ic = [collections count]; i < ic; i++) {
         
-            /*if(i==0) {
-
-            //add dummy product to each collection
-            Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-            
-            product.productCode = @"1461031160";
-            product.productName = @"iced gem abigail";
-            product.productBrand = @"irregular choice";
-            product.productCategory = @"high heels";
-            product.productColour = @"Stone";
-            product.productMaterial = @"Man-Made";
-            product.productPrice = [NSNumber numberWithDouble:90.00];
-            product.productSupplier = @"irregular choice";
-            product.productNotes = @"This is a test product inserted manually";
-            
-            //add collection
-            [product addCollectionsObject:[collections objectAtIndex:i]];
-            
-            //add image
-            UIImage *image = [UIImage imageNamed:@"1461031160_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
-            NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-            
-            product.productImageData = imageData;
-            
-            //add additional images
-            //Image *productImage = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:managedContext];
-            //productImage.imageData = imageData;
-            
-            //[product addImagesObject:productImage];
-            
-                if(![managedContext save:&error]) {
-                    NSLog(@"Could not save product: %@", [error localizedDescription]);
-                    
-                }
-            }*/
-            
             if(collectionListView == nil)
                 collectionListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * kPageWidth), kNavBarHeight, kPageWidth, kPageHeight)];
             
@@ -208,6 +173,49 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptorsProducts = [[NSArray alloc] initWithObjects:alphaSortProducts,nil];
             products = [collectionElement.products sortedArrayUsingDescriptors:sortDescriptorsProducts];
         
+            if(i==0) {
+                
+                //add dummy product to each collection
+                Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
+                
+                product.productCode = @"1461031160";
+                product.productName = @"iced gem abigail";
+                //product.productBrand = @"irregular choice";
+                //product.productCategory = @"high heels";
+                //product.productColour = @"Stone";
+                //product.productMaterial = @"Man-Made";
+                //product.productSupplier = @"irregular choice";
+                product.productPrice = [NSNumber numberWithDouble:90.00];
+                product.productNotes = @"This is a test product inserted manually";
+                
+                //add collection
+                [product addCollectionsObject:[collections objectAtIndex:i]];
+                
+                //add image
+                UIImage *image = [UIImage imageNamed:@"1461031160_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+                
+                product.productImageData = imageData;
+                
+                //add additional images
+                //Image *productImage = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:managedContext];
+                //productImage.imageData = imageData;
+                
+                //[product addImagesObject:productImage];
+                
+                if(![managedContext save:&error]) {
+                    NSLog(@"Could not save product: %@", [error localizedDescription]);
+                    
+                }
+                
+                //add dummy product to each collection
+                ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:managedContext];
+                
+                productOrder.productOrder = [NSNumber numberWithInt:[products count]];
+                productOrder.orderCollection = collectionElement;
+                productOrder.orderProduct = product.self;
+                
+            }
             
             //if there are products get first 12 product images
             if ([products count] > 0) {

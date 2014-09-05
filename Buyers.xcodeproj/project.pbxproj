@@ -118,8 +118,9 @@
 		5BA0951D19B61FBE006C1782 /* 1106011160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */; };
 		5BA0951F19B620AB006C1782 /* 1159061320_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */; };
 		5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0952019B6212B006C1782 /* 1461031160_main.jpg */; };
-		5BA0952419B8B53A006C1782 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA0952319B8B53A006C1782 /* ProductOrder.m */; };
-		5BDDAA1719A5E48C00073B10 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA1619A5E48C00073B10 /* Product.m */; };
+		5BB56F9B19B8C1280040EBCF /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB56F9A19B8C1280040EBCF /* ProductOrder.m */; };
+		5BB56FB919B8D2860040EBCF /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB56FB819B8D2860040EBCF /* ProductCategory.m */; };
+		5BB56FBC19B8D2950040EBCF /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB56FBB19B8D2950040EBCF /* Product.m */; };
 		5BDDAA1A19A5E4A200073B10 /* Brand.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA1919A5E4A200073B10 /* Brand.m */; };
 		5BDDAA1D19A5E4B400073B10 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA1C19A5E4B400073B10 /* Collection.m */; };
 		5BDDAA2019A5E4D600073B10 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA1F19A5E4D600073B10 /* Colour.m */; };
@@ -273,10 +274,12 @@
 		5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1106011160_main.jpg; sourceTree = "<group>"; };
 		5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159061320_main.jpg; sourceTree = "<group>"; };
 		5BA0952019B6212B006C1782 /* 1461031160_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1461031160_main.jpg; sourceTree = "<group>"; };
-		5BA0952219B8B53A006C1782 /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductOrder.h; sourceTree = "<group>"; };
-		5BA0952319B8B53A006C1782 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductOrder.m; sourceTree = "<group>"; };
-		5BDDAA1519A5E48C00073B10 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
-		5BDDAA1619A5E48C00073B10 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
+		5BB56F9919B8C1280040EBCF /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductOrder.h; sourceTree = "<group>"; };
+		5BB56F9A19B8C1280040EBCF /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductOrder.m; sourceTree = "<group>"; };
+		5BB56FB719B8D2860040EBCF /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCategory.h; sourceTree = "<group>"; };
+		5BB56FB819B8D2860040EBCF /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCategory.m; sourceTree = "<group>"; };
+		5BB56FBA19B8D2950040EBCF /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		5BB56FBB19B8D2950040EBCF /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		5BDDAA1819A5E4A200073B10 /* Brand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Brand.h; path = Buyers/Brand.h; sourceTree = "<group>"; };
 		5BDDAA1919A5E4A200073B10 /* Brand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Brand.m; path = Buyers/Brand.m; sourceTree = "<group>"; };
 		5BDDAA1B19A5E4B400073B10 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = Buyers/Collection.h; sourceTree = "<group>"; };
@@ -497,11 +500,13 @@
 				5B14383319ADE40800A68865 /* CollectionButton.h */,
 				5B14383419ADE40800A68865 /* CollectionButton.m */,
 				5BDDAA2C19A5EA7600073B10 /* Settings.bundle */,
-				5BDDAA1519A5E48C00073B10 /* Product.h */,
-				5BDDAA1619A5E48C00073B10 /* Product.m */,
+				5BB56F9919B8C1280040EBCF /* ProductOrder.h */,
+				5BB56F9A19B8C1280040EBCF /* ProductOrder.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
-				5BA0952219B8B53A006C1782 /* ProductOrder.h */,
-				5BA0952319B8B53A006C1782 /* ProductOrder.m */,
+				5BB56FBA19B8D2950040EBCF /* Product.h */,
+				5BB56FBB19B8D2950040EBCF /* Product.m */,
+				5BB56FB719B8D2860040EBCF /* ProductCategory.h */,
+				5BB56FB819B8D2860040EBCF /* ProductCategory.m */,
 				5BDDAA2719A5E51700073B10 /* Supplier.h */,
 				5BDDAA2819A5E51700073B10 /* Supplier.m */,
 				5BDDAA2419A5E4FD00073B10 /* Material.h */,
@@ -793,7 +798,6 @@
 				5BDDAA1A19A5E4A200073B10 /* Brand.m in Sources */,
 				5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
-				5BDDAA1719A5E48C00073B10 /* Product.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				5BDDAA2919A5E51700073B10 /* Supplier.m in Sources */,
@@ -803,12 +807,14 @@
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				5BDDAA2019A5E4D600073B10 /* Colour.m in Sources */,
 				5BDDAA1D19A5E4B400073B10 /* Collection.m in Sources */,
-				5BA0952419B8B53A006C1782 /* ProductOrder.m in Sources */,
+				5BB56F9B19B8C1280040EBCF /* ProductOrder.m in Sources */,
 				0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */,
 				0B7630A3199E0BCD00949155 /* OrderVsIntakeReportViewController.m in Sources */,
+				5BB56FBC19B8D2950040EBCF /* Product.m in Sources */,
 				0B970B68199376C9006D0358 /* CollectionViewController.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				0B970B6A199376C9006D0358 /* PlayingCard.m in Sources */,
+				5BB56FB919B8D2860040EBCF /* ProductCategory.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,

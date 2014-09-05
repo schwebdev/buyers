@@ -2,33 +2,30 @@
 //  Product.h
 //  Buyers
 //
-//  Created by Web Development on 21/08/2014.
+//  Created by Web Development on 04/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Brand, Collection, Colour, Image, Material, Supplier;
+@class Brand, Collection, Colour, Image, Material, ProductCategory, ProductOrder, Supplier;
 
 @interface Product : NSManagedObject
 
 @property (nonatomic, retain) NSString * productCode;
-@property (nonatomic, retain) NSString * productName;
-@property (nonatomic, retain) NSNumber * productPrice;
-@property (nonatomic, retain) NSString * productNotes;
-@property (nonatomic, retain) NSString * productBrand;
-@property (nonatomic, retain) NSString * productCategory;
-@property (nonatomic, retain) NSString * productSupplier;
-@property (nonatomic, retain) NSString * productColour;
-@property (nonatomic, retain) NSString * productMaterial;
 @property (nonatomic, retain) NSData * productImageData;
-@property (nonatomic, retain) NSSet *collections;
-@property (nonatomic, retain) NSSet *images;
+@property (nonatomic, retain) NSString * productName;
+@property (nonatomic, retain) NSString * productNotes;
+@property (nonatomic, retain) NSNumber * productPrice;
 @property (nonatomic, retain) Brand *brand;
-@property (nonatomic, retain) Supplier *supplier;
-@property (nonatomic, retain) Material *material;
+@property (nonatomic, retain) NSSet *collections;
 @property (nonatomic, retain) Colour *colour;
+@property (nonatomic, retain) NSSet *images;
+@property (nonatomic, retain) Material *material;
+@property (nonatomic, retain) ProductOrder *productOrder;
+@property (nonatomic, retain) Supplier *supplier;
+@property (nonatomic, retain) ProductCategory *category;
 @end
 
 @interface Product (CoreDataGeneratedAccessors)
