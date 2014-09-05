@@ -12,6 +12,7 @@
 		0B288A7219B9C81300F62B63 /* BusinessReview.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B288A7119B9C81200F62B63 /* BusinessReview.html */; };
 		0B288A7719B9C83600F62B63 /* BusinessReviewReportControllerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A7419B9C83600F62B63 /* BusinessReviewReportControllerViewController.m */; };
 		0B288A7819B9C83600F62B63 /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A7619B9C83600F62B63 /* Report.m */; };
+		0B288A7E19B9E2E300F62B63 /* Supplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A7D19B9E2E300F62B63 /* Supplier.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -131,7 +132,6 @@
 		5BDDAA2019A5E4D600073B10 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA1F19A5E4D600073B10 /* Colour.m */; };
 		5BDDAA2319A5E4EC00073B10 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2219A5E4EC00073B10 /* Image.m */; };
 		5BDDAA2619A5E4FD00073B10 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2519A5E4FD00073B10 /* Material.m */; };
-		5BDDAA2919A5E51700073B10 /* Supplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2819A5E51700073B10 /* Supplier.m */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
 /* End PBXBuildFile section */
@@ -156,6 +156,8 @@
 		0B288A7419B9C83600F62B63 /* BusinessReviewReportControllerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BusinessReviewReportControllerViewController.m; sourceTree = "<group>"; };
 		0B288A7519B9C83600F62B63 /* Report.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Report.h; sourceTree = "<group>"; };
 		0B288A7619B9C83600F62B63 /* Report.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Report.m; sourceTree = "<group>"; };
+		0B288A7C19B9E2E300F62B63 /* Supplier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Supplier.h; path = Buyers/Supplier.h; sourceTree = "<group>"; };
+		0B288A7D19B9E2E300F62B63 /* Supplier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Supplier.m; path = Buyers/Supplier.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -304,8 +306,6 @@
 		5BDDAA2219A5E4EC00073B10 /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = Buyers/Image.m; sourceTree = "<group>"; };
 		5BDDAA2419A5E4FD00073B10 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = Buyers/Material.h; sourceTree = "<group>"; };
 		5BDDAA2519A5E4FD00073B10 /* Material.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Material.m; path = Buyers/Material.m; sourceTree = "<group>"; };
-		5BDDAA2719A5E51700073B10 /* Supplier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Supplier.h; path = Buyers/Supplier.h; sourceTree = "<group>"; };
-		5BDDAA2819A5E51700073B10 /* Supplier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Supplier.m; path = Buyers/Supplier.m; sourceTree = "<group>"; };
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
@@ -526,12 +526,12 @@
 				5BB56F9919B8C1280040EBCF /* ProductOrder.h */,
 				5BB56F9A19B8C1280040EBCF /* ProductOrder.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
+				0B288A7C19B9E2E300F62B63 /* Supplier.h */,
+				0B288A7D19B9E2E300F62B63 /* Supplier.m */,
 				5BB56FBA19B8D2950040EBCF /* Product.h */,
 				5BB56FBB19B8D2950040EBCF /* Product.m */,
 				5BB56FB719B8D2860040EBCF /* ProductCategory.h */,
 				5BB56FB819B8D2860040EBCF /* ProductCategory.m */,
-				5BDDAA2719A5E51700073B10 /* Supplier.h */,
-				5BDDAA2819A5E51700073B10 /* Supplier.m */,
 				5BDDAA2419A5E4FD00073B10 /* Material.h */,
 				5BDDAA2519A5E4FD00073B10 /* Material.m */,
 				5BDDAA2119A5E4EC00073B10 /* Image.h */,
@@ -824,8 +824,8 @@
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
+				0B288A7E19B9E2E300F62B63 /* Supplier.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportControllerViewController.m in Sources */,
-				5BDDAA2919A5E51700073B10 /* Supplier.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,

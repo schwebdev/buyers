@@ -78,6 +78,13 @@
     }
     
 }
+
+-(IBAction)startSync:(id)sender {
+    
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"start sync" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    [alert show];
+}
+
 /*
 #pragma mark - Navigation
 

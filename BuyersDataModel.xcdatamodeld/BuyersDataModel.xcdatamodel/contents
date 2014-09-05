@@ -49,6 +49,7 @@
         <relationship name="orderProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="productOrder" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Supplier" representedClassName="Supplier" syncable="YES">
+        <attribute name="supplierCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="supplierName" attributeType="String" maxValueString="100" syncable="YES"/>
         <relationship name="productSupplier" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="supplier" inverseEntity="Product" syncable="YES"/>
     </entity>
@@ -59,8 +60,8 @@
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
         <element name="Product" positionX="-54" positionY="27" width="128" height="238"/>
-        <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
-        <element name="Supplier" positionX="-18" positionY="135" width="128" height="73"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
+        <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
+        <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
     </elements>
 </model>

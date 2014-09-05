@@ -14,4 +14,5 @@
 
 -(IBAction)saveUserName:(id)sender;
 
+-(IBAction)startSync:(id)sender;
 @end

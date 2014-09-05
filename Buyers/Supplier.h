@@ -2,7 +2,7 @@
 //  Supplier.h
 //  Buyers
 //
-//  Created by Web Development on 21/08/2014.
+//  Created by webdevelopment on 05/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface Supplier : NSManagedObject
 
 @property (nonatomic, retain) NSString * supplierName;
+@property (nonatomic, retain) NSString * supplierCode;
 @property (nonatomic, retain) NSSet *productSupplier;
 @end
 

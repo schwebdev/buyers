@@ -67,7 +67,7 @@
                       @{@"15":@"blah15"},
                       nil];
     
-    self.departmentsList = (NSMutableArray *)[Report getSuppliers];
+    //self.departmentsList = (NSMutableArray *)[Report getSuppliers];
 }
 
 - (void)didReceiveMemoryWarning
