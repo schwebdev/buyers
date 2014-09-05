@@ -8,21 +8,38 @@
 
 #import "ReportHomeViewController.h"
 #import "SWRevealViewController.h"
-
+#import "ReportViewController.h"
 @interface ReportHomeViewController ()
 
 @end
 
 @implementation ReportHomeViewController
 
+- (IBAction)viewReportClick:(id)sender {
+    
+    if([self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
+        //vc.reportType = @"Order Vs Intake Report";
+        
+        [vc view];
+        //NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
+        NSString *filePath = [self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        
+        [vc loadReport:filePath];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
 
 - (IBAction)runReportClick:(id)sender {
     
-    if([self.txt1.getSelectedValue isEqualToString:@""]) {
+    if([self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"OrderVsIntakeReportViewController"];
+        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -42,19 +59,20 @@
             }
         }
     //}
-    
+    self.reportList.text = @"";
     if(currentSwitch.tag == 0) {
         
-        self.txt2.listItems = [NSMutableArray arrayWithObjects:
-                               @{@"":@""},
-                               @{@"key1":@"2 value 1"},
-                               @{@"key2":@"2 value 2"},
-                               @{@"key3":@"v2 alue 3"}, nil];
+        NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
+        
+        self.reportList.listItems = [NSMutableArray array];
+        
+        for (NSString *report in reports) {
+            [self.reportList.listItems addObject:@{report:report}];
+        }
     } else {
         
-        self.txt2.listItems = [NSMutableArray arrayWithObjects:
-                               @{@"":@""},
-                               @{@"OrderVsIntakeReportViewController":@"Order vs Intake"}, nil];
+        self.reportList.listItems = [NSMutableArray arrayWithObjects:
+                               @{@"blah":@"blah"}, nil];
         
     }
 }
@@ -77,16 +95,13 @@
     [self.view.layer addSublayer:separator];
     
     
-    self.txt1.listItems = [NSMutableArray arrayWithObjects:
-                            @{@"":@""},
-                            @{@"OrderVsIntakeReportViewController":@"Order vs Intake"}, nil];
+    self.reportType.listItems = [NSMutableArray arrayWithObjects:
+                                 @{@"OrderVsIntakeReport":@"Order vs Intake Report"},
+                                 @{@"BusinessReviewReport":@"Business Review Report"},
+                                 nil];
     
-    self.txt2.listItems = [NSMutableArray arrayWithObjects:
-                           @{@"":@""},
-                           @{@"key1":@"2 value 1"},
-                           @{@"key2":@"2 value 2"},
-                           @{@"key3":@"v2 alue 3"}, nil];
-    //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
+    
+        //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -98,6 +113,19 @@
     
     [self setMenuButton:2 title:@"reports 2"];
     [self setMenuButton:3 title:@"reports 3"];
+    
+    
+    NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
+    if(![[NSFileManager defaultManager] fileExistsAtPath:reportsPath]) [[NSFileManager defaultManager] createDirectoryAtPath:reportsPath withIntermediateDirectories:NO attributes:nil error:nil];
+        
+    NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:reportsPath error:nil];
+
+    self.reportList.listItems = [NSMutableArray array];
+    
+    for (NSString *report in reports) {
+        [self.reportList.listItems addObject:@{report:report}];
+    }
+
 }
 
 - (void)didReceiveMemoryWarning

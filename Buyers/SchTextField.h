@@ -8,10 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SchTextField : UITextField <UITextFieldDelegate, UIPopoverControllerDelegate, UIPickerViewDelegate,UIPickerViewDataSource>
+@interface SchTextField : UITextField 
 
-@property UIPopoverController *popover;
-@property (nonatomic) NSMutableArray * listItems;
-
-- (NSString *)getSelectedValue;
 @end

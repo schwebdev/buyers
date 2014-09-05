@@ -8,14 +8,13 @@
 
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
-#import "SchTextField.h"
+#import "SchDropDown.h"
 @interface ReportHomeViewController : BaseViewController
 
-@property (weak, nonatomic) IBOutlet SchTextField *txt1;
-@property (weak, nonatomic) IBOutlet SchTextField *txt2;
+@property (weak, nonatomic) IBOutlet SchDropDown *reportType;
+@property (weak, nonatomic) IBOutlet SchDropDown *reportList;
 
 - (IBAction)reportFilterChange:(id)sender;
 
-- (IBAction)runReportClick:(id)sender;
 
 @end
