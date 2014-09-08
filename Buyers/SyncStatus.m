@@ -1,18 +1,17 @@
 //
-//  Colour.m
+//  SyncStatus.m
 //  Buyers
 //
 //  Created by webdevelopment on 05/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "Colour.h"
-#import "Product.h"
+#import "SyncStatus.h"
 
 
-@implementation Colour
+@implementation SyncStatus
 
-@dynamic colourName;
-@dynamic productColour;
+@dynamic type;
+@dynamic lastSync;
 
 @end

@@ -10,7 +10,6 @@
 
 @interface Report : NSObject
 
-+ (NSArray *)getSuppliers;
 
 + (NSString *)generateReport:(NSString *)reportType;
 + (void)exportReportAsPDF:(UIWebView *)webView withName:(NSString *)fileName;

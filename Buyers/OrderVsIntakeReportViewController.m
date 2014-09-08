@@ -8,7 +8,8 @@
 
 #import "OrderVsIntakeReportViewController.h"
 #import "ReportViewController.h"
-#import "Report.h"
+#import "Sync.h"
+#import "Supplier.h"
 
 @interface OrderVsIntakeReportViewController ()
 
@@ -23,9 +24,9 @@
     
     for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
         
-        NSDictionary *listItem = (NSDictionary *)self.departmentsList[path.row];
+        Supplier *supplier = (Supplier *)self.departmentsList[path.row];
         //NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
-        NSLog(@"%@, %@",listItem[@"Sup_Code"], listItem[@"Sup_Name"]);
+        NSLog(@"%@, %@",supplier.supplierCode, supplier.supplierName);
     }
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
     vc.reportType = @"OrderVsIntake";
@@ -67,7 +68,9 @@
                       @{@"15":@"blah15"},
                       nil];
     
-    //self.departmentsList = (NSMutableArray *)[Report getSuppliers];
+    
+    
+    self.departmentsList = (NSMutableArray *)[Sync getSuppliers];
 }
 
 - (void)didReceiveMemoryWarning
@@ -100,7 +103,7 @@
     
     //NSDictionary *listItem = (NSDictionary *)self.departmentsList[indexPath.row];
     //cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
-    cell.textLabel.text = self.departmentsList[indexPath.row][@"Sup_Name"];
+    cell.textLabel.text = ((Supplier *)self.departmentsList[indexPath.row]).supplierName;
     
     [cell setAccessoryType:UITableViewCellAccessoryNone];
     for (NSIndexPath *path in [tableView indexPathsForSelectedRows]) {

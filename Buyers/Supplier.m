@@ -12,8 +12,8 @@
 
 @implementation Supplier
 
-@dynamic supplierName;
 @dynamic supplierCode;
+@dynamic supplierName;
 @dynamic productSupplier;
 
 @end

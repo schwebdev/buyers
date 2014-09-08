@@ -2,7 +2,7 @@
 //  Brand.m
 //  Buyers
 //
-//  Created by Web Development on 21/08/2014.
+//  Created by webdevelopment on 05/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 @implementation Brand
 
 @dynamic brandName;
+@dynamic brandRef;
 @dynamic productBrand;
 
 @end

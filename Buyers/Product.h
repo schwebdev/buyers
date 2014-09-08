@@ -2,7 +2,7 @@
 //  Product.h
 //  Buyers
 //
-//  Created by Web Development on 04/09/2014.
+//  Created by webdevelopment on 05/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -19,13 +19,13 @@
 @property (nonatomic, retain) NSString * productNotes;
 @property (nonatomic, retain) NSNumber * productPrice;
 @property (nonatomic, retain) Brand *brand;
+@property (nonatomic, retain) ProductCategory *category;
 @property (nonatomic, retain) NSSet *collections;
 @property (nonatomic, retain) Colour *colour;
 @property (nonatomic, retain) NSSet *images;
 @property (nonatomic, retain) Material *material;
 @property (nonatomic, retain) ProductOrder *productOrder;
 @property (nonatomic, retain) Supplier *supplier;
-@property (nonatomic, retain) ProductCategory *category;
 @end
 
 @interface Product (CoreDataGeneratedAccessors)

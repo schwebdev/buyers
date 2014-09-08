@@ -1,18 +1,15 @@
 //
-//  Colour.m
+//  Sync.h
 //  Buyers
 //
 //  Created by webdevelopment on 05/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "Colour.h"
-#import "Product.h"
+#import <Foundation/Foundation.h>
 
+@interface Sync : NSObject
 
-@implementation Colour
-
-@dynamic colourName;
-@dynamic productColour;
-
++ (BOOL)syncAll;
++ (NSArray *)getSuppliers;
 @end

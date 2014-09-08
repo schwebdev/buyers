@@ -198,24 +198,5 @@
     [pdfData writeToFile:filePath  atomically: YES];
 }
 
-+ (NSArray *)getSuppliers {
-    
-    NSError *error;
-    NSURL *url = [[NSURL alloc] initWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getsuppliers"];
-    
-    NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
-    
-    if(!data) {
-        NSLog(@"download error:%@", error.localizedDescription);
-    }
-    
-    NSArray *suppliers = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    if(suppliers == nil) {
-        NSLog(@"json error: %@", error);
-    }
-    //dictionary[3][@"Sup_Code"]
-    
-    return suppliers;
-}
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "SettingsHomeViewController.h"
+#import "Sync.h"
 
 @interface SettingsHomeViewController ()
 
@@ -81,8 +82,18 @@
 
 -(IBAction)startSync:(id)sender {
     
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"start sync" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-    [alert show];
+    BOOL success = YES;
+    
+    success = [Sync syncAll];
+    
+    if(success) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"sync failed" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
 }
 
 /*

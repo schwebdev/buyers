@@ -13,8 +13,8 @@
 
 @interface Supplier : NSManagedObject
 
-@property (nonatomic, retain) NSString * supplierName;
 @property (nonatomic, retain) NSString * supplierCode;
+@property (nonatomic, retain) NSString * supplierName;
 @property (nonatomic, retain) NSSet *productSupplier;
 @end
 

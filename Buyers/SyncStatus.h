@@ -1,5 +1,5 @@
 //
-//  Image.h
+//  SyncStatus.h
 //  Buyers
 //
 //  Created by webdevelopment on 05/09/2014.
@@ -9,11 +9,10 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Product;
 
-@interface Image : NSManagedObject
+@interface SyncStatus : NSManagedObject
 
-@property (nonatomic, retain) NSData * imageData;
-@property (nonatomic, retain) Product *product;
+@property (nonatomic, retain) NSString * type;
+@property (nonatomic, retain) NSDate * lastSync;
 
 @end

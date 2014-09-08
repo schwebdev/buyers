@@ -2,6 +2,7 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Brand" representedClassName="Brand" syncable="YES">
         <attribute name="brandName" attributeType="String" maxValueString="100" syncable="YES"/>
+        <attribute name="brandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="productBrand" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="brand" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Collection" representedClassName="Collection" syncable="YES">
@@ -53,8 +54,12 @@
         <attribute name="supplierName" attributeType="String" maxValueString="100" syncable="YES"/>
         <relationship name="productSupplier" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="supplier" inverseEntity="Product" syncable="YES"/>
     </entity>
+    <entity name="SyncStatus" representedClassName="SyncStatus" syncable="YES">
+        <attribute name="lastSync" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <elements>
-        <element name="Brand" positionX="-27" positionY="126" width="128" height="73"/>
+        <element name="Brand" positionX="-27" positionY="126" width="128" height="88"/>
         <element name="Collection" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
@@ -63,5 +68,6 @@
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
+        <element name="SyncStatus" positionX="0" positionY="135" width="128" height="73"/>
     </elements>
 </model>
