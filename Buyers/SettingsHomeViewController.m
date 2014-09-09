@@ -61,10 +61,45 @@
     [self setMenuButton:3 title:@"settings 3"];
 }
 
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    [self updateLastSync];
+}
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+-(void)updateLastSync {
+    NSDate *lastSync = [Sync getLastSyncDate];
+    
+    if(lastSync == nil) {
+        _syncLabel.text = @"Please start synchronisation";
+    } else {
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"dd MMMM yyyy HH:mm";
+        
+        _syncLabel.text = [NSString stringWithFormat:@"%@", [dateFormat stringFromDate:lastSync]];
+        
+        //CGSize textSize = [_syncLabel.text sizeWithAttributes:@{NSFontAttributeName: _syncLabel.font, NSForegroundColorAttributeName:[UIColor blackColor]}];
+        
+        int dayDifference = [[NSDate date] timeIntervalSinceDate:lastSync] / 86400;
+        
+        _syncDays.text = [NSString stringWithFormat:@"%d",dayDifference];
+        if(dayDifference >= 5) {
+            _syncDays.superview.backgroundColor = [UIColor colorWithRed:153.0f/255.0f green:0.0f blue:0.0f alpha:1.0f];
+            _syncLabel.superview.backgroundColor = [UIColor colorWithRed:153.0f/255.0f green:0.0f blue:0.0f alpha:1.0f];
+        } else if(dayDifference >= 3) {
+            _syncDays.superview.backgroundColor = [UIColor colorWithRed:220.0f/255.0f green:100.0f/255.0f blue:0.0f alpha:1.0f];
+            _syncLabel.superview.backgroundColor = [UIColor colorWithRed:220.0f/255.0f green:100.0f/255.0f blue:0.0f alpha:1.0f];
+        } else {
+            _syncDays.superview.backgroundColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
+            _syncLabel.superview.backgroundColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
+            
+        }
+    }
 }
 
 -(IBAction)saveUserName:(id)sender {
@@ -87,13 +122,14 @@
     success = [Sync syncAll];
     
     if(success) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"sync failed" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync failed" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     }
     
+    [self updateLastSync];
 }
 
 /*

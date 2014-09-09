@@ -13,5 +13,6 @@
 @property UIPopoverController *popover;
 @property (nonatomic) NSMutableArray * listItems;
 
+- (void)setListItems:(NSMutableArray *)listItems withName:(NSString *)listName withValue:(NSString *)listValue;
 - (NSString *)getSelectedValue;
 @end

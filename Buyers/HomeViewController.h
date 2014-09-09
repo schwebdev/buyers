@@ -10,8 +10,8 @@
 
 @interface HomeViewController : UIViewController
 
-@property (weak, nonatomic) IBOutlet UIButton *button1;
-@property (weak, nonatomic) IBOutlet UIButton *button2;
+@property (nonatomic) IBOutlet UILabel *syncLabel;
+@property (nonatomic) IBOutlet UIImageView *syncImage;
 
 -(IBAction) btnClick:(id)sender;
 @end

@@ -22,11 +22,13 @@
 
 - (IBAction)runReportClick:(id)sender {
     
+    NSLog(@"brand value, %@",[self.BrandsList getSelectedValue]);
+    NSLog(@"supplier value, %@",[self.SuppliersList getSelectedValue]);
     for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
-        
-        Supplier *supplier = (Supplier *)self.departmentsList[path.row];
+        //self.departmentsList[path.row][@"supplierName"];
+        //Supplier *supplier = (Supplier *)self.departmentsList[path.row];
         //NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
-        NSLog(@"%@, %@",supplier.supplierCode, supplier.supplierName);
+        NSLog(@"%@, %@",self.departmentsList[path.row][@"supplierCode"], self.departmentsList[path.row][@"supplierName"]);
     }
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
     vc.reportType = @"OrderVsIntake";
@@ -70,7 +72,10 @@
     
     
     
-    self.departmentsList = (NSMutableArray *)[Sync getSuppliers];
+    self.departmentsList = (NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"];
+    
+    [self.SuppliersList setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
+    [self.BrandsList setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
 }
 
 - (void)didReceiveMemoryWarning
@@ -103,7 +108,7 @@
     
     //NSDictionary *listItem = (NSDictionary *)self.departmentsList[indexPath.row];
     //cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
-    cell.textLabel.text = ((Supplier *)self.departmentsList[indexPath.row]).supplierName;
+    cell.textLabel.text = self.departmentsList[indexPath.row][@"supplierName"];
     
     [cell setAccessoryType:UITableViewCellAccessoryNone];
     for (NSIndexPath *path in [tableView indexPathsForSelectedRows]) {

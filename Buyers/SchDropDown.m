@@ -8,14 +8,27 @@
 
 #import "SchDropDown.h"
 
+@interface SchDropDown ()
+
+@property NSString *listName;
+@property NSString *listValue;
+@end
+
 @implementation SchDropDown
 
 - (NSString *)getSelectedValue {
     NSString *returnVal = @"";
     if(self.listItems!= nil) {
         for (NSDictionary *item in self.listItems) {
-            if([self.text isEqualToString:item[[[item allKeys] objectAtIndex:0]]]) {
-                returnVal = [[item allKeys] objectAtIndex:0];
+            
+            if(self.listName != nil) {
+                if([self.text isEqualToString:item[self.listName]]) {
+                    returnVal = item[self.listValue];
+                }
+            } else {
+                if([self.text isEqualToString:item[[[item allKeys] objectAtIndex:0]]]) {
+                    returnVal = [[item allKeys] objectAtIndex:0];
+                }
             }
         }
     }
@@ -62,6 +75,11 @@
     // Drawing code
 }
 */
+- (void)setListItems:(NSMutableArray *)listItems withName:(NSString *)listName withValue:(NSString *)listValue {
+    self.listItems = listItems;
+    self.listName = listName;
+    self.listValue = listValue;
+}
 
 
 - (BOOL)textFieldShouldBeginEditing:(UITextField *)textField {
@@ -158,7 +176,9 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
-    cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    
+    if(self.listName != nil) cell.textLabel.text = listItem[self.listName];
+    else cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     
     UIView *bgColorView = [[UIView alloc] init];
     bgColorView.backgroundColor = [UIColor clearColor];
@@ -172,7 +192,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
-    self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    
+    if(self.listName != nil) self.text = listItem[self.listName];
+    else self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
+    
     [self.popover dismissPopoverAnimated:YES];
 }
 

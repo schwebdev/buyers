@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Brand" representedClassName="Brand" syncable="YES">
-        <attribute name="brandName" attributeType="String" maxValueString="100" syncable="YES"/>
-        <attribute name="brandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="brandName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="brandRef" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <relationship name="productBrand" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="brand" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Collection" representedClassName="Collection" syncable="YES">
@@ -68,6 +68,6 @@
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
-        <element name="SyncStatus" positionX="0" positionY="135" width="128" height="73"/>
+        <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
     </elements>
 </model>

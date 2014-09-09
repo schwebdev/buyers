@@ -11,5 +11,8 @@
 @interface Sync : NSObject
 
 + (BOOL)syncAll;
-+ (NSArray *)getSuppliers;
+
++ (NSDate *)getLastSyncDate;
+
++ (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column;
 @end

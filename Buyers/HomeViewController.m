@@ -8,6 +8,7 @@
 
 #import "HomeViewController.h"
 #import "SWRevealViewController.h"
+#import "Sync.h"
 
 @interface HomeViewController ()
 
@@ -28,6 +29,46 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+}
+
+-(void)viewDidLayoutSubviews {
+    [super viewDidLayoutSubviews];
+    
+    NSDate *lastSync = [Sync getLastSyncDate];
+    
+    if(lastSync == nil) {
+        
+        _syncLabel.text = @"Please start synchronisation";
+        _syncImage.image = [UIImage imageNamed:@"homeSyncRed.png"];
+    } else {
+        NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+        dateFormat.dateFormat = @"dd MMMM yyyy HH:mm";
+        
+        _syncLabel.text = [NSString stringWithFormat:@"Last synchronisation: %@", [dateFormat stringFromDate:lastSync]];
+        
+        CGSize textSize = [_syncLabel.text sizeWithAttributes:@{NSFontAttributeName: _syncLabel.font, NSForegroundColorAttributeName:[UIColor blackColor]}];
+        
+        
+        _syncImage = [[UIImageView alloc] init];
+        
+        
+        int dayDifference = [[NSDate date] timeIntervalSinceDate:lastSync] / 86400;
+        if(dayDifference >= 5) {
+            _syncImage.image = [UIImage imageNamed:@"homeSyncRed.png"];
+        } else if(dayDifference >= 3) {
+            _syncImage.image = [UIImage imageNamed:@"homeSyncOrange.png"];
+        } else {
+            _syncImage.image = [UIImage imageNamed:@"homeSyncGreen2.png"];
+        }
+        _syncImage.frame = CGRectMake(970 - textSize.width, 736, 24, 24);
+        [self.view addSubview:_syncImage];
+        NSLog(@"image x: %f %f",_syncImage.frame.origin.x,_syncImage.frame.origin.y);
+    }
+}
+
+-(void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
 }
 
 - (void)didReceiveMemoryWarning

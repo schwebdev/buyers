@@ -2,7 +2,7 @@
 //  Brand.h
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by webdevelopment on 08/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -13,8 +13,8 @@
 
 @interface Brand : NSManagedObject
 
-@property (nonatomic, retain) NSString * brandName;
 @property (nonatomic, retain) NSNumber * brandRef;
+@property (nonatomic, retain) NSString * brandName;
 @property (nonatomic, retain) NSSet *productBrand;
 @end
 

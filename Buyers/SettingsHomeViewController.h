@@ -11,6 +11,8 @@
 @interface SettingsHomeViewController : BaseViewController
 
 @property(nonatomic,retain) IBOutlet UITextField *userName;
+@property (nonatomic,retain) IBOutlet UILabel *syncLabel;
+@property (nonatomic,retain) IBOutlet UILabel *syncDays;
 
 -(IBAction)saveUserName:(id)sender;
 
