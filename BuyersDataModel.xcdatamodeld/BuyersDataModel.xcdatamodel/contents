@@ -2,8 +2,11 @@
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="5064" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Brand" representedClassName="Brand" syncable="YES">
         <attribute name="brandName" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="brandRef" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="brandRef" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="productBrand" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="brand" inverseEntity="Product" syncable="YES"/>
+    </entity>
+    <entity name="CalYearWeek" representedClassName="CalYearWeek" syncable="YES">
+        <attribute name="calYearWeek" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Collection" representedClassName="Collection" syncable="YES">
         <attribute name="collectionCreationDate" attributeType="Date" syncable="YES"/>
@@ -49,6 +52,31 @@
         <relationship name="orderCollection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Collection" inverseName="collectionProductOrder" inverseEntity="Collection" syncable="YES"/>
         <relationship name="orderProduct" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="productOrder" inverseEntity="Product" syncable="YES"/>
     </entity>
+    <entity name="ReportData" representedClassName="ReportData" syncable="YES">
+        <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="createdBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="ReportOrderVsIntake" representedClassName="ReportOrderVsIntake" syncable="YES">
+        <attribute name="diffonordvlyintake" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="diffonordvtyintake" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lyavecostintake" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lycostintake" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lydiff" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lymarginachieved" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="lynewskus" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lyunitsintake" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="lyunitssold" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="skusdiff" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="supplierref" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tyavecostonorder" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tydiff" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tynewskus" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="tyonordercost" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
+        <attribute name="tyonorderunits" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+    </entity>
     <entity name="Supplier" representedClassName="Supplier" syncable="YES">
         <attribute name="supplierCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="supplierName" attributeType="String" maxValueString="100" syncable="YES"/>
@@ -60,6 +88,7 @@
     </entity>
     <elements>
         <element name="Brand" positionX="-27" positionY="126" width="128" height="88"/>
+        <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
         <element name="Collection" positionX="-63" positionY="-18" width="128" height="133"/>
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
@@ -67,7 +96,9 @@
         <element name="Product" positionX="-54" positionY="27" width="128" height="238"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
+        <element name="ReportData" positionX="18" positionY="153" width="128" height="120"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
+        <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
     </elements>
 </model>

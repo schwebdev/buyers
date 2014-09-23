@@ -26,6 +26,7 @@
 		0B288AC019BE031400F62B63 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288ABF19BE031400F62B63 /* Reachability.m */; };
 		0B288AC219BE032C00F62B63 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */; };
 		0B288AC419BEEE7700F62B63 /* homeSyncGreen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */; };
+		0B288ACA19BF407900F62B63 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AC919BF407900F62B63 /* ReportData.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -34,6 +35,8 @@
 		0B7630A3199E0BCD00949155 /* OrderVsIntakeReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630A2199E0BCD00949155 /* OrderVsIntakeReportViewController.m */; };
 		0B7630A619A2121700949155 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630A519A2121700949155 /* ReportViewController.m */; };
 		0B7630A919A247DF00949155 /* OrderVsIntake.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B7630A819A247DF00949155 /* OrderVsIntake.html */; };
+		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
+		0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */; };
 		0B970B32199376C9006D0358 /* c1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF3199376C9006D0358 /* c1.png */; };
 		0B970B33199376C9006D0358 /* c10.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF4199376C9006D0358 /* c10.png */; };
 		0B970B34199376C9006D0358 /* c11.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF5199376C9006D0358 /* c11.png */; };
@@ -187,6 +190,8 @@
 		0B288ABF19BE031400F62B63 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSyncGreen2.png; sourceTree = "<group>"; };
+		0B288AC819BF407900F62B63 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
+		0B288AC919BF407900F62B63 /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportData.m; path = Buyers/ReportData.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -200,6 +205,10 @@
 		0B7630A419A2121700949155 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportViewController.h; sourceTree = "<group>"; };
 		0B7630A519A2121700949155 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportViewController.m; sourceTree = "<group>"; };
 		0B7630A819A247DF00949155 /* OrderVsIntake.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OrderVsIntake.html; sourceTree = "<group>"; };
+		0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalYearWeek.h; path = Buyers/CalYearWeek.h; sourceTree = "<group>"; };
+		0B92CDC019D046A6007B7FDB /* CalYearWeek.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalYearWeek.m; path = Buyers/CalYearWeek.m; sourceTree = "<group>"; };
+		0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportOrderVsIntake.h; path = Buyers/ReportOrderVsIntake.h; sourceTree = "<group>"; };
+		0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportOrderVsIntake.m; path = Buyers/ReportOrderVsIntake.m; sourceTree = "<group>"; };
 		0B970AF3199376C9006D0358 /* c1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = c1.png; sourceTree = "<group>"; };
 		0B970AF4199376C9006D0358 /* c10.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = c10.png; sourceTree = "<group>"; };
 		0B970AF5199376C9006D0358 /* c11.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = c11.png; sourceTree = "<group>"; };
@@ -544,7 +553,13 @@
 				5BDDAA2C19A5EA7600073B10 /* Settings.bundle */,
 				0B288AA019B9F74700F62B63 /* SyncStatus.h */,
 				0B288AA119B9F74700F62B63 /* SyncStatus.m */,
+				0B288AC819BF407900F62B63 /* ReportData.h */,
+				0B288AC919BF407900F62B63 /* ReportData.m */,
+				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
+				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
+				0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */,
+				0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */,
 				0B288ABB19BDF06500F62B63 /* Brand.h */,
 				0B288ABC19BDF06500F62B63 /* Brand.m */,
 				0B288A9A19B9EFC000F62B63 /* ProductOrder.h */,
@@ -843,6 +858,8 @@
 				0BC95642198FDABD00CD45D5 /* AppDelegate.m in Sources */,
 				5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */,
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
+				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
+				0B288ACA19BF407900F62B63 /* ReportData.m in Sources */,
 				0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
@@ -863,6 +880,7 @@
 				0B7630A3199E0BCD00949155 /* OrderVsIntakeReportViewController.m in Sources */,
 				0B970B68199376C9006D0358 /* CollectionViewController.m in Sources */,
 				0B288A9619B9EFC000F62B63 /* Collection.m in Sources */,
+				0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */,
 				0B288A9019B9EFBF00F62B63 /* Material.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				0B970B6A199376C9006D0358 /* PlayingCard.m in Sources */,

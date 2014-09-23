@@ -22,6 +22,8 @@
 
 - (IBAction)runReportClick:(id)sender {
     
+    NSLog(@"calweekfrom value, %@",[self.CalWeekFrom getSelectedValue]);
+    NSLog(@"calweekto value, %@",[self.CalWeekTo getSelectedValue]);
     NSLog(@"brand value, %@",[self.BrandsList getSelectedValue]);
     NSLog(@"supplier value, %@",[self.SuppliersList getSelectedValue]);
     for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
@@ -48,7 +50,7 @@
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"order vs intake by week report"]];
     
     CALayer *separator = [CALayer layer];
-    separator.frame = CGRectMake(802, 100, 1, 589);
+    separator.frame = CGRectMake(834, 100, 1, 589);
     separator.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
     [self.view.layer addSublayer:separator];
     
@@ -76,8 +78,17 @@
     
     [self.SuppliersList setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
     [self.BrandsList setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
+    
+    [self.CalWeekFrom setListItems:(NSMutableArray *)[Sync getTable:@"CalYearWeek" sortWith:@"calYearWeek"] withName:@"calYearWeek" withValue:@"calYearWeek"];
+    
+    [self.CalWeekTo setListItems:(NSMutableArray *)[Sync getTable:@"CalYearWeek" sortWith:@"calYearWeek"] withName:@"calYearWeek" withValue:@"calYearWeek"];
+    
+    
+   // self.departmentsTable.frame = CGRectMake(0, 0,  150, 600);
+    
+    self.departmentsTable.layer.borderWidth = 1.0;
+    self.departmentsTable.layer.borderColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
 }
-
 - (void)didReceiveMemoryWarning
 {
     [super didReceiveMemoryWarning];
@@ -108,7 +119,9 @@
     
     //NSDictionary *listItem = (NSDictionary *)self.departmentsList[indexPath.row];
     //cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
-    cell.textLabel.text = self.departmentsList[indexPath.row][@"supplierName"];
+    
+    UILabel *textLabel = (UILabel*)[cell viewWithTag:1];
+    textLabel.text = self.departmentsList[indexPath.row][@"supplierName"];
     
     [cell setAccessoryType:UITableViewCellAccessoryNone];
     for (NSIndexPath *path in [tableView indexPathsForSelectedRows]) {

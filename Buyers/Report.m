@@ -7,6 +7,7 @@
 //
 
 #import "Report.h"
+#import "Sync.h"
 
 @implementation Report
 
@@ -114,34 +115,75 @@
     
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##TITLE##" withString:dateTime];
     
-    NSString *htmlRows = @"";
+    NSMutableString *htmlRows = [NSMutableString new];
     
-    for (int i=0; i < 50; i++) {
-        htmlRows = [htmlRows stringByAppendingString:@"<tr>"];
-        htmlRows = [htmlRows stringByAppendingString:[NSString stringWithFormat:@"<td>BRAND%d</td>", i]];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>4976</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>47.26</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>26431</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>677068</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>&pound;25.62</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>23</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>444</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>-25987</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>-98%</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>11584</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>-665484</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>-98%</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>&pound;26.09</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td></td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>0</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"<td>-23</td>"];
-        htmlRows = [htmlRows stringByAppendingString:@"</tr>"];
+    
+    NSArray *results = [Sync getTable:@"ReportOrderVsIntake" sortWith:@"supplierref"];
+    CGFloat tot1 = 0, tot2 = 0, tot3 = 0, tot4 = 0, tot5 = 0, tot6 = 0, tot7 = 0, tot8 = 0, tot9 = 0, tot10 = 0, tot11 = 0, tot12 = 0 ,tot13 = 0, tot14 = 0, tot15 = 0;
+    
+    for (NSDictionary *row in results) {
+        [htmlRows appendFormat:@"<tr>"];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"supplierref"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"lyunitssold"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"lymarginachieved"]];
+        [htmlRows appendFormat:@"<td></td>"];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"lyunitsintake"]];
+        [htmlRows appendFormat:@"<td>£%@</td>", row[@"lycostintake"]];
+        [htmlRows appendFormat:@"<td>£%@</td>", row[@"lyavecostintake"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"lynewskus"]];
+        [htmlRows appendFormat:@"<td></td>"];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"tyonorderunits"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"diffonordvlyintake"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"lydiff"]];
+        [htmlRows appendFormat:@"<td></td>"];
+        [htmlRows appendFormat:@"<td>£%@</td>", row[@"tyonordercost"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"diffonordvtyintake"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"tydiff"]];
+        [htmlRows appendFormat:@"<td>£%@</td>", row[@"tyavecostonorder"]];
+        [htmlRows appendFormat:@"<td></td>"];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"tynewskus"]];
+        [htmlRows appendFormat:@"<td>%@</td>", row[@"skusdiff"]];
+        [htmlRows appendFormat:@"</tr>"];
         
+        tot1 += [row[@"lyunitssold"] floatValue];
+        tot2 += [row[@"lymarginachieved"] floatValue];
+        tot3 += [row[@"lyunitsintake"] floatValue];
+        tot4 += [row[@"lycostintake"] floatValue];
+        tot5 += [row[@"lyavecostintake"] floatValue];
+        tot6 += [row[@"lynewskus"] floatValue];
+        tot7 += [row[@"tyonorderunits"] floatValue];
+        tot8 += [row[@"diffonordvlyintake"] floatValue];
+        tot9 += [row[@"lydiff"] floatValue];
+        tot10 += [row[@"tyonordercost"] floatValue];
+        tot11 += [row[@"diffonordvtyintake"] floatValue];
+        tot12 += [row[@"tydiff"] floatValue];
+        tot13 += [row[@"tyavecostonorder"] floatValue];
+        tot14 += [row[@"tynewskus"] floatValue];
+        tot15 += [row[@"skusdiff"] floatValue];
     }
     
+    [htmlRows appendFormat:@"<tr><td colspan=20></td></tr><tr>"];
+    [htmlRows appendFormat:@"<td>Totals</td>"];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot1];
+    [htmlRows appendFormat:@"<td>%.2f</td>", tot2];
+    [htmlRows appendFormat:@"<td></td>"];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot3];
+    [htmlRows appendFormat:@"<td>£%.2f</td>", tot4];
+    [htmlRows appendFormat:@"<td>£%.2f</td>", tot5/results.count];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot6];
+    [htmlRows appendFormat:@"<td></td>"];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot7];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot8];
+    [htmlRows appendFormat:@"<td>%.2f</td>", tot9];
+    [htmlRows appendFormat:@"<td></td>"];
+    [htmlRows appendFormat:@"<td>£%.2f</td>", tot10];
+    [htmlRows appendFormat:@"<td>%.2f</td>", tot11];
+    [htmlRows appendFormat:@"<td>%.2f</td>", tot12];
+    [htmlRows appendFormat:@"<td>£%.2f</td>", tot13/results.count];
+    [htmlRows appendFormat:@"<td></td>"];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot14];
+    [htmlRows appendFormat:@"<td>%d</td>", (int)tot15];
+    [htmlRows appendFormat:@"</tr>"];
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##ROWS##" withString:htmlRows];
     
     return htmlString;

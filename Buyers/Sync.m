@@ -14,7 +14,9 @@
 #import "Supplier.h"
 #import "Brand.h"
 #import "material.h"
+#import "CalYearWeek.h"
 
+#import "ReportOrderVsIntake.h"
 
 @implementation Sync
 
@@ -33,6 +35,7 @@
         
         if(![self syncBrands]) return NO;
         
+        if(![self syncCalYearWeeks]) return NO;
         
         return YES;
     } else {
@@ -119,8 +122,8 @@
         return NO;
     }
     
-    NSArray *suppliers = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    if(suppliers == nil) {
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
         NSLog(@"json error: %@", error);
         return NO;
     }
@@ -128,18 +131,18 @@
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
-    NSArray *oldSuppliers = [managedContext executeFetchRequest:request error:&error];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
     
-    for (NSManagedObject *supplier in oldSuppliers) {
-        [managedContext deleteObject:supplier];
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
     }
     
-    for (NSDictionary *supplierData in suppliers) {
+    for (NSDictionary *result in results) {
         //save the new collection
         Supplier *supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:managedContext];
         
-        supplier.supplierCode = supplierData[@"Sup_Code"];
-        supplier.supplierName = supplierData[@"Sup_Name"];
+        supplier.supplierCode = result[@"Sup_Code"];
+        supplier.supplierName = result[@"Sup_Name"];
         
     }
     
@@ -158,7 +161,7 @@
         return NO;
     } else {
         
-        NSLog(@"%d supplier entries created",suppliers.count);
+        NSLog(@"%d supplier entries created",results.count);
     }
     
     [self updateSyncStatus:@"suppliers"];
@@ -178,24 +181,27 @@
         return NO;
     }
     
-    NSArray *brands = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
-    if(brands == nil) {
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
         NSLog(@"json error: %@", error);
         return NO;
     }
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
-    NSArray *oldBrands = [managedContext executeFetchRequest:request error:&error];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
     
-    for (NSManagedObject *brand in oldBrands) {
-        [managedContext deleteObject:brand];
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
     }
     
-    for (NSDictionary *brandData in brands) {
+    for (NSDictionary *result in results) {
         //save the new collection
+        if(result[@"brandRef"]) {
+            
+        }
         Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
-        brand.brandRef = brandData[@"brandRef"];
-        brand.brandName = brandData[@"brandName"];
+        brand.brandRef = result[@"brandRef"];
+        brand.brandName = result[@"brandName"];
     }
     
     NSError *saveError;
@@ -214,7 +220,7 @@
         return NO;
     } else {
         
-        NSLog(@"%d brand entries created",brands.count);
+        NSLog(@"%d brand entries created",results.count);
     }
     
     [self updateSyncStatus:@"brand"];
@@ -222,6 +228,128 @@
     return YES;
 }
 
++ (BOOL)syncCalYearWeeks {
+    
+    NSError *error;
+    NSURL *url = [[NSURL alloc] initWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcalyearweeks"];
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
+    
+    if(!data) {
+        NSLog(@"download error:%@", error.localizedDescription);
+        return NO;
+    }
+    
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
+        NSLog(@"json error: %@", error);
+        return NO;
+    }
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"CalYearWeek"];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
+    }
+    
+    for (NSDictionary *result in results) {
+        //save the new collection
+        CalYearWeek *yearWeek = [NSEntityDescription insertNewObjectForEntityForName:@"CalYearWeek" inManagedObjectContext:managedContext];
+        yearWeek.calYearWeek = result[@"Cal_Year_Week"];
+    }
+    
+    NSError *saveError;
+    if(![managedContext save:&saveError]) {
+        NSLog(@"Could not save CalYearWeek: %@", [saveError localizedDescription]);
+        
+        NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+        if(detailedErrors != nil && [detailedErrors count] > 0) {
+            for(NSError* detailedError in detailedErrors) {
+                NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%d", [detailedError code]);
+            }
+        } else {
+            NSLog(@" detailed error:%@", [saveError userInfo]);
+        }
+        return NO;
+    } else {
+        
+        NSLog(@"%d CalYearWeek entries created",results.count);
+    }
+    
+    [self updateSyncStatus:@"calyearweek"];
+    
+    return YES;
+}
+
++ (BOOL)syncReportsOrderVsIntake {
+    
+    NSError *error;
+    NSURL *url = [[NSURL alloc] initWithString:@"http://mie.schuh.co.uk/test.txt"];
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
+    
+    if(!data) {
+        NSLog(@"download error:%@", error.localizedDescription);
+        return NO;
+    }
+    
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
+        NSLog(@"json error: %@", error);
+        return NO;
+    }
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportOrderVsIntake"];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
+    }
+    
+    for (NSDictionary *result in results) {
+        //save the new collection
+        ReportOrderVsIntake *row = [NSEntityDescription insertNewObjectForEntityForName:@"ReportOrderVsIntake" inManagedObjectContext:managedContext];
+        
+        for(NSString *key in result.allKeys) {
+            NSEntityDescription *entity = [NSEntityDescription entityForName:@"ReportOrderVsIntake" inManagedObjectContext:managedContext];
+            
+            NSDictionary *attributes = [entity attributesByName];
+            NSAttributeDescription *attrDesc = [attributes objectForKey:[key lowercaseString]];
+            if([attrDesc attributeType] == NSInteger32AttributeType) {
+                [row setValue:[NSNumber numberWithInt:[result[key] intValue]] forKey:[key lowercaseString]];
+            } else if([attrDesc attributeType] == NSFloatAttributeType) {
+                [row setValue:[NSNumber numberWithFloat:[result[key] floatValue]] forKey:[key lowercaseString]];
+            } else {
+                [row setValue:result[key] forKey:[key lowercaseString]];
+            }
+        }
+    }
+    
+    NSError *saveError;
+    if(![managedContext save:&saveError]) {
+        NSLog(@"Could not save ReportOrderVsIntake: %@", [saveError localizedDescription]);
+        
+        NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+        if(detailedErrors != nil && [detailedErrors count] > 0) {
+            for(NSError* detailedError in detailedErrors) {
+                NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%d", [detailedError code]);
+            }
+        } else {
+            NSLog(@" detailed error:%@", [saveError userInfo]);
+        }
+        return NO;
+    } else {
+        
+        NSLog(@"%d ReportOrderVsIntake entries created",results.count);
+    }
+    
+    
+    [self updateSyncStatus:@"reportordervsintake"];
+    return YES;
+}
 
 + (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column {
     //fetch request to retrieve all collections

@@ -22,8 +22,8 @@
         for (NSDictionary *item in self.listItems) {
             
             if(self.listName != nil) {
-                if([self.text isEqualToString:item[self.listName]]) {
-                    returnVal = item[self.listValue];
+                if([self.text isEqualToString:[NSString stringWithFormat:@"%@",item[self.listName]]]) {
+                    returnVal = [NSString stringWithFormat:@"%@",item[self.listValue]];
                 }
             } else {
                 if([self.text isEqualToString:item[[[item allKeys] objectAtIndex:0]]]) {
@@ -113,16 +113,15 @@
         self.popover.delegate = self;
         [self.popover setPopoverContentSize:CGSizeMake(280, 200) animated:NO];
         
-        if(![self.text isEqualToString:@""]) {
-            for (int i = 0; i < self.listItems.count; i++) {
-                
-                if([self.text isEqualToString:self.listItems[i][[[self.listItems[i] allKeys] objectAtIndex:0]]]) {
-                    //[picker selectRow:i inComponent:0 animated:NO];
-                }
-            }
-        }
+//        if(![self.text isEqualToString:@""]) {
+//            for (int i = 0; i < self.listItems.count; i++) {
+//                
+//                if([self.text isEqualToString:self.listItems[i][[[self.listItems[i] allKeys] objectAtIndex:0]]]) {
+//                    [picker selectRow:i inComponent:0 animated:NO];
+//                }
+//            }
+//        }
         
-        //}
         
         [self.popover presentPopoverFromRect:textField.frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
         
@@ -177,7 +176,7 @@
     }
     NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
     
-    if(self.listName != nil) cell.textLabel.text = listItem[self.listName];
+    if(self.listName != nil) cell.textLabel.text = [NSString stringWithFormat:@"%@",listItem[self.listName]];
     else cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     
     UIView *bgColorView = [[UIView alloc] init];
@@ -193,7 +192,7 @@
 {
     NSDictionary *listItem = (NSDictionary *)self.listItems[indexPath.row];
     
-    if(self.listName != nil) self.text = listItem[self.listName];
+    if(self.listName != nil) self.text = [NSString stringWithFormat:@"%@",listItem[self.listName]];
     else self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     
     [self.popover dismissPopoverAnimated:YES];

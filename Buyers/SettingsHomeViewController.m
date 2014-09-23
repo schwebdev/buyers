@@ -8,8 +8,12 @@
 
 #import "SettingsHomeViewController.h"
 #import "Sync.h"
+#import "Reachability.h"
 
 @interface SettingsHomeViewController ()
+
+@property UIView *loadingOverlay;
+@property UIProgressView *progressView;
 
 @end
 
@@ -117,11 +121,83 @@
 
 -(IBAction)startSync:(id)sender {
     
+    self.loadingOverlay = [[UIView alloc] initWithFrame:CGRectMake(0,0, 1024,768)];
+    self.loadingOverlay.backgroundColor = [UIColor colorWithRed:0.5f green:0.5f blue:0.5f alpha:0.5f];
+    
+    UIView *subview = [[UIView alloc] initWithFrame:CGRectMake(0,0, 300,200)];
+    subview.backgroundColor = [UIColor whiteColor];
+    [self.loadingOverlay addSubview:subview];
+    subview.center = self.loadingOverlay.center;
+    subview.layer.cornerRadius = 10;
+    
+    UILabel *syncLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 50, 300, 30)];
+    syncLabel.text = @"syncing...";
+    syncLabel.textAlignment = NSTextAlignmentCenter;
+    [subview addSubview:syncLabel];
+    
+    UIActivityIndicatorView *indicator = [[UIActivityIndicatorView alloc] init];
+    [subview addSubview:indicator];
+    indicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyleGray;
+    indicator.center = self.loadingOverlay.center;
+    [indicator startAnimating];
+    
+    
+    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(25,135,250,50)];
+    self.progressView.progress = 0;
+    [subview addSubview:self.progressView];
+    
+    [[[[[UIApplication sharedApplication] keyWindow] subviews] objectAtIndex:0] addSubview:self.loadingOverlay];
+
+    [self performSelectorInBackground:@selector(sync) withObject:nil];
+}
+
+-(void)sync {
     BOOL success = YES;
     
-    success = [Sync syncAll];
+    //internet check
+    
+    CGFloat syncCount = 4;
+    
+    Reachability *network = [Reachability reachabilityWithHostName:@"aws.schuhshark.com"];
+    
+    if ([network currentReachabilityStatus] == ReachableViaWiFi) {
+        
+                
+        if(success) {
+            success = [Sync syncSuppliers];
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:1/syncCount] waitUntilDone:YES];
+        }
+        
+        if(success) {
+            success = [Sync syncBrands];
+            
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:2/syncCount] waitUntilDone:YES];
+        }
+        
+        if(success) {
+            success = [Sync syncCalYearWeeks];
+            
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:3/syncCount] waitUntilDone:YES];
+        }
+        
+        
+        if(success) {
+            success = [Sync syncReportsOrderVsIntake];
+            
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:4/syncCount] waitUntilDone:YES];
+        }
+    } else {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"no wifi found" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
+        
+        success = NO;
+    }
+
     
     if(success) {
+        
+        [Sync updateSyncStatus:@"global"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     } else {
@@ -130,8 +206,16 @@
     }
     
     [self updateLastSync];
-}
+    
+    [self performSelectorOnMainThread:@selector(endSync) withObject:nil waitUntilDone:YES];
 
+}
+-(void)updateProgress:(NSNumber *)progress {
+    self.progressView.progress = [progress floatValue];
+}
+-(void)endSync {
+    [self.loadingOverlay removeFromSuperview];
+}
 /*
 #pragma mark - Navigation
 

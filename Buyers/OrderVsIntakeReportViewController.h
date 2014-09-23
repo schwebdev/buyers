@@ -13,6 +13,9 @@
 
 @interface OrderVsIntakeReportViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
 
+@property (weak, nonatomic) IBOutlet SchDropDown *CalWeekFrom;
+@property (weak, nonatomic) IBOutlet SchDropDown *CalWeekTo;
+
 @property (weak, nonatomic) IBOutlet SchDropDown *SuppliersList;
 @property (weak, nonatomic) IBOutlet SchDropDown *BrandsList;
 @property (weak, nonatomic) IBOutlet UITableView *departmentsTable;

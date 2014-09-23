@@ -62,7 +62,7 @@
         }
         _syncImage.frame = CGRectMake(970 - textSize.width, 736, 24, 24);
         [self.view addSubview:_syncImage];
-        NSLog(@"image x: %f %f",_syncImage.frame.origin.x,_syncImage.frame.origin.y);
+        //NSLog(@"image x: %f %f",_syncImage.frame.origin.x,_syncImage.frame.origin.y);
     }
 }
 

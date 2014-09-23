@@ -9,6 +9,9 @@
 #import "ReportHomeViewController.h"
 #import "SWRevealViewController.h"
 #import "ReportViewController.h"
+#import "AppDelegate.h"
+#import "ReportData.h"
+
 @interface ReportHomeViewController ()
 
 @end
@@ -62,12 +65,19 @@
     self.reportList.text = @"";
     if(currentSwitch.tag == 0) {
         
-        NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:[[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"] error:nil];
-        
         self.reportList.listItems = [NSMutableArray array];
         
-        for (NSString *report in reports) {
-            [self.reportList.listItems addObject:@{report:report}];
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+        
+        NSError *error;
+        NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+        
+        if(reports.count > 0) {
+            for (ReportData *report in reports) {
+                [self.reportList.listItems addObject:@{report.name:report.name}];
+            }
         }
     } else {
         
@@ -115,6 +125,7 @@
     [self setMenuButton:3 title:@"reports 3"];
     
     
+    /*
     NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
     if(![[NSFileManager defaultManager] fileExistsAtPath:reportsPath]) [[NSFileManager defaultManager] createDirectoryAtPath:reportsPath withIntermediateDirectories:NO attributes:nil error:nil];
         
@@ -124,6 +135,22 @@
     
     for (NSString *report in reports) {
         [self.reportList.listItems addObject:@{report:report}];
+    }
+    */
+    
+    self.reportList.listItems = [NSMutableArray array];
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+    
+    NSError *error;
+    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+    
+    if(reports.count > 0) {        
+        for (ReportData *report in reports) {
+            [self.reportList.listItems addObject:@{report.name:report.name}];
+        }
     }
 
 }
