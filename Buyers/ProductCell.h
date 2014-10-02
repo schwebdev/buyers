@@ -11,6 +11,7 @@
 @class Product;
 
 @interface ProductCell : UICollectionViewCell
+@property (strong, nonatomic) IBOutlet UIButton *productDeleteButton;
 
 @property (strong, nonatomic) Product *product;
 @property (strong, nonatomic) IBOutlet UIImageView *productImageView;

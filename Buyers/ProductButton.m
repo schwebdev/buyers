@@ -1,16 +1,16 @@
 //
-//  CollectionButton.m
+//  ProductButton.m
 //  Buyers
 //
-//  Created by Web Development on 27/08/2014.
+//  Created by Web Development on 09/09/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "CollectionButton.h"
+#import "ProductButton.h"
 
-@implementation CollectionButton
+@implementation ProductButton
 
-@synthesize collection = _collection;
+@synthesize product = _product;
 
 - (id)initWithFrame:(CGRect)frame
 {

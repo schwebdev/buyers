@@ -15,7 +15,7 @@
 
 - (void)setProduct:(Product *)product {
     _product = product;
-    self.productImageView.image = [UIImage imageWithData:(_product.productImageData)]; // [UIImage imageNamed:_product.productImageData];
+    self.productImageView.image = [UIImage imageWithData:(_product.productImageData)];
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

@@ -2,7 +2,7 @@
 //  ProductCategory.h
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Schuh Webdev on 02/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 

@@ -15,12 +15,8 @@
 		0B288A8119B9E73300F62B63 /* Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8019B9E73300F62B63 /* Sync.m */; };
 		0B288A8419B9EFBF00F62B63 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8319B9EFBF00F62B63 /* Image.m */; };
 		0B288A8A19B9EFBF00F62B63 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8919B9EFBF00F62B63 /* Colour.m */; };
-		0B288A8D19B9EFBF00F62B63 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8C19B9EFBF00F62B63 /* Product.m */; };
 		0B288A9019B9EFBF00F62B63 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8F19B9EFBF00F62B63 /* Material.m */; };
 		0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A9219B9EFBF00F62B63 /* Supplier.m */; };
-		0B288A9619B9EFC000F62B63 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A9519B9EFC000F62B63 /* Collection.m */; };
-		0B288A9919B9EFC000F62B63 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A9819B9EFC000F62B63 /* ProductCategory.m */; };
-		0B288A9C19B9EFC000F62B63 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A9B19B9EFC000F62B63 /* ProductOrder.m */; };
 		0B288AA219B9F74700F62B63 /* SyncStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AA119B9F74700F62B63 /* SyncStatus.m */; };
 		0B288ABD19BDF06500F62B63 /* Brand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288ABC19BDF06500F62B63 /* Brand.m */; };
 		0B288AC019BE031400F62B63 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288ABF19BE031400F62B63 /* Reachability.m */; };
@@ -144,6 +140,28 @@
 		5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0952019B6212B006C1782 /* 1461031160_main.jpg */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
+		C6B9A7A319DD6A1900C832A1 /* AddNewProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A79C19DD6A1900C832A1 /* AddNewProductViewController.m */; };
+		C6B9A7A419DD6A1900C832A1 /* ProductNotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A79E19DD6A1900C832A1 /* ProductNotesViewController.m */; };
+		C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7A019DD6A1900C832A1 /* ProductsViewController.m */; };
+		C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7A219DD6A1900C832A1 /* ProductViewController.m */; };
+		C6B9A7A919DD6A4C00C832A1 /* CollectionNotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7A819DD6A4C00C832A1 /* CollectionNotesViewController.m */; };
+		C6B9A7AC19DD6AB800C832A1 /* ProductButton.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */; };
+		C6B9A7B919DD6B5600C832A1 /* 1158985860_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */; };
+		C6B9A7BA19DD6B5600C832A1 /* 1159053670_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7AE19DD6B5600C832A1 /* 1159053670_main.jpg */; };
+		C6B9A7BB19DD6B5600C832A1 /* 1159155670_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7AF19DD6B5600C832A1 /* 1159155670_main.jpg */; };
+		C6B9A7BC19DD6B5600C832A1 /* 1159167060_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B019DD6B5600C832A1 /* 1159167060_main.jpg */; };
+		C6B9A7BD19DD6B5600C832A1 /* 1159167270_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B119DD6B5600C832A1 /* 1159167270_main.jpg */; };
+		C6B9A7BE19DD6B5600C832A1 /* 1945097370_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B219DD6B5600C832A1 /* 1945097370_main.jpg */; };
+		C6B9A7BF19DD6B5600C832A1 /* arrowDOWN.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */; };
+		C6B9A7C019DD6B5600C832A1 /* arrowUP.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B419DD6B5600C832A1 /* arrowUP.png */; };
+		C6B9A7C119DD6B5600C832A1 /* checkbox-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */; };
+		C6B9A7C219DD6B5600C832A1 /* checkbox-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */; };
+		C6B9A7C319DD6B5600C832A1 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B719DD6B5600C832A1 /* checkbox.png */; };
+		C6B9A7C419DD6B5600C832A1 /* checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */; };
+		C6B9A7C719DD737400C832A1 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7C619DD737400C832A1 /* Collection.m */; };
+		C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */; };
+		C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CC19DD73AC00C832A1 /* Product.m */; };
+		C6B9A7D019DD73AC00C832A1 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -172,18 +190,10 @@
 		0B288A8319B9EFBF00F62B63 /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = Buyers/Image.m; sourceTree = "<group>"; };
 		0B288A8819B9EFBF00F62B63 /* Colour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Colour.h; path = Buyers/Colour.h; sourceTree = "<group>"; };
 		0B288A8919B9EFBF00F62B63 /* Colour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Colour.m; path = Buyers/Colour.m; sourceTree = "<group>"; };
-		0B288A8B19B9EFBF00F62B63 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
-		0B288A8C19B9EFBF00F62B63 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
 		0B288A8E19B9EFBF00F62B63 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = Buyers/Material.h; sourceTree = "<group>"; };
 		0B288A8F19B9EFBF00F62B63 /* Material.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Material.m; path = Buyers/Material.m; sourceTree = "<group>"; };
 		0B288A9119B9EFBF00F62B63 /* Supplier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Supplier.h; path = Buyers/Supplier.h; sourceTree = "<group>"; };
 		0B288A9219B9EFBF00F62B63 /* Supplier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Supplier.m; path = Buyers/Supplier.m; sourceTree = "<group>"; };
-		0B288A9419B9EFC000F62B63 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = Buyers/Collection.h; sourceTree = "<group>"; };
-		0B288A9519B9EFC000F62B63 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Collection.m; path = Buyers/Collection.m; sourceTree = "<group>"; };
-		0B288A9719B9EFC000F62B63 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductCategory.h; path = Buyers/ProductCategory.h; sourceTree = "<group>"; };
-		0B288A9819B9EFC000F62B63 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductCategory.m; path = Buyers/ProductCategory.m; sourceTree = "<group>"; };
-		0B288A9A19B9EFC000F62B63 /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductOrder.h; path = Buyers/ProductOrder.h; sourceTree = "<group>"; };
-		0B288A9B19B9EFC000F62B63 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductOrder.m; path = Buyers/ProductOrder.m; sourceTree = "<group>"; };
 		0B288AA019B9F74700F62B63 /* SyncStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncStatus.h; path = Buyers/SyncStatus.h; sourceTree = "<group>"; };
 		0B288AA119B9F74700F62B63 /* SyncStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SyncStatus.m; path = Buyers/SyncStatus.m; sourceTree = "<group>"; };
 		0B288ABB19BDF06500F62B63 /* Brand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Brand.h; path = Buyers/Brand.h; sourceTree = "<group>"; };
@@ -337,6 +347,38 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
+		C6B9A79B19DD6A1900C832A1 /* AddNewProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewProductViewController.h; sourceTree = "<group>"; };
+		C6B9A79C19DD6A1900C832A1 /* AddNewProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewProductViewController.m; sourceTree = "<group>"; };
+		C6B9A79D19DD6A1900C832A1 /* ProductNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductNotesViewController.h; sourceTree = "<group>"; };
+		C6B9A79E19DD6A1900C832A1 /* ProductNotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductNotesViewController.m; sourceTree = "<group>"; };
+		C6B9A79F19DD6A1900C832A1 /* ProductsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductsViewController.h; sourceTree = "<group>"; };
+		C6B9A7A019DD6A1900C832A1 /* ProductsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductsViewController.m; sourceTree = "<group>"; };
+		C6B9A7A119DD6A1900C832A1 /* ProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductViewController.h; sourceTree = "<group>"; };
+		C6B9A7A219DD6A1900C832A1 /* ProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductViewController.m; sourceTree = "<group>"; };
+		C6B9A7A719DD6A4C00C832A1 /* CollectionNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionNotesViewController.h; sourceTree = "<group>"; };
+		C6B9A7A819DD6A4C00C832A1 /* CollectionNotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionNotesViewController.m; sourceTree = "<group>"; };
+		C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductButton.h; path = Buyers/ProductButton.h; sourceTree = "<group>"; };
+		C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductButton.m; path = Buyers/ProductButton.m; sourceTree = "<group>"; };
+		C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1158985860_main.jpg; sourceTree = "<group>"; };
+		C6B9A7AE19DD6B5600C832A1 /* 1159053670_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159053670_main.jpg; sourceTree = "<group>"; };
+		C6B9A7AF19DD6B5600C832A1 /* 1159155670_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159155670_main.jpg; sourceTree = "<group>"; };
+		C6B9A7B019DD6B5600C832A1 /* 1159167060_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159167060_main.jpg; sourceTree = "<group>"; };
+		C6B9A7B119DD6B5600C832A1 /* 1159167270_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159167270_main.jpg; sourceTree = "<group>"; };
+		C6B9A7B219DD6B5600C832A1 /* 1945097370_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1945097370_main.jpg; sourceTree = "<group>"; };
+		C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowDOWN.png; sourceTree = "<group>"; };
+		C6B9A7B419DD6B5600C832A1 /* arrowUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUP.png; sourceTree = "<group>"; };
+		C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked.png"; sourceTree = "<group>"; };
+		C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked@2x.png"; sourceTree = "<group>"; };
+		C6B9A7B719DD6B5600C832A1 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
+		C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@2x.png"; sourceTree = "<group>"; };
+		C6B9A7C519DD737400C832A1 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = Buyers/Collection.h; sourceTree = "<group>"; };
+		C6B9A7C619DD737400C832A1 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Collection.m; path = Buyers/Collection.m; sourceTree = "<group>"; };
+		C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductOrder.h; path = Buyers/ProductOrder.h; sourceTree = "<group>"; };
+		C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductOrder.m; path = Buyers/ProductOrder.m; sourceTree = "<group>"; };
+		C6B9A7CB19DD73AC00C832A1 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
+		C6B9A7CC19DD73AC00C832A1 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
+		C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductCategory.h; path = Buyers/ProductCategory.h; sourceTree = "<group>"; };
+		C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductCategory.m; path = Buyers/ProductCategory.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -482,6 +524,16 @@
 		0B970B6C199376E3006D0358 /* Collections */ = {
 			isa = PBXGroup;
 			children = (
+				C6B9A7A719DD6A4C00C832A1 /* CollectionNotesViewController.h */,
+				C6B9A7A819DD6A4C00C832A1 /* CollectionNotesViewController.m */,
+				C6B9A79B19DD6A1900C832A1 /* AddNewProductViewController.h */,
+				C6B9A79C19DD6A1900C832A1 /* AddNewProductViewController.m */,
+				C6B9A79D19DD6A1900C832A1 /* ProductNotesViewController.h */,
+				C6B9A79E19DD6A1900C832A1 /* ProductNotesViewController.m */,
+				C6B9A79F19DD6A1900C832A1 /* ProductsViewController.h */,
+				C6B9A7A019DD6A1900C832A1 /* ProductsViewController.m */,
+				C6B9A7A119DD6A1900C832A1 /* ProductViewController.h */,
+				C6B9A7A219DD6A1900C832A1 /* ProductViewController.m */,
 				0B970B29199376C9006D0358 /* CollectionViewController.h */,
 				0B970B2A199376C9006D0358 /* CollectionViewController.m */,
 				0BC9566A1990CF3200CD45D5 /* CollectionListViewController.h */,
@@ -547,6 +599,22 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
+				C6B9A7C519DD737400C832A1 /* Collection.h */,
+				C6B9A7C619DD737400C832A1 /* Collection.m */,
+				C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */,
+				C6B9A7AE19DD6B5600C832A1 /* 1159053670_main.jpg */,
+				C6B9A7AF19DD6B5600C832A1 /* 1159155670_main.jpg */,
+				C6B9A7B019DD6B5600C832A1 /* 1159167060_main.jpg */,
+				C6B9A7B119DD6B5600C832A1 /* 1159167270_main.jpg */,
+				C6B9A7B219DD6B5600C832A1 /* 1945097370_main.jpg */,
+				C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */,
+				C6B9A7B419DD6B5600C832A1 /* arrowUP.png */,
+				C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */,
+				C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */,
+				C6B9A7B719DD6B5600C832A1 /* checkbox.png */,
+				C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */,
+				C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */,
+				C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */,
 				5BA0952019B6212B006C1782 /* 1461031160_main.jpg */,
 				5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */,
 				5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */,
@@ -564,6 +632,12 @@
 				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
 				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
+				C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */,
+				C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */,
+				C6B9A7CB19DD73AC00C832A1 /* Product.h */,
+				C6B9A7CC19DD73AC00C832A1 /* Product.m */,
+				C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */,
+				C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */,
 				0B523EB019DD5EC20079EB25 /* Department.h */,
 				0B523EB119DD5EC20079EB25 /* Department.m */,
 				0B523EAD19DD5EC10079EB25 /* Merch.h */,
@@ -572,18 +646,10 @@
 				0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */,
 				0B288ABB19BDF06500F62B63 /* Brand.h */,
 				0B288ABC19BDF06500F62B63 /* Brand.m */,
-				0B288A9A19B9EFC000F62B63 /* ProductOrder.h */,
-				0B288A9B19B9EFC000F62B63 /* ProductOrder.m */,
-				0B288A9719B9EFC000F62B63 /* ProductCategory.h */,
-				0B288A9819B9EFC000F62B63 /* ProductCategory.m */,
-				0B288A9419B9EFC000F62B63 /* Collection.h */,
-				0B288A9519B9EFC000F62B63 /* Collection.m */,
 				0B288A9119B9EFBF00F62B63 /* Supplier.h */,
 				0B288A9219B9EFBF00F62B63 /* Supplier.m */,
 				0B288A8E19B9EFBF00F62B63 /* Material.h */,
 				0B288A8F19B9EFBF00F62B63 /* Material.m */,
-				0B288A8B19B9EFBF00F62B63 /* Product.h */,
-				0B288A8C19B9EFBF00F62B63 /* Product.m */,
 				0B288A8819B9EFBF00F62B63 /* Colour.h */,
 				0B288A8919B9EFBF00F62B63 /* Colour.m */,
 				0B288A8219B9EFBF00F62B63 /* Image.h */,
@@ -759,6 +825,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B970B62199376C9006D0358 /* s4.png in Resources */,
+				C6B9A7BD19DD6B5600C832A1 /* 1159167270_main.jpg in Resources */,
+				C6B9A7C119DD6B5600C832A1 /* checkbox-checked.png in Resources */,
 				5BA0951B19B61F07006C1782 /* 1159137970_main.jpg in Resources */,
 				0B288AC419BEEE7700F62B63 /* homeSyncGreen2.png in Resources */,
 				5B9FDD6C19AF55DC00CE75F0 /* 1159140970_main.jpg in Resources */,
@@ -769,12 +837,14 @@
 				0B970B4E199376C9006D0358 /* h10.png in Resources */,
 				0B9F71AC19950A5D003AE1BE /* homeCollectionsButton.png in Resources */,
 				0B970B59199376C9006D0358 /* h9.png in Resources */,
+				C6B9A7B919DD6B5600C832A1 /* 1158985860_main.jpg in Resources */,
 				0BC9564A198FDABD00CD45D5 /* Images.xcassets in Resources */,
 				0B970B36199376C9006D0358 /* c13.png in Resources */,
 				0B9F71A41994FF53003AE1BE /* homeSyncGreen.png in Resources */,
 				0B970B4F199376C9006D0358 /* h11.png in Resources */,
 				0B9F71A21994FF53003AE1BE /* homeSettingsLogoGrey.png in Resources */,
 				0B7630A0199CB7D200949155 /* rightArrowButtonBG.png in Resources */,
+				C6B9A7BF19DD6B5600C832A1 /* arrowDOWN.png in Resources */,
 				0B970B52199376C9006D0358 /* h2.png in Resources */,
 				0B970B60199376C9006D0358 /* s2.png in Resources */,
 				0B970B47199376C9006D0358 /* d5.png in Resources */,
@@ -787,19 +857,25 @@
 				0B970B57199376C9006D0358 /* h7.png in Resources */,
 				0B76309F199CB7D200949155 /* leftArrowButtonBG.png in Resources */,
 				0B970B5C199376C9006D0358 /* s10.png in Resources */,
+				C6B9A7BB19DD6B5600C832A1 /* 1159155670_main.jpg in Resources */,
 				0B7630A919A247DF00949155 /* OrderVsIntake.html in Resources */,
 				0B970B58199376C9006D0358 /* h8.png in Resources */,
 				0B9F719E1994FF53003AE1BE /* homeIDLogo.png in Resources */,
+				C6B9A7C219DD6B5600C832A1 /* checkbox-checked@2x.png in Resources */,
+				C6B9A7C319DD6B5600C832A1 /* checkbox.png in Resources */,
 				0BC9563C198FDABD00CD45D5 /* InfoPlist.strings in Resources */,
 				0B9F71A31994FF53003AE1BE /* homeSettingsLogoWhite.png in Resources */,
 				0B9F71A01994FF53003AE1BE /* homeReportsLogo.png in Resources */,
 				0B970B64199376C9006D0358 /* s6.png in Resources */,
 				0B970B55199376C9006D0358 /* h5.png in Resources */,
 				0B970B3E199376C9006D0358 /* c9.png in Resources */,
+				C6B9A7BC19DD6B5600C832A1 /* 1159167060_main.jpg in Resources */,
+				C6B9A7C419DD6B5600C832A1 /* checkbox@2x.png in Resources */,
 				0B970B56199376C9006D0358 /* h6.png in Resources */,
 				5BA0951F19B620AB006C1782 /* 1159061320_main.jpg in Resources */,
 				0B970B3D199376C9006D0358 /* c8.png in Resources */,
 				0B970B3F199376C9006D0358 /* d1.png in Resources */,
+				C6B9A7C019DD6B5600C832A1 /* arrowUP.png in Resources */,
 				0B970B35199376C9006D0358 /* c12.png in Resources */,
 				0B970B63199376C9006D0358 /* s5.png in Resources */,
 				0B9F71AB19950A5D003AE1BE /* homeChangeSettingsButton.png in Resources */,
@@ -829,8 +905,10 @@
 				5B65017B19B60B3E003F03F8 /* 1159147370_main.jpg in Resources */,
 				0B288A7219B9C81300F62B63 /* BusinessReview.html in Resources */,
 				0B970B34199376C9006D0358 /* c11.png in Resources */,
+				C6B9A7BA19DD6B5600C832A1 /* 1159053670_main.jpg in Resources */,
 				0B970B40199376C9006D0358 /* d10.png in Resources */,
 				5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */,
+				C6B9A7BE19DD6B5600C832A1 /* 1945097370_main.jpg in Resources */,
 				0B970B45199376C9006D0358 /* d3.png in Resources */,
 				0BC95645198FDABD00CD45D5 /* Main.storyboard in Resources */,
 				0B970B5F199376C9006D0358 /* s13.png in Resources */,
@@ -861,44 +939,50 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0B288A9C19B9EFC000F62B63 /* ProductOrder.m in Sources */,
 				0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */,
 				5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */,
+				C6B9A7A319DD6A1900C832A1 /* AddNewProductViewController.m in Sources */,
+				C6B9A7A419DD6A1900C832A1 /* ProductNotesViewController.m in Sources */,
 				0B970B6B199376C9006D0358 /* PlayingCardCell.m in Sources */,
 				0BC95642198FDABD00CD45D5 /* AppDelegate.m in Sources */,
 				5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */,
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
 				0B288ACA19BF407900F62B63 /* ReportData.m in Sources */,
+				C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */,
 				0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				0B288ABD19BDF06500F62B63 /* Brand.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
-				0B288A9919B9EFC000F62B63 /* ProductCategory.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportControllerViewController.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,
 				0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */,
+				C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				0B288A7819B9C83600F62B63 /* Report.m in Sources */,
+				C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */,
 				0B288A6F19B9C80B00F62B63 /* SchDropDown.m in Sources */,
 				0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */,
 				0B288AA219B9F74700F62B63 /* SyncStatus.m in Sources */,
-				0B288A8D19B9EFBF00F62B63 /* Product.m in Sources */,
 				0B7630A3199E0BCD00949155 /* OrderVsIntakeReportViewController.m in Sources */,
 				0B970B68199376C9006D0358 /* CollectionViewController.m in Sources */,
-				0B288A9619B9EFC000F62B63 /* Collection.m in Sources */,
+				C6B9A7A919DD6A4C00C832A1 /* CollectionNotesViewController.m in Sources */,
 				0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */,
 				0B288A9019B9EFBF00F62B63 /* Material.m in Sources */,
+				C6B9A7C719DD737400C832A1 /* Collection.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				0B970B6A199376C9006D0358 /* PlayingCard.m in Sources */,
 				0B288A7019B9C80B00F62B63 /* SchPDFView.m in Sources */,
+				C6B9A7AC19DD6AB800C832A1 /* ProductButton.m in Sources */,
+				C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0B288A8A19B9EFBF00F62B63 /* Colour.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
+				C6B9A7D019DD73AC00C832A1 /* ProductCategory.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B288A8419B9EFBF00F62B63 /* Image.m in Sources */,

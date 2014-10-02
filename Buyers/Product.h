@@ -2,7 +2,7 @@
 //  Product.h
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Schuh Webdev on 02/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -24,7 +24,7 @@
 @property (nonatomic, retain) Colour *colour;
 @property (nonatomic, retain) NSSet *images;
 @property (nonatomic, retain) Material *material;
-@property (nonatomic, retain) ProductOrder *productOrder;
+@property (nonatomic, retain) NSSet *productOrder;
 @property (nonatomic, retain) Supplier *supplier;
 @end
 
@@ -39,5 +39,10 @@
 - (void)removeImagesObject:(Image *)value;
 - (void)addImages:(NSSet *)values;
 - (void)removeImages:(NSSet *)values;
+
+- (void)addProductOrderObject:(ProductOrder *)value;
+- (void)removeProductOrderObject:(ProductOrder *)value;
+- (void)addProductOrder:(NSSet *)values;
+- (void)removeProductOrder:(NSSet *)values;
 
 @end

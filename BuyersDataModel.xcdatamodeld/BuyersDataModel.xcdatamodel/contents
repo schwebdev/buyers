@@ -13,7 +13,7 @@
         <attribute name="collectionCreator" attributeType="String" minValueString="3" maxValueString="100" syncable="YES"/>
         <attribute name="collectionName" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
         <attribute name="collectionNotes" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="collectionProductOrder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderCollection" inverseEntity="ProductOrder" syncable="YES"/>
+        <relationship name="collectionProductOrder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderCollection" inverseEntity="ProductOrder" syncable="YES"/>
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="collections" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Colour" representedClassName="Colour" syncable="YES">
@@ -48,7 +48,7 @@
         <relationship name="colour" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Colour" inverseName="productColour" inverseEntity="Colour" syncable="YES"/>
         <relationship name="images" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Image" inverseName="product" inverseEntity="Image" syncable="YES"/>
         <relationship name="material" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Material" inverseName="productMaterial" inverseEntity="Material" syncable="YES"/>
-        <relationship name="productOrder" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderProduct" inverseEntity="ProductOrder" syncable="YES"/>
+        <relationship name="productOrder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderProduct" inverseEntity="ProductOrder" syncable="YES"/>
         <relationship name="supplier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Supplier" inverseName="productSupplier" inverseEntity="Supplier" syncable="YES"/>
     </entity>
     <entity name="ProductCategory" representedClassName="ProductCategory" syncable="YES">
@@ -97,18 +97,18 @@
     <elements>
         <element name="Brand" positionX="-27" positionY="126" width="128" height="88"/>
         <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
-        <element name="Collection" positionX="-63" positionY="-18" width="128" height="133"/>
+        <element name="Collection" positionX="-63" positionY="-18" width="128" height="135"/>
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
+        <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="238"/>
+        <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="240"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="120"/>
         <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
-        <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
-        <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
     </elements>
 </model>

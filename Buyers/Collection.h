@@ -2,7 +2,7 @@
 //  Collection.h
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Schuh Webdev on 02/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -17,11 +17,16 @@
 @property (nonatomic, retain) NSString * collectionCreator;
 @property (nonatomic, retain) NSString * collectionName;
 @property (nonatomic, retain) NSString * collectionNotes;
-@property (nonatomic, retain) ProductOrder *collectionProductOrder;
+@property (nonatomic, retain) NSSet *collectionProductOrder;
 @property (nonatomic, retain) NSSet *products;
 @end
 
 @interface Collection (CoreDataGeneratedAccessors)
+
+- (void)addCollectionProductOrderObject:(ProductOrder *)value;
+- (void)removeCollectionProductOrderObject:(ProductOrder *)value;
+- (void)addCollectionProductOrder:(NSSet *)values;
+- (void)removeCollectionProductOrder:(NSSet *)values;
 
 - (void)addProductsObject:(Product *)value;
 - (void)removeProductsObject:(Product *)value;

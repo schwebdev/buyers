@@ -48,7 +48,7 @@
 -(IBAction)saveNewCollection:(id)sender {
     _collectionError.hidden = true;
     [_collectionName resignFirstResponder];
-    if ([_collectionName.text isEqualToString:(@"")]) {
+    if ([self.collectionName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a name for this collection!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     } else {
