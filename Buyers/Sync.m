@@ -15,7 +15,8 @@
 #import "Brand.h"
 #import "material.h"
 #import "CalYearWeek.h"
-
+#import "Department.h"
+#import "Merch.h"
 #import "ReportOrderVsIntake.h"
 
 @implementation Sync
@@ -154,6 +155,7 @@
         if(detailedErrors != nil && [detailedErrors count] > 0) {
             for(NSError* detailedError in detailedErrors) {
                 NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
             }
         } else {
             NSLog(@" detailed error:%@", [saveError userInfo]);
@@ -161,7 +163,7 @@
         return NO;
     } else {
         
-        NSLog(@"%d supplier entries created",results.count);
+        NSLog(@"%lu supplier entries created",(unsigned long)results.count);
     }
     
     [self updateSyncStatus:@"suppliers"];
@@ -212,7 +214,7 @@
         if(detailedErrors != nil && [detailedErrors count] > 0) {
             for(NSError* detailedError in detailedErrors) {
                 NSLog(@" detailed error:%@", [detailedError userInfo]);
-                NSLog(@" detailed error:%d", [detailedError code]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
             }
         } else {
             NSLog(@" detailed error:%@", [saveError userInfo]);
@@ -220,7 +222,7 @@
         return NO;
     } else {
         
-        NSLog(@"%d brand entries created",results.count);
+        NSLog(@"%lu brand entries created",(unsigned long)results.count);
     }
     
     [self updateSyncStatus:@"brand"];
@@ -267,7 +269,7 @@
         if(detailedErrors != nil && [detailedErrors count] > 0) {
             for(NSError* detailedError in detailedErrors) {
                 NSLog(@" detailed error:%@", [detailedError userInfo]);
-                NSLog(@" detailed error:%d", [detailedError code]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
             }
         } else {
             NSLog(@" detailed error:%@", [saveError userInfo]);
@@ -275,10 +277,124 @@
         return NO;
     } else {
         
-        NSLog(@"%d CalYearWeek entries created",results.count);
+        NSLog(@"%lu CalYearWeek entries created",(unsigned long)results.count);
     }
     
     [self updateSyncStatus:@"calyearweek"];
+    
+    return YES;
+}
+
+
++ (BOOL)syncMerch {
+    
+    NSError *error;
+    NSURL *url = [[NSURL alloc] initWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmerch"];
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
+    
+    if(!data) {
+        NSLog(@"download error:%@", error.localizedDescription);
+        return NO;
+    }
+    
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
+        NSLog(@"json error: %@", error);
+        return NO;
+    }
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Merch"];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
+    }
+    
+    for (NSDictionary *result in results) {
+        //save the new collection
+        Merch *merch = [NSEntityDescription insertNewObjectForEntityForName:@"Merch" inManagedObjectContext:managedContext];
+        merch.merchRef = result[@"MerchRef"];
+        merch.merchName = result[@"MerchName"];
+    }
+    
+    NSError *saveError;
+    if(![managedContext save:&saveError]) {
+        NSLog(@"Could not save Merch: %@", [saveError localizedDescription]);
+        
+        NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+        if(detailedErrors != nil && [detailedErrors count] > 0) {
+            for(NSError* detailedError in detailedErrors) {
+                NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
+            }
+        } else {
+            NSLog(@" detailed error:%@", [saveError userInfo]);
+        }
+        return NO;
+    } else {
+        
+        NSLog(@"%lu Merch entries created",(unsigned long)results.count);
+    }
+    
+    [self updateSyncStatus:@"merch"];
+    
+    return YES;
+}
+
+
++ (BOOL)syncDepartments {
+    
+    NSError *error;
+    NSURL *url = [[NSURL alloc] initWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getdepartments"];
+    
+    NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
+    
+    if(!data) {
+        NSLog(@"download error:%@", error.localizedDescription);
+        return NO;
+    }
+    
+    NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+    if(results == nil) {
+        NSLog(@"json error: %@", error);
+        return NO;
+    }
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Department"];
+    NSArray *oldResults = [managedContext executeFetchRequest:request error:&error];
+    
+    for (NSManagedObject *oldResult in oldResults) {
+        [managedContext deleteObject:oldResult];
+    }
+    
+    for (NSDictionary *result in results) {
+        //save the new collection
+        Department *department = [NSEntityDescription insertNewObjectForEntityForName:@"Department" inManagedObjectContext:managedContext];
+        department.depCode = [NSNumber numberWithInt:[result[@"DepCode"] intValue]];
+        department.depDesc = result[@"Desc"];
+    }
+    
+    NSError *saveError;
+    if(![managedContext save:&saveError]) {
+        NSLog(@"Could not save Department: %@", [saveError localizedDescription]);
+        
+        NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+        if(detailedErrors != nil && [detailedErrors count] > 0) {
+            for(NSError* detailedError in detailedErrors) {
+                NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
+            }
+        } else {
+            NSLog(@" detailed error:%@", [saveError userInfo]);
+        }
+        return NO;
+    } else {
+        
+        NSLog(@"%lu Department entries created",(unsigned long)results.count);
+    }
+    
+    [self updateSyncStatus:@"department"];
     
     return YES;
 }
@@ -335,7 +451,7 @@
         if(detailedErrors != nil && [detailedErrors count] > 0) {
             for(NSError* detailedError in detailedErrors) {
                 NSLog(@" detailed error:%@", [detailedError userInfo]);
-                NSLog(@" detailed error:%d", [detailedError code]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
             }
         } else {
             NSLog(@" detailed error:%@", [saveError userInfo]);
@@ -343,7 +459,7 @@
         return NO;
     } else {
         
-        NSLog(@"%d ReportOrderVsIntake entries created",results.count);
+        NSLog(@"%lu ReportOrderVsIntake entries created",(unsigned long)results.count);
     }
     
     

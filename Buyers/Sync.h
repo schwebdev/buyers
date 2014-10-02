@@ -15,6 +15,8 @@
 + (BOOL)syncBrands;
 + (BOOL)syncCalYearWeeks;
 + (BOOL)syncReportsOrderVsIntake;
++ (BOOL)syncDepartments;
++ (BOOL)syncMerch;
 
 + (void)updateSyncStatus:(NSString *)type;
 + (NSDate *)getLastSyncDate;

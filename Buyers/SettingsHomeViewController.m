@@ -156,7 +156,7 @@
     
     //internet check
     
-    CGFloat syncCount = 4;
+    CGFloat syncCount = 6;
     
     Reachability *network = [Reachability reachabilityWithHostName:@"aws.schuhshark.com"];
     
@@ -167,24 +167,29 @@
             success = [Sync syncSuppliers];
             [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:1/syncCount] waitUntilDone:YES];
         }
-        
         if(success) {
             success = [Sync syncBrands];
-            
             [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:2/syncCount] waitUntilDone:YES];
         }
-        
         if(success) {
             success = [Sync syncCalYearWeeks];
-            
             [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:3/syncCount] waitUntilDone:YES];
         }
+        if(success) {
+            success = [Sync syncMerch];
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:4/syncCount] waitUntilDone:YES];
+        }
+        if(success) {
+            success = [Sync syncDepartments];
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:5/syncCount] waitUntilDone:YES];
+        }
+
         
         
         if(success) {
             success = [Sync syncReportsOrderVsIntake];
             
-            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:4/syncCount] waitUntilDone:YES];
+            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:6/syncCount] waitUntilDone:YES];
         }
     } else {
         

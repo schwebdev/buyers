@@ -27,6 +27,8 @@
 		0B288AC219BE032C00F62B63 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */; };
 		0B288AC419BEEE7700F62B63 /* homeSyncGreen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */; };
 		0B288ACA19BF407900F62B63 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AC919BF407900F62B63 /* ReportData.m */; };
+		0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EAE19DD5EC10079EB25 /* Merch.m */; };
+		0B523EB219DD5EC20079EB25 /* Department.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB119DD5EC20079EB25 /* Department.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -192,6 +194,10 @@
 		0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSyncGreen2.png; sourceTree = "<group>"; };
 		0B288AC819BF407900F62B63 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
 		0B288AC919BF407900F62B63 /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportData.m; path = Buyers/ReportData.m; sourceTree = "<group>"; };
+		0B523EAD19DD5EC10079EB25 /* Merch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Merch.h; path = Buyers/Merch.h; sourceTree = "<group>"; };
+		0B523EAE19DD5EC10079EB25 /* Merch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Merch.m; path = Buyers/Merch.m; sourceTree = "<group>"; };
+		0B523EB019DD5EC20079EB25 /* Department.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Department.h; path = Buyers/Department.h; sourceTree = "<group>"; };
+		0B523EB119DD5EC20079EB25 /* Department.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Department.m; path = Buyers/Department.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -558,6 +564,10 @@
 				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
 				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
+				0B523EB019DD5EC20079EB25 /* Department.h */,
+				0B523EB119DD5EC20079EB25 /* Department.m */,
+				0B523EAD19DD5EC10079EB25 /* Merch.h */,
+				0B523EAE19DD5EC10079EB25 /* Merch.m */,
 				0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */,
 				0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */,
 				0B288ABB19BDF06500F62B63 /* Brand.h */,
@@ -870,6 +880,7 @@
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,
+				0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				0B288A7819B9C83600F62B63 /* Report.m in Sources */,
@@ -891,6 +902,7 @@
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B288A8419B9EFBF00F62B63 /* Image.m in Sources */,
+				0B523EB219DD5EC20079EB25 /* Department.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
