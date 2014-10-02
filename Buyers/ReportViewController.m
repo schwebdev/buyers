@@ -39,7 +39,9 @@
         [self.popover dismissPopoverAnimated:YES];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
+        [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
         
+        //[self.side setFrontViewPosition:toggledFrontViewPosition animated:animated];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please enter a file name"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];

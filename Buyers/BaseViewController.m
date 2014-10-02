@@ -7,8 +7,6 @@
 //
 
 #import "BaseViewController.h"
-#import "SWRevealViewController.h"
-#import "SidebarViewController.h"
 
 @interface BaseViewController ()
 
@@ -147,7 +145,8 @@
     self.navigationController.navigationBar.translucent = NO;
     //[self setAutomaticallyAdjustsScrollViewInsets:NO];
     //[self setEdgesForExtendedLayout:UIRectEdgeNone];
-        
+    
+    self.navigationController.delegate = self;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -197,6 +196,8 @@
     // Dispose of any resources that can be recreated.
 }
 
-
+-(void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
+}
 
 @end
