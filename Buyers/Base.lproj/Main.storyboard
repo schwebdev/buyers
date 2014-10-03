@@ -216,10 +216,10 @@
             </objects>
             <point key="canvasLocation" x="-1137" y="-1616"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="cGH-Rd-rsk">
             <objects>
-                <navigationController storyboardIdentifier="CollectionsNavController" definesPresentationContext="YES" id="2sS-4z-qZu" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CollectionsNavController" definesPresentationContext="YES" id="2sS-4z-qZu" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="4bx-OU-Za8">
                         <autoresizingMask key="autoresizingMask"/>
@@ -403,10 +403,10 @@
             </objects>
             <point key="canvasLocation" x="5087" y="-35"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="m6e-la-mIc">
             <objects>
-                <navigationController storyboardIdentifier="SettingsNavController" definesPresentationContext="YES" id="5C5-hX-2b4" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="SettingsNavController" definesPresentationContext="YES" id="5C5-hX-2b4" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ewD-BU-Vn9">
                         <autoresizingMask key="autoresizingMask"/>
@@ -423,10 +423,10 @@
             </objects>
             <point key="canvasLocation" x="3907" y="-35"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="LfA-wE-Eu1">
             <objects>
-                <navigationController storyboardIdentifier="CustomProductNavController" definesPresentationContext="YES" id="PlI-sp-1nW" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="CustomProductNavController" definesPresentationContext="YES" id="PlI-sp-1nW" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="XTZ-Mb-vH8">
                         <autoresizingMask key="autoresizingMask"/>
@@ -640,10 +640,11 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="color" red="0.49803921569999998" green="0.68627450980000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                             </activityIndicatorView>
-                            <webView contentMode="scaleToFill" scalesPageToFit="YES" id="Qcv-4e-y5P">
+                            <webView contentMode="scaleToFill" scalesPageToFit="YES" allowsInlineMediaPlayback="NO" mediaPlaybackRequiresUserAction="NO" mediaPlaybackAllowsAirPlay="NO" keyboardDisplayRequiresUserAction="NO" id="Qcv-4e-y5P">
                                 <rect key="frame" x="0.0" y="85" width="1024" height="683"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <dataDetectorType key="dataDetectorTypes"/>
                                 <connections>
                                     <outlet property="delegate" destination="n8l-yt-bLJ" id="5cN-1Y-KwJ"/>
                                 </connections>
@@ -661,10 +662,10 @@
             </objects>
             <point key="canvasLocation" x="995" y="1996"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--Base Navigation Controller-->
         <scene sceneID="GRv-Of-2BY">
             <objects>
-                <navigationController storyboardIdentifier="ReportsNavController" definesPresentationContext="YES" id="hkY-EU-r6s" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="ReportsNavController" definesPresentationContext="YES" id="hkY-EU-r6s" customClass="BaseNavigationController" sceneMemberID="viewController">
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="ulT-Qi-q6B">
                         <autoresizingMask key="autoresizingMask"/>
@@ -816,7 +817,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" tag="1" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="bdD-ug-hNA">
-                                                    <rect key="frame" x="15" y="0.0" width="210" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="200" height="43"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
@@ -841,6 +842,7 @@
                         <outlet property="BrandsList" destination="lHr-MM-pXz" id="sbs-48-TW5"/>
                         <outlet property="CalWeekFrom" destination="sOf-ar-DVB" id="jkZ-j7-Vcd"/>
                         <outlet property="CalWeekTo" destination="l1R-IE-H4Z" id="W5G-hz-CSG"/>
+                        <outlet property="MerchList" destination="KAz-VE-jP2" id="6am-Nl-7VF"/>
                         <outlet property="SuppliersList" destination="KzL-Lu-4aP" id="TDr-Bk-YjJ"/>
                         <outlet property="departmentsTable" destination="Orf-Pc-d7a" id="Md7-cr-356"/>
                     </connections>
@@ -1616,10 +1618,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="e9U-H5-272"/>
-        <segue reference="Vre-rQ-Oeh"/>
-        <segue reference="4ka-9q-dOG"/>
-        <segue reference="ktD-rv-eYL"/>
+        <segue reference="xii-QN-o1o"/>
+        <segue reference="GDM-t3-wVL"/>
+        <segue reference="aGa-ph-cAx"/>
+        <segue reference="8zL-Jv-JNu"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
 </document>

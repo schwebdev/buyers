@@ -111,18 +111,19 @@
                                  nil];
     
     
-        //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
+    //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
+    //self.navigationController.delegate = self;
 }
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    UIButton *menu1 = [self setMenuButton:1 title:@"reports 1"];
-    
-    [menu1 addTarget:self action:@selector(alert) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self setMenuButton:2 title:@"reports 2"];
-    [self setMenuButton:3 title:@"reports 3"];
+//    UIButton *menu1 = [self setMenuButton:1 title:@"reports 1"];
+//    
+//    [menu1 addTarget:self action:@selector(alert) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [self setMenuButton:2 title:@"reports 2"];
+//    [self setMenuButton:3 title:@"reports 3"];
     
     
     /*

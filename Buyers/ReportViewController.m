@@ -245,7 +245,7 @@
     //[self createPDFFromUIVIew:self.webView saveToDocumentWithFileName:@"test.pdf"];
     //[self savePDFFromWebView:self.webView fileName:@"test2.pdf"];
     
-    UIBarButtonItem *btn = (UIBarButtonItem *)sender;
+    //UIBarButtonItem *btn = (UIBarButtonItem *)sender;
     
     UIViewController *popoverContent = [[UIViewController alloc] init];
     
@@ -318,8 +318,6 @@
     [barButtons addSubview:saveButton];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:barButtons];
-
-    self.webView.dataDetectorTypes = UIDataDetectorTypeNone;
     
 }
 - (void)viewWillAppear:(BOOL)animated {
