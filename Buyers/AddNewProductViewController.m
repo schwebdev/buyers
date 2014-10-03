@@ -15,6 +15,7 @@
 #import "Supplier.h"
 #import "Colour.h"
 #import "Material.h"
+#import "Sync.h"
 
 static const float kPageWidth = 680.0;
 
@@ -44,7 +45,7 @@ static const float kPageWidth = 680.0;
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+    _isDirtyImage = NO;
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"product" title2:@"your custom product" image:@"homePaperClipLogo.png"];
     
     
@@ -85,79 +86,19 @@ static const float kPageWidth = 680.0;
     
     [self.view addSubview:productsInfo];
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSError *error;
+   
+    
+    
     //categories drop down
-    NSFetchRequest *categoryRequest = [[NSFetchRequest alloc] initWithEntityName:@"ProductCategory"];
-    categories = [managedContext executeFetchRequest:categoryRequest error:&error];
-    
-    if([categories count] >0) {
-        
-        self.categoryList.hidden = NO;
-        self.categoryList.listItems = [NSMutableArray array];
-        for (int c = 0, cc = [categories count]; c < cc; c++) {
-            ProductCategory *col = [categories objectAtIndex:c];
-            [self.categoryList.listItems addObject:@{[[col objectID]URIRepresentation]:col.categoryName}];
-            
-        }
-    }
-    
+    [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
     //brand drop down
-    NSFetchRequest *brandRequest = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
-    brands = [managedContext executeFetchRequest:brandRequest error:&error];
-    
-    if([brands count] >0) {
-        self.brandList.hidden = NO;
-        self.brandList.listItems = [NSMutableArray array];
-        for (int c = 0, cc = [brands count]; c < cc; c++) {
-            Brand *col = [brands objectAtIndex:c];
-            [self.brandList.listItems addObject:@{[[col objectID]URIRepresentation]:col.brandName}];
-            
-        }
-    }
-    
+    [self.brandList setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
     //supplier drop down
-    NSFetchRequest *supplierRequest = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
-    suppliers = [managedContext executeFetchRequest:supplierRequest error:&error];
-    
-    if([suppliers count] >0) {
-        self.supplierList.hidden = NO;
-        self.supplierList.listItems = [NSMutableArray array];
-        for (int c = 0, cc = [suppliers count]; c < cc; c++) {
-            Supplier *col = [suppliers objectAtIndex:c];
-            [self.supplierList.listItems addObject:@{[[col objectID]URIRepresentation]:col.supplierName}];
-            
-        }
-    }
-    
+    [self.supplierList setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
     //colour drop down
-    NSFetchRequest *colourRequest = [[NSFetchRequest alloc] initWithEntityName:@"Colour"];
-    colours = [managedContext executeFetchRequest:colourRequest error:&error];
-    
-    if([colours count] >0) {
-        self.colourList.hidden = NO;
-        self.colourList.listItems = [NSMutableArray array];
-        for (int c = 0, cc = [colours count]; c < cc; c++) {
-            Colour *col = [colours objectAtIndex:c];
-            [self.colourList.listItems addObject:@{[[col objectID]URIRepresentation]:col.colourName}];
-            
-        }
-    }
-    
+    [self.colourList setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourCode"];
     //material drop down
-    NSFetchRequest *materialRequest = [[NSFetchRequest alloc] initWithEntityName:@"Material"];
-    material = [managedContext executeFetchRequest:materialRequest error:&error];
-    
-    if([material count] >0) {
-        self.materialList.hidden = NO;
-        self.materialList.listItems = [NSMutableArray array];
-        for (int c = 0, cc = [material count]; c < cc; c++) {
-            Material *col = [material objectAtIndex:c];
-            [self.materialList.listItems addObject:@{[[col objectID]URIRepresentation]:col.materialName}];
-            
-        }
-    }
-    
+    [self.materialList setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
 
 }
 
@@ -172,18 +113,32 @@ static const float kPageWidth = 680.0;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeCamera])
     {
-        UIImagePickerController *imagePicker =
-        [[UIImagePickerController alloc] init];
-        imagePicker.delegate = self;
-        imagePicker.sourceType =
-        UIImagePickerControllerSourceTypeCamera;
-        //UIImagePickerControllerCameraFlashModeAuto;
-        imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
-        imagePicker.allowsEditing = NO;
+        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
         
-        [self presentViewController:imagePicker
-                           animated:YES completion:nil];
+        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
+        ///imagePicker.allowsEditing = NO;
+        //imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn; //UIImagePickerControllerCameraFlashModeAuto;
+        //imagePicker.showsCameraControls = YES;
+        
+        CGRect f = imagePicker.view.bounds;
+        f.size.height -= imagePicker.navigationBar.bounds.size.height;
+        CGFloat barHeight = (f.size.height - f.size.width) / 2;
+        UIGraphicsBeginImageContext(f.size);
+        [[UIColor colorWithWhite:0 alpha:.5] set];
+        UIRectFillUsingBlendMode(CGRectMake(0, 0, f.size.width, barHeight), kCGBlendModeNormal);
+        UIRectFillUsingBlendMode(CGRectMake(0, f.size.height - barHeight, f.size.width, barHeight), kCGBlendModeNormal);
+        UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        
+        UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
+        overlayIV.image = overlayImage;
+        [imagePicker.cameraOverlayView addSubview:overlayIV];
+        
+        imagePicker.delegate = self;
+        [self presentViewController:imagePicker animated:YES completion:nil];
         _newMedia = YES;
+        _isDirtyImage = YES;
     }
 }
 
@@ -202,6 +157,7 @@ static const float kPageWidth = 680.0;
         [self presentViewController:imagePicker
                            animated:YES completion:nil];
         _newMedia = NO;
+        _isDirtyImage = YES;
     }
 }
 
@@ -211,59 +167,132 @@ static const float kPageWidth = 680.0;
 
 - (void)saveCustomProduct:(id)sender {
     
-    
-    //validation
+    NSString *pName, *pCode;
+    ProductCategory *pCategory;
+    Brand *pBrand;
+    Supplier *pSupplier;
+    Colour *pColour;
+    Material *pMaterial;
+    NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
+    NSNumber *pPrice;
+    _isValid = YES;
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSError *error;
-    
-    Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-    
-    product.productName = @"test";
-    product.productPrice = [NSNumber numberWithDouble:125.00];
-   // product.productNotes = @""; //user can add notes via edit so may not need this field
-    
-    /*NSFetchRequest *brandRequest = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
-    NSArray *brands = [managedContext executeFetchRequest:brandRequest error:&error];
-    NSFetchRequest *materialRequest = [[NSFetchRequest alloc] initWithEntityName:@"Material"];
-    NSArray *materials = [managedContext executeFetchRequest:materialRequest error:&error];
-    NSFetchRequest *colourRequest = [[NSFetchRequest alloc] initWithEntityName:@"Colour"];
-    NSArray *colours = [managedContext executeFetchRequest:colourRequest error:&error];
-    NSFetchRequest *supplierRequest = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
-    NSArray *suppliers = [managedContext executeFetchRequest:supplierRequest error:&error];
-    NSFetchRequest *catRequest = [[NSFetchRequest alloc] initWithEntityName:@"ProductCategory"];
-    NSArray *categories = [managedContext executeFetchRequest:catRequest error:&error];*/
-    
-    
-    
-    /*for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
-        NSLog(@"selected list p: %d",p);
-        Product *product = [selectedProducts objectAtIndex:p];
-        int index = [products indexOfObject:product]+1; //add one as products array tag adds 1 to index for viewWithTag to work (doesn't work with 0)
-        UIButton *button = (UIButton *)[self.view viewWithTag:index];
-        //add full opacity
-        button.layer.opacity = 1;
-    }*/
-    
-    
-    //picker control index for all of these
-    
-    
-    NSString *filePath = [self.categoryList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
-    
-    product.category = [categories objectAtIndex:0];
-    product.brand = [brands objectAtIndex:0];
-    product.colour = [colours objectAtIndex:0];
-    product.material = [material objectAtIndex:0];
-    product.supplier = [suppliers objectAtIndex:0];
-
-    NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-    product.productImageData = imageData;
+    NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
 
     
-    if(![managedContext save:&error]) {
-        NSLog(@"Could not save product: %@", [error localizedDescription]);
+    
+    //validation
+    if([self.txtProductName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a product name\n"];
+    } else {
+        pName =self.txtProductName.text;
     }
+    
+    if([self.categoryList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a category\n"];
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.categoryList.getSelectedObject[@"IDURI"]];
+        NSManagedObject *categoryElement = [managedContext objectWithID:c];
+        pCategory = (ProductCategory*)categoryElement;
+    }
+    
+    if([self.brandList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a brand\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.brandList.getSelectedObject[@"IDURI"]];
+        NSManagedObject *brandElement = [managedContext objectWithID:c];
+        pBrand = (Brand*)brandElement;
+    }
+    
+    if([self.supplierList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a supplier\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.supplierList.getSelectedObject[@"IDURI"]];
+        NSManagedObject *supplierElement = [managedContext objectWithID:c];
+        pSupplier = (Supplier*)supplierElement;
+        //pSupplier = [self.supplierList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    
+    if([self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a colour\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.colourList.getSelectedObject[@"IDURI"]];
+        NSManagedObject *colourElement = [managedContext objectWithID:c];
+        pColour = (Colour*)colourElement;
+        //pColour = [self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    
+    if([self.materialList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a material\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.materialList.getSelectedObject[@"IDURI"]];
+        NSManagedObject *materialElement = [managedContext objectWithID:c];
+        pMaterial = (Material*)materialElement;
+        //pMaterial = [self.materialList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    
+    if([self.txtProductPrice.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a price\n"];
+    } else {
+        pPrice = [NSNumber numberWithDouble:[self.txtProductPrice.text doubleValue]];
+    }
+    
+    if([self.txtProductCode.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a product code\n"];
+    } else {
+        pCode =self.txtProductCode.text;
+    }
+    
+    if(!_isDirtyImage){
+        _isValid = NO;
+        [errorMsg appendString:@"please take a photo or select an image\n"];
+    }
+    
+    
+         if(_isValid){
+             NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+             NSError *error;
+             
+             Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
+             
+             product.productCode = pCode;
+             
+             product.productName = pName;
+             product.productPrice = pPrice;
+             
+             product.category = pCategory;
+             product.brand = pBrand;
+             product.colour = pColour;
+             product.material = pMaterial;
+             product.supplier = pSupplier;
+             
+             NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+             product.productImageData = imageData;
+             
+             
+             if(![managedContext save:&error]) {
+                 NSLog(@"Could not save product: %@", [error localizedDescription]);
+             }
+         }else{
+             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+             [alert show];
+            }
+    
+    
+    
 
 }
 
