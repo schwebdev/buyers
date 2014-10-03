@@ -25,6 +25,7 @@
 		0B288ACA19BF407900F62B63 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AC919BF407900F62B63 /* ReportData.m */; };
 		0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EAE19DD5EC10079EB25 /* Merch.m */; };
 		0B523EB219DD5EC20079EB25 /* Department.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB119DD5EC20079EB25 /* Department.m */; };
+		0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -208,6 +209,8 @@
 		0B523EAE19DD5EC10079EB25 /* Merch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Merch.m; path = Buyers/Merch.m; sourceTree = "<group>"; };
 		0B523EB019DD5EC20079EB25 /* Department.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Department.h; path = Buyers/Department.h; sourceTree = "<group>"; };
 		0B523EB119DD5EC20079EB25 /* Department.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Department.m; path = Buyers/Department.m; sourceTree = "<group>"; };
+		0B523EB319DEB32A0079EB25 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
+		0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -592,6 +595,8 @@
 				0B288A7619B9C83600F62B63 /* Report.m */,
 				0B288A7F19B9E73300F62B63 /* Sync.h */,
 				0B288A8019B9E73300F62B63 /* Sync.m */,
+				0B523EB319DEB32A0079EB25 /* BaseNavigationController.h */,
+				0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -947,6 +952,7 @@
 				0BC95642198FDABD00CD45D5 /* AppDelegate.m in Sources */,
 				5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */,
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
+				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
 				0B288ACA19BF407900F62B63 /* ReportData.m in Sources */,
 				C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */,

@@ -18,6 +18,7 @@
 
 @property (weak, nonatomic) IBOutlet SchDropDown *SuppliersList;
 @property (weak, nonatomic) IBOutlet SchDropDown *BrandsList;
+@property (weak, nonatomic) IBOutlet SchDropDown *MerchList;
 @property (weak, nonatomic) IBOutlet UITableView *departmentsTable;
 - (IBAction)runReportClick:(id)sender;
 

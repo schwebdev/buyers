@@ -16,18 +16,18 @@
 
 + (UIView *)genNavWithTitle:(NSString*)title1 title2:(NSString*)title2 image:(NSString*)image {
     
-    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, -20, 680, 100)];
-    //navView.backgroundColor = [UIColor colorWithRed:229.0f/255.0f green:229.0f/255.0f blue:229.0f/255.0f alpha:1.0f];
+    UIView *navView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, 100)];
+    //navView.backgroundColor = [UIColor colorWithRed:229.0f/255.0f green:229.0f/255.0f blue:229.0f/255.0f alpha:0.5f];
     
     UIImageView *navImage = [[UIImageView alloc] initWithImage:[UIImage imageNamed:image]];
-    navImage.frame = CGRectMake(1, 5, 30, 30);
+    navImage.frame = CGRectMake(-337, 5, 30, 30);
     //self.navigationItem.titleView = navImage;
     
-    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(35, 0, 500, 25)];
+    UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(-305, 0, 500, 25)];
     titleLabel.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f];
     [titleLabel setText:title1];
     
-    UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(35, 12, 500, 50)];
+    UILabel *titleLabel2 = [[UILabel alloc] initWithFrame:CGRectMake(-305, 12, 500, 50)];
     titleLabel2.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:40.0f];
     titleLabel2.textColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
     [titleLabel2 setText:title2];
@@ -129,11 +129,6 @@
 }
 
 
-- (void)alert {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"alert" message:[NSString stringWithFormat:@"test"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-    [alert show];
-}
-
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -146,7 +141,6 @@
     //[self setAutomaticallyAdjustsScrollViewInsets:NO];
     //[self setEdgesForExtendedLayout:UIRectEdgeNone];
     
-    self.navigationController.delegate = self;
 }
 
 - (void)viewDidLayoutSubviews {
@@ -184,11 +178,10 @@
 }
 
 - (void) viewDidAppear:(BOOL)animated {
-    //[self.view setFrame:CGRectMake(0, 124, self.view.frame.size.width,708)];
     [super viewDidAppear:animated];
     [self.navigationController.navigationBar setBounds:CGRectMake(0, 0, 1024, 124)];
-    //[self.view setFrame:CGRectMake(0, 124, self.view.frame.size.width,708)];
 }
+
 
 - (void)didReceiveMemoryWarning
 {
@@ -196,8 +189,5 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
-    [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
-}
 
 @end

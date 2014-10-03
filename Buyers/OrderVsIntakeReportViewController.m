@@ -26,11 +26,12 @@
     NSLog(@"calweekto value, %@",[self.CalWeekTo getSelectedValue]);
     NSLog(@"brand value, %@",[self.BrandsList getSelectedValue]);
     NSLog(@"supplier value, %@",[self.SuppliersList getSelectedValue]);
+    NSLog(@"merch value, %@",[self.MerchList getSelectedValue]);
     for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
         //self.departmentsList[path.row][@"supplierName"];
         //Supplier *supplier = (Supplier *)self.departmentsList[path.row];
         //NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
-        NSLog(@"%@, %@",self.departmentsList[path.row][@"supplierCode"], self.departmentsList[path.row][@"supplierName"]);
+        NSLog(@"%@, %@",self.departmentsList[path.row][@"depCode"], self.departmentsList[path.row][@"depDesc"]);
     }
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
     vc.reportType = @"OrderVsIntake";
@@ -74,8 +75,9 @@
     
     
     
-    self.departmentsList = (NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"];
+    self.departmentsList = (NSMutableArray *)[Sync getTable:@"Department" sortWith:@"depDesc"];
     
+    [self.MerchList setListItems:(NSMutableArray *)[Sync getTable:@"Merch" sortWith:@"merchName"] withName:@"merchName" withValue:@"merchRef"];
     [self.SuppliersList setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
     [self.BrandsList setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
     
@@ -121,7 +123,7 @@
     //cell.textLabel.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     
     UILabel *textLabel = (UILabel*)[cell viewWithTag:1];
-    textLabel.text = self.departmentsList[indexPath.row][@"supplierName"];
+    textLabel.text = self.departmentsList[indexPath.row][@"depDesc"];
     
     [cell setAccessoryType:UITableViewCellAccessoryNone];
     for (NSIndexPath *path in [tableView indexPathsForSelectedRows]) {

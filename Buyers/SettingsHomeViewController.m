@@ -7,8 +7,9 @@
 //
 
 #import "SettingsHomeViewController.h"
-#import "Sync.h"
+#import "AppDelegate.h"
 #import "Reachability.h"
+#import "Sync.h"
 
 @interface SettingsHomeViewController ()
 
@@ -57,12 +58,12 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    UIButton *menu1 = [self setMenuButton:1 title:@"settings 1"];
-    
-    [menu1 addTarget:self action:@selector(alert) forControlEvents:UIControlEventTouchUpInside];
-    
-    [self setMenuButton:2 title:@"settings 2"];
-    [self setMenuButton:3 title:@"settings 3"];
+//    UIButton *menu1 = [self setMenuButton:1 title:@"settings 1"];
+//    
+//    [menu1 addTarget:self action:@selector(alert) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    [self setMenuButton:2 title:@"settings 2"];
+//    [self setMenuButton:3 title:@"settings 3"];
 }
 
 -(void)viewDidLayoutSubviews {
@@ -108,13 +109,16 @@
 
 -(IBAction)saveUserName:(id)sender {
     [userName resignFirstResponder];
-    if ([userName.text isEqualToString:(@"")]) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your full name!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    if (userName.text.length < 3) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter your full name" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     } else {
         //save the new customer name to the nsuserdefaults
         [[NSUserDefaults standardUserDefaults]
          setObject:userName.text forKey:@"username"];
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"username saved" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     }
     
 }
@@ -158,7 +162,7 @@
     
     CGFloat syncCount = 6;
     
-    Reachability *network = [Reachability reachabilityWithHostName:@"aws.schuhshark.com"];
+    Reachability *network = [(AppDelegate *)[[UIApplication sharedApplication] delegate] reachability];
     
     if ([network currentReachabilityStatus] == ReachableViaWiFi) {
         
@@ -191,26 +195,27 @@
             
             [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:6/syncCount] waitUntilDone:YES];
         }
+        
+        
+        if(success) {
+            
+            [Sync updateSyncStatus:@"global"];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        } else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync failed" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+            [alert show];
+        }
+        
+        [self updateLastSync];
     } else {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"no wifi found" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"sync failed" message:@"no wifi found" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         
         success = NO;
     }
-
-    
-    if(success) {
-        
-        [Sync updateSyncStatus:@"global"];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-    } else {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync failed" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
-    }
-    
-    [self updateLastSync];
+   
     
     [self performSelectorOnMainThread:@selector(endSync) withObject:nil waitUntilDone:YES];
 
