@@ -67,6 +67,13 @@
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
+    <entity name="ReportFilterSet" representedClassName="ReportFilterSet" syncable="YES">
+        <attribute name="createdBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filterSetName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filterValues" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="reportType" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="ReportOrderVsIntake" representedClassName="ReportOrderVsIntake" syncable="YES">
         <attribute name="diffonordvlyintake" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="diffonordvtyintake" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
@@ -110,5 +117,6 @@
         <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
+        <element name="ReportFilterSet" positionX="-9" positionY="153" width="128" height="118"/>
     </elements>
 </model>

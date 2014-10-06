@@ -9,10 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "BaseViewController.h"
 #import "SchDropDown.h"
-@interface ReportHomeViewController : BaseViewController
+@interface ReportHomeViewController : BaseViewController 
 
 @property (weak, nonatomic) IBOutlet SchDropDown *reportType;
 @property (weak, nonatomic) IBOutlet SchDropDown *reportList;
+
+@property (weak, nonatomic) IBOutlet SchDropDown *filterSets;
+@property (weak, nonatomic) IBOutlet UILabel *FilterLabel;
 
 - (IBAction)reportFilterChange:(id)sender;
 

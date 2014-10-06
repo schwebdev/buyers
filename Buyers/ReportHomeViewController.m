@@ -11,6 +11,7 @@
 #import "ReportViewController.h"
 #import "AppDelegate.h"
 #import "ReportData.h"
+#import "ReportFilterSet.h"
 
 @interface ReportHomeViewController ()
 
@@ -42,11 +43,45 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
         [self.navigationController pushViewController:vc animated:YES];
     }
     
 }
+
+- (IBAction)editFilterSet:(id)sender {
+    
+    if(self.filterSets.getSelectedValue.length == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+        
+        [vc setValue:self.filterSets.getSelectedValue forKey:@"filterSetName"];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+    
+}
+
+- (IBAction)viewFilterSet:(id)sender {
+    if(self.filterSets.getSelectedValue.length == 0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    } else {
+        ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
+        //vc.reportType = @"Order Vs Intake Report";
+        
+        [vc view];
+        //NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
+        NSString *filePath = [self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        
+        [vc loadReport:filePath];
+        [self.navigationController pushViewController:vc animated:YES];
+    }
+}
+
+
+
 - (IBAction)reportFilterChange:(id)sender {
     
     UISwitch *currentSwitch = (UISwitch *)sender;
@@ -87,10 +122,6 @@
     }
 }
 
-- (void)alert {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"alert2" message:[NSString stringWithFormat:@"test2"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-    [alert show];
-}
 
 - (void)viewDidLoad
 {
@@ -106,13 +137,33 @@
     
     
     self.reportType.listItems = [NSMutableArray arrayWithObjects:
-                                 @{@"OrderVsIntakeReport":@"Order vs Intake Report"},
-                                 @{@"BusinessReviewReport":@"Business Review Report"},
+                                 @{@"OrderVsIntake":@"Order vs Intake Report"},
+                                 @{@"BusinessReview":@"Business Review Report"},
                                  nil];
     
+    self.reportType.observerName = @"reportTypeSelect";
     
     //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
-    //self.navigationController.delegate = self;
+
+}
+
+- (void) dropDownSelectChange:(NSNotification *)notification {
+   // NSString *reportType = (NSString*)notification.object;
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(reportType == %@)",[self.reportType getSelectedValue]]];
+    
+    NSError *error;
+    NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+    
+    self.filterSets.listItems = [NSMutableArray array];
+    if(filterSets.count > 0) {
+        for (ReportFilterSet *filterSet in filterSets) {
+            [self.filterSets.listItems addObject:@{filterSet.filterSetName:filterSet.filterSetName}];
+        }
+    }
 }
 
 - (void) viewWillAppear:(BOOL)animated {
@@ -153,7 +204,21 @@
             [self.reportList.listItems addObject:@{report.name:report.name}];
         }
     }
+    
+    self.filterSets.listItems = [NSMutableArray array];
+    
+    if([self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length != 0) {
+        [self dropDownSelectChange:nil];
+    }
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center addObserver:self selector:@selector(dropDownSelectChange:) name:self.reportType.observerName object:nil];
+}
 
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+    [center removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning
@@ -162,15 +227,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
-{
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

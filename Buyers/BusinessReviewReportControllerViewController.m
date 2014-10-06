@@ -25,7 +25,7 @@
         NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
     }
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
-    vc.reportType = @"BusinessReview";
+    vc.reportType = @"BusinessReviewReport";
     // [vc preLoadView];
     
     [vc view];

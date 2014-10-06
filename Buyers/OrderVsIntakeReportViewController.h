@@ -19,7 +19,11 @@
 @property (weak, nonatomic) IBOutlet SchDropDown *SuppliersList;
 @property (weak, nonatomic) IBOutlet SchDropDown *BrandsList;
 @property (weak, nonatomic) IBOutlet SchDropDown *MerchList;
+@property (weak, nonatomic) IBOutlet SchTextField *AnalysisCode;
 @property (weak, nonatomic) IBOutlet UITableView *departmentsTable;
+
+@property (strong, nonatomic) NSString *filterSetName;
+
 - (IBAction)runReportClick:(id)sender;
 
 @end

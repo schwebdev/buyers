@@ -10,9 +10,12 @@
 
 @interface SchDropDown : UITextField <UITextFieldDelegate, UIPopoverControllerDelegate, UIPickerViewDelegate,UIPickerViewDataSource, UITableViewDataSource, UITableViewDelegate>
 
-@property UIPopoverController *popover;
+@property (strong, nonatomic) UIPopoverController *popover;
+@property (strong, nonatomic) NSString *observerName;
 @property (nonatomic) NSMutableArray * listItems;
 
 - (void)setListItems:(NSMutableArray *)listItems withName:(NSString *)listName withValue:(NSString *)listValue;
 - (NSString *)getSelectedValue;
+- (void)setSelectedValue:(NSString *)value;
+
 @end
