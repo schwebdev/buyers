@@ -142,6 +142,9 @@
 		5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0952019B6212B006C1782 /* 1461031160_main.jpg */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
+		C618D3A019DEEBC7005977D6 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D39F19DEEBC7005977D6 /* camera.png */; };
+		C618D3A219DEEC7F005977D6 /* gallery.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A119DEEC7F005977D6 /* gallery.png */; };
+		C618D3A419DEF114005977D6 /* camera_lg.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A319DEF114005977D6 /* camera_lg.png */; };
 		C6B9A7A319DD6A1900C832A1 /* AddNewProductViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A79C19DD6A1900C832A1 /* AddNewProductViewController.m */; };
 		C6B9A7A419DD6A1900C832A1 /* ProductNotesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A79E19DD6A1900C832A1 /* ProductNotesViewController.m */; };
 		C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7A019DD6A1900C832A1 /* ProductsViewController.m */; };
@@ -353,6 +356,9 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
+		C618D39F19DEEBC7005977D6 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
+		C618D3A119DEEC7F005977D6 /* gallery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gallery.png; sourceTree = "<group>"; };
+		C618D3A319DEF114005977D6 /* camera_lg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_lg.png; sourceTree = "<group>"; };
 		C6B9A79B19DD6A1900C832A1 /* AddNewProductViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddNewProductViewController.h; sourceTree = "<group>"; };
 		C6B9A79C19DD6A1900C832A1 /* AddNewProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddNewProductViewController.m; sourceTree = "<group>"; };
 		C6B9A79D19DD6A1900C832A1 /* ProductNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductNotesViewController.h; sourceTree = "<group>"; };
@@ -434,6 +440,9 @@
 		0B970AF1199376C9006D0358 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				C618D3A319DEF114005977D6 /* camera_lg.png */,
+				C618D3A119DEEC7F005977D6 /* gallery.png */,
+				C618D39F19DEEBC7005977D6 /* camera.png */,
 				0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */,
 				0B76309D199CB7D200949155 /* leftArrowButtonBG.png */,
 				0B76309E199CB7D200949155 /* rightArrowButtonBG.png */,
@@ -849,6 +858,7 @@
 				0B970B59199376C9006D0358 /* h9.png in Resources */,
 				C6B9A7B919DD6B5600C832A1 /* 1158985860_main.jpg in Resources */,
 				0BC9564A198FDABD00CD45D5 /* Images.xcassets in Resources */,
+				C618D3A419DEF114005977D6 /* camera_lg.png in Resources */,
 				0B970B36199376C9006D0358 /* c13.png in Resources */,
 				0B9F71A41994FF53003AE1BE /* homeSyncGreen.png in Resources */,
 				0B970B4F199376C9006D0358 /* h11.png in Resources */,
@@ -898,6 +908,7 @@
 				0B9F71A61994FF53003AE1BE /* homeSyncRed.png in Resources */,
 				0B970B3A199376C9006D0358 /* c5.png in Resources */,
 				0B970B3C199376C9006D0358 /* c7.png in Resources */,
+				C618D3A019DEEBC7005977D6 /* camera.png in Resources */,
 				0B970B4A199376C9006D0358 /* d8.png in Resources */,
 				0B970B67199376C9006D0358 /* s9.png in Resources */,
 				0B970B43199376C9006D0358 /* d13.png in Resources */,
@@ -929,6 +940,7 @@
 				0B970B5A199376C9006D0358 /* README.md in Resources */,
 				0B970B33199376C9006D0358 /* c10.png in Resources */,
 				0B9F71AD19950A5D003AE1BE /* homeCustomProductButton.png in Resources */,
+				C618D3A219DEEC7F005977D6 /* gallery.png in Resources */,
 				5BA0951919B61E5B006C1782 /* 1159074370_main.jpg in Resources */,
 				0B9F71B019951099003AE1BE /* schuhMenuIcon-S.png in Resources */,
 			);
