@@ -10,7 +10,6 @@
 
 @interface SchDropDown ()
 
-
 @property NSString *listName;
 @property NSString *listValue;
 @end
@@ -115,6 +114,7 @@
     self.listItems = listItems;
     self.listName = listName;
     self.listValue = listValue;
+    self.text = @"";
 }
 
 
@@ -136,8 +136,7 @@
 //        picker.dataSource = self;
 //        [popoverView addSubview:picker];
 
-        UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 280, 200) style:UITableViewStylePlain];
-        //picker.backgroundColor = [UIColor redColor];
+        UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 200) style:UITableViewStylePlain];
         [table setSeparatorInset:UIEdgeInsetsZero];
         [table setLayoutMargins:UIEdgeInsetsZero];
         table.delegate = self;
@@ -148,7 +147,7 @@
         
         self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
         self.popover.delegate = self;
-        [self.popover setPopoverContentSize:CGSizeMake(280, 200) animated:NO];
+        [self.popover setPopoverContentSize:CGSizeMake(self.frame.size.width, 200) animated:NO];
         
 //        if(![self.text isEqualToString:@""]) {
 //            for (int i = 0; i < self.listItems.count; i++) {
@@ -160,7 +159,7 @@
 //        }
         
         
-        [self.popover presentPopoverFromRect:textField.frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+        [self.popover presentPopoverFromRect:textField.frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:NO];
         
         return NO;
     } else {
@@ -205,7 +204,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"cellID";//[self.listItems objectAtIndex:indexPath.row];
+    static NSString *CellIdentifier = @"cellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {

@@ -49,10 +49,10 @@
 }
 
 - (void)saveReport {
-    NSString *fileName = [self.saveText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    NSString *fileName = self.saveText.text;
     self.filePath = fileName;
     
-    if(fileName.length > 0) {
+    if([fileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0) {
         /*
         fileName = [fileName stringByAppendingString:@".html"];
         
@@ -85,21 +85,30 @@
             NSString *htmlString = [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
 
             ReportData *report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+            report.reportID = [[NSUUID UUID] UUIDString];
             report.name = fileName;
             report.content = htmlString;
+            report.notes = @"";
             report.createdBy = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
             report.lastModified = [NSDate date];
+            report.requiresSync = @YES;
+            report.isActive = @YES;
             
             NSError *saveError;
             if(![managedContext save:&saveError]) {
                 NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
             } else {
                 NSLog(@"%@ reportdata entry created", fileName);
+                
+                self.filePath = fileName;
+                [self.popover dismissPopoverAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
             }
             
-            [self.popover dismissPopoverAnimated:YES];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-            [alert show];
         }
         
         
@@ -124,9 +133,15 @@
         report.notes = self.notesTextView.text;
         report.lastModified = [NSDate date];
         
+        if(![report.createdBy isEqualToString:@"sync"]) report.requiresSync = @YES;
+        
         NSError *saveError;
         if(![managedContext save:&saveError]) {
             NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"notes save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alert show];
         } else {
             NSLog(@"%@ reportdata entry modified", self.filePath);
         }
@@ -137,36 +152,14 @@
 
 - (void)deleteReport {
     if(self.filePath != nil) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Are you sure you wish to delete this report?"] delegate:nil cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Are you sure you wish to delete this report?"] delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
         [alert show];
     }
 }
 
-- (IBAction)addNotesClick:(id)sender {
-    
-    if(self.filePath != nil) {
-    UIViewController *popoverContent = [[UIViewController alloc] init];
-    
-    UIView *popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 720, 680)];
-    
-    
-    UILabel *lblHeader = [[UILabel alloc] initWithFrame:CGRectMake(20, 20, 300, 50)];
-    lblHeader.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:40.0f];
-    lblHeader.textColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
-    [lblHeader setText:@"report notes"];
-    [popoverView addSubview:lblHeader];
-    
-    self.notesTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 100, 680, 500)];
-    self.notesTextView.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0f];
-    self.notesTextView.textColor = [UIColor darkGrayColor];
-    [self.notesTextView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
-    [self.notesTextView.layer setBorderWidth:2];
-    
-    self.notesTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight ;
-    self.notesTextView.delegate = self;
-        
-        
-    if(self.filePath != nil) {
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1) {
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
         [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.filePath]];
@@ -176,34 +169,92 @@
         
         if(reports.count > 0) {
             ReportData *report = reports[0];
+            report.isActive = @NO;
+            report.lastModified = [NSDate date];
+            report.requiresSync = @YES;
             
-            self.notesTextView.text = report.notes;
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report delete failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                NSLog(@"%@ reportdata entry marked as deleted", self.filePath);
+                
+                self.filePath = @"";
+                [self.navigationController popViewControllerAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been deleted"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            }
         }
-    }
 
-    [popoverView addSubview:self.notesTextView];
+    }
+}
+
+
+- (IBAction)addNotesClick:(UIButton *)sender {
     
-    
-    UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];
-    [saveConfirm setTitle:@"save notes" forState:UIControlStateNormal];
-    [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
-    
-    //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
-    [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
-    
-    [saveConfirm setFrame:CGRectMake(550, 615, 150, 50)];
-    [saveConfirm addTarget:self action:@selector(saveNotes) forControlEvents:UIControlEventTouchUpInside];
-    saveConfirm.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-    [popoverView addSubview:saveConfirm];
-    
-    popoverContent.view = popoverView;
-    
-    self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
-    self.popover.delegate = self;
-    [self.popover setPopoverContentSize:popoverContent.view.frame.size animated:NO];
-    
-    [self.popover presentPopoverFromRect:self.menuAddNotes.frame inView:self.menuAddNotes.superview permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+    if(self.filePath != nil) {
+        UIViewController *popoverContent = [[UIViewController alloc] init];
+        
+        UIView *popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 720, 680)];
+        
+        
+        UILabel *lblHeader = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, 300, 40)];
+        lblHeader.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:40.0f];
+        lblHeader.textColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
+        [lblHeader setText:@"report notes"];
+        [popoverView addSubview:lblHeader];
+        
+        self.notesTextView = [[UITextView alloc] initWithFrame:CGRectMake(20, 65, 680, 530)];
+        self.notesTextView.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0f];
+        self.notesTextView.textColor = [UIColor darkGrayColor];
+        [self.notesTextView.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+        [self.notesTextView.layer setBorderWidth:2];
+        
+        self.notesTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight ;
+        self.notesTextView.delegate = self;
+            
+            
+        if(self.filePath != nil) {
+            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.filePath]];
+            
+            NSError *error;
+            NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+            
+            if(reports.count > 0) {
+                ReportData *report = reports[0];
+                
+                self.notesTextView.text = report.notes;
+            }
+        }
+
+        [popoverView addSubview:self.notesTextView];
+        
+        
+        UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];
+        [saveConfirm setTitle:@"save notes" forState:UIControlStateNormal];
+        [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+        
+        //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
+        [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
+        
+        [saveConfirm setFrame:CGRectMake(550, 615, 150, 50)];
+        [saveConfirm addTarget:self action:@selector(saveNotes) forControlEvents:UIControlEventTouchUpInside];
+        saveConfirm.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+        [popoverView addSubview:saveConfirm];
+        
+        popoverContent.view = popoverView;
+        
+        self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
+        self.popover.delegate = self;
+        [self.popover setPopoverContentSize:popoverContent.view.frame.size animated:NO];
+        
+        [self.popover presentPopoverFromRect:sender.frame inView:sender.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report must be saved before notes can be added."] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
@@ -237,7 +288,7 @@
     self.popover.delegate = self;
     [self.popover setPopoverContentSize:CGSizeMake(270, 130) animated:NO];
     
-    [self.popover presentPopoverFromRect:self.menuSavePDF.frame inView:self.menuSavePDF.superview permittedArrowDirections:UIPopoverArrowDirectionLeft animated:YES];
+    [self.popover presentPopoverFromRect:self.menuSavePDF.frame inView:self.menuSavePDF.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
     
 }
 
@@ -300,7 +351,7 @@
     //UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"save" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
     //UIBarButtonItem *button2 = [[UIBarButtonItem alloc] initWithTitle:@"save pdf" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
         //self.navigationItem.rightBarButtonItems = [NSArray arrayWithObjects:button,button2,nil];
-    UIView *barButtons = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 85)];
+    UIView *barButtons = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 220, 65)];
     
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
@@ -312,14 +363,24 @@
     [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     //[button setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
     [saveButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
-    saveButton.frame = CGRectMake(0, 0, 100, 50);
+    saveButton.frame = CGRectMake(120, 0, 100, 40);
     //[button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [saveButton addTarget:self action:@selector(saveClick:) forControlEvents:UIControlEventTouchUpInside];
     [barButtons addSubview:saveButton];
     
+    UIButton *notesButton = [UIButton buttonWithType:UIButtonTypeSystem];
+    [notesButton setTitle:@"notes" forState:UIControlStateNormal];
+    [notesButton setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+    [notesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [notesButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
+    notesButton.frame = CGRectMake(0, 0, 100, 40);
+    [notesButton addTarget:self action:@selector(addNotesClick:) forControlEvents:UIControlEventTouchUpInside];
+    [barButtons addSubview:notesButton];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:barButtons];
     
 }
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
@@ -327,10 +388,10 @@
     self.menuSavePDF = [self setMenuButton:1 title:@"export as PDF"];
     [self.menuSavePDF addTarget:self action:@selector(exportPDFClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    self.menuAddNotes = [self setMenuButton:2 title:@"add notes"];
-    [self.menuAddNotes addTarget:self action:@selector(addNotesClick:) forControlEvents:UIControlEventTouchUpInside];
+    //self.menuAddNotes = [self setMenuButton:2 title:@"add notes"];
+    //[self.menuAddNotes addTarget:self action:@selector(addNotesClick:) forControlEvents:UIControlEventTouchUpInside];
     
-    [[self setMenuButton:3 title:@"delete report"] addTarget:self action:@selector(deleteReport) forControlEvents:UIControlEventTouchUpInside];
+    [[self setMenuButton:2 title:@"delete report"] addTarget:self action:@selector(deleteReport) forControlEvents:UIControlEventTouchUpInside];
 }
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];

@@ -8,7 +8,7 @@
 
 #import "BaseViewController.h"
 #import "SchPDFView.h"
-@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UITextViewDelegate>
+@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UITextViewDelegate, UIAlertViewDelegate>
 
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSString *reportType;

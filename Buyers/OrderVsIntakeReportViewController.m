@@ -12,6 +12,8 @@
 #import "Sync.h"
 #import "ReportFilterSet.h"
 #import "AppDelegate.h"
+#import "Report.h"
+#import "ReportData.h"
 
 @interface OrderVsIntakeReportViewController ()
 
@@ -24,6 +26,70 @@
 
 @implementation OrderVsIntakeReportViewController
 
+- (void)syncReportClick:(id)sender {
+    
+    if(self.filterSetName != nil) {
+        
+        NSString *htmlString = [Report generateReport:@"OrderVsIntake"];
+        
+        if(htmlString.length > 0) {
+            NSString *reportName = [NSString stringWithFormat:@"filterReport:%@",self.filterSetName];
+            
+            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",reportName]];
+            
+            NSError *error;
+            NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+            ReportData *report;
+            
+            if(reports.count > 0) {
+                report = reports[0];
+            } else {
+                report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                report.name = reportName;
+            }
+            
+            report.content = htmlString;
+            report.lastModified = [NSDate date];
+            report.createdBy = @"sync";
+            report.requiresSync = @NO;
+            
+            
+            request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
+            
+            NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+            if(filterSets.count > 0) {
+                
+                ReportFilterSet *filterSet = filterSets[0];
+                filterSet.lastSync = [NSDate date];
+            }
+            
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set sync failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                NSLog(@"%@ reportdata entry saved", reportName);
+                
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"filter set report has been synced"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+                
+                ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
+                [vc view];
+                [vc loadReport:reportName];
+                [self.navigationController pushViewController:vc animated:YES];
+            }
+        }
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set must be saved before it can be synced."] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    }
+}
 
 - (IBAction)runReportClick:(id)sender {
     
@@ -47,10 +113,11 @@
     
     [self.navigationController pushViewController:vc animated:YES];
 }
-- (IBAction)saveFilterSet {
-    NSString *fileName = [self.saveText.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
 
-    if(fileName.length > 0) {
+- (IBAction)saveFilterSet {
+    NSString *fileName = self.saveText.text;
+
+    if([fileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0) {
         
         
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -58,12 +125,12 @@
         [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",fileName]];
         
         NSError *error;
-        NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+        NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
         
-        if(reports.count > 0) {
+        if(filterSets.count > 0) {
             //ReportData *report = reports[0];
             
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"a filter set with this name already exists" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"warning" message:@"a filter set with this name already exists. would you like to overwrite it?" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"ok", nil];
             [alert show];
         } else {
             
@@ -90,13 +157,19 @@
             NSError *saveError;
             if(![managedContext save:&saveError]) {
                 NSLog(@"Could not save filter set: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
             } else {
                 NSLog(@"%@ filter set entry created", fileName);
+                self.filterSetName = fileName;
+                [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"order vs intake by week report: %@", self.filterSetName]]];
+                
+                [self.popover dismissPopoverAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"filter set has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
             }
             
-            [self.popover dismissPopoverAnimated:YES];
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"filter set has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-            [alert show];
         }
         
     } else {
@@ -104,6 +177,52 @@
         [alert show];
     }
     
+}
+
+-(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if(buttonIndex == 1) {
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
+        
+        NSError *error;
+        NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+        
+        if(filterSets.count > 0) {
+            ReportFilterSet *filterSet = filterSets[0];
+            
+            NSMutableString *filterString = [NSMutableString new];
+            [filterString appendFormat:@"%@;", [self.CalWeekFrom getSelectedValue]];
+            [filterString appendFormat:@"%@;", [self.CalWeekTo getSelectedValue]];
+            [filterString appendFormat:@"%@;", [self.BrandsList getSelectedValue]];
+            [filterString appendFormat:@"%@;", [self.MerchList getSelectedValue]];
+            [filterString appendFormat:@"%@;", [self.SuppliersList getSelectedValue]];
+            [filterString appendFormat:@"%@;", self.AnalysisCode.text];
+            
+            for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
+                [filterString appendFormat:@"%@,", self.departmentsList[path.row][@"depCode"]];
+            }
+            NSLog(@"filterString value, %@",filterString);
+            
+            filterSet.filterValues = filterString;
+            filterSet.createdBy = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
+            filterSet.reportType = @"OrderVsIntake";
+            filterSet.lastModified = [NSDate date];
+            
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not save filter set: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                NSLog(@"%@ filter set entry saved", self.filterSetName);
+                [self.popover dismissPopoverAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"filter set has been saved"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+    }
 }
 
 
@@ -119,6 +238,7 @@
     
     self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
     self.saveText.autocorrectionType = UITextAutocorrectionTypeNo;
+    self.saveText.text = self.filterSetName;
     [popoverView addSubview:self.saveText];
     
     
@@ -182,21 +302,8 @@
             
         }
     }
-
     
-    NSMutableString *filterString = [NSMutableString new];
-    [filterString appendFormat:@"%@;", [self.CalWeekFrom getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.CalWeekTo getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.BrandsList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.MerchList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.SuppliersList getSelectedValue]];
-    [filterString appendFormat:@"%@;", self.AnalysisCode.text];
-    
-    for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
-        [filterString appendFormat:@"%@,", self.departmentsList[path.row][@"depCode"]];
-    }
-    
-    
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"order vs intake by week report: %@", self.filterSetName]]];
 }
 
 - (void)viewDidLoad

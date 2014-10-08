@@ -17,9 +17,11 @@
 + (BOOL)syncReportsOrderVsIntake;
 + (BOOL)syncDepartments;
 + (BOOL)syncMerch;
++ (BOOL)syncReportData;
 
 + (void)updateSyncStatus:(NSString *)type;
 + (NSDate *)getLastSyncDate;
-
++ (NSDate *)getLastSyncForTable:(NSString *)table;
 + (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column;
++ (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column withPredicate:(NSPredicate *)predicate;
 @end

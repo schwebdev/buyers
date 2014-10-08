@@ -13,6 +13,8 @@
 #import "ReportData.h"
 #import "ReportFilterSet.h"
 
+#import "Sync.h"
+
 @interface ReportHomeViewController ()
 
 @end
@@ -30,7 +32,7 @@
         
         [vc view];
         //NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
-        NSString *filePath = [self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
+        NSString *filePath = [self.reportList getSelectedValue];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         
         [vc loadReport:filePath];
         [self.navigationController pushViewController:vc animated:YES];
@@ -67,20 +69,39 @@
     if(self.filterSets.getSelectedValue.length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
+    } else if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"this filter set has not been synced yet"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
     } else {
         ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
-        //vc.reportType = @"Order Vs Intake Report";
-        
         [vc view];
-        //NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
-        NSString *filePath = [self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];//[reportsPath stringByAppendingPathComponent:[self.reportList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]];
         
+        NSString *filePath = [NSString stringWithFormat:@"filterReport:%@",[self.filterSets getSelectedValue]];
         [vc loadReport:filePath];
         [self.navigationController pushViewController:vc animated:YES];
     }
 }
 
 
+- (void) reportTypeChange:(NSNotification *)notification {
+    [self.filterSets setListItems:(NSMutableArray *)[Sync getTable:@"ReportFilterSet" sortWith:@"filterSetName" withPredicate:[NSPredicate predicateWithFormat:@"(reportType == %@)",[self.reportType getSelectedValue]]] withName:@"filterSetName" withValue:@"filterSetName"];
+    
+    self.FilterLabel.text = @"Last sync:";
+}
+
+
+- (void) filterSetsChange:(NSNotification *)notification {
+    if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+        self.FilterLabel.text = @"Last sync: n/a";
+    } else {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd  HH:mm:ss"];
+        
+        NSString *dateTime = [dateFormatter stringFromDate:(NSDate*)[self.filterSets getSelectedObject][@"lastSync"]];
+
+        self.FilterLabel.text = [NSString stringWithFormat:@"Last sync: %@",dateTime];
+    }
+}
 
 - (IBAction)reportFilterChange:(id)sender {
     
@@ -98,28 +119,28 @@
         }
     //}
     self.reportList.text = @"";
+    
+    
+    self.reportList.listItems = [NSMutableArray array];
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
     if(currentSwitch.tag == 0) {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
         
-        self.reportList.listItems = [NSMutableArray array];
-        
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
-        
-        NSError *error;
-        NSArray *reports = [managedContext executeFetchRequest:request error:&error];
-        
-        if(reports.count > 0) {
-            for (ReportData *report in reports) {
-                [self.reportList.listItems addObject:@{report.name:report.name}];
-            }
-        }
     } else {
-        
-        self.reportList.listItems = [NSMutableArray arrayWithObjects:
-                               @{@"blah":@"blah"}, nil];
-        
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];
     }
+        
+    NSError *error;
+    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+    
+    if(reports.count > 0) {
+        for (ReportData *report in reports) {
+            [self.reportList.listItems addObject:@{report.name:report.name}];
+        }
+    }
+
 }
 
 
@@ -143,58 +164,20 @@
     
     self.reportType.observerName = @"reportTypeSelect";
     
-    //[NSMutableDictionary dictionaryWithObjectsAndKeys:@"val1",@"1",@"val2",@"2",@"val3",@"3",nil];
+    self.filterSets.observerName = @"filterSetsSelect";
 
 }
 
-- (void) dropDownSelectChange:(NSNotification *)notification {
-   // NSString *reportType = (NSString*)notification.object;
-    
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"(reportType == %@)",[self.reportType getSelectedValue]]];
-    
-    NSError *error;
-    NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
-    
-    self.filterSets.listItems = [NSMutableArray array];
-    if(filterSets.count > 0) {
-        for (ReportFilterSet *filterSet in filterSets) {
-            [self.filterSets.listItems addObject:@{filterSet.filterSetName:filterSet.filterSetName}];
-        }
-    }
-}
 
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
-//    UIButton *menu1 = [self setMenuButton:1 title:@"reports 1"];
-//    
-//    [menu1 addTarget:self action:@selector(alert) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [self setMenuButton:2 title:@"reports 2"];
-//    [self setMenuButton:3 title:@"reports 3"];
-    
-    
-    /*
-    NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/reports"];
-    if(![[NSFileManager defaultManager] fileExistsAtPath:reportsPath]) [[NSFileManager defaultManager] createDirectoryAtPath:reportsPath withIntermediateDirectories:NO attributes:nil error:nil];
-        
-    NSArray *reports = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:reportsPath error:nil];
 
-    self.reportList.listItems = [NSMutableArray array];
-    
-    for (NSString *report in reports) {
-        [self.reportList.listItems addObject:@{report:report}];
-    }
-    */
-    
+    self.reportList.text = @"";
     self.reportList.listItems = [NSMutableArray array];
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
     
     NSError *error;
     NSArray *reports = [managedContext executeFetchRequest:request error:&error];
@@ -208,11 +191,12 @@
     self.filterSets.listItems = [NSMutableArray array];
     
     if([self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length != 0) {
-        [self dropDownSelectChange:nil];
+        [self reportTypeChange:nil];
     }
     
     NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
-    [center addObserver:self selector:@selector(dropDownSelectChange:) name:self.reportType.observerName object:nil];
+    [center addObserver:self selector:@selector(reportTypeChange:) name:self.reportType.observerName object:nil];
+    [center addObserver:self selector:@selector(filterSetsChange:) name:self.filterSets.observerName object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {

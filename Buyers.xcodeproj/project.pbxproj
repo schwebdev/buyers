@@ -22,11 +22,11 @@
 		0B288AC019BE031400F62B63 /* Reachability.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288ABF19BE031400F62B63 /* Reachability.m */; };
 		0B288AC219BE032C00F62B63 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */; };
 		0B288AC419BEEE7700F62B63 /* homeSyncGreen2.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */; };
-		0B288ACA19BF407900F62B63 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AC919BF407900F62B63 /* ReportData.m */; };
 		0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EAE19DD5EC10079EB25 /* Merch.m */; };
 		0B523EB219DD5EC20079EB25 /* Department.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB119DD5EC20079EB25 /* Department.m */; };
 		0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */; };
-		0B523EB819DED4B30079EB25 /* ReportFilterSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB719DED4B30079EB25 /* ReportFilterSet.m */; };
+		0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */; };
+		0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B52FC8A19E56E0C00D1D747 /* ReportData.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -207,16 +207,16 @@
 		0B288ABF19BE031400F62B63 /* Reachability.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Reachability.m; sourceTree = "<group>"; };
 		0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		0B288AC319BEEE7700F62B63 /* homeSyncGreen2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = homeSyncGreen2.png; sourceTree = "<group>"; };
-		0B288AC819BF407900F62B63 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
-		0B288AC919BF407900F62B63 /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportData.m; path = Buyers/ReportData.m; sourceTree = "<group>"; };
 		0B523EAD19DD5EC10079EB25 /* Merch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Merch.h; path = Buyers/Merch.h; sourceTree = "<group>"; };
 		0B523EAE19DD5EC10079EB25 /* Merch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Merch.m; path = Buyers/Merch.m; sourceTree = "<group>"; };
 		0B523EB019DD5EC20079EB25 /* Department.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Department.h; path = Buyers/Department.h; sourceTree = "<group>"; };
 		0B523EB119DD5EC20079EB25 /* Department.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Department.m; path = Buyers/Department.m; sourceTree = "<group>"; };
 		0B523EB319DEB32A0079EB25 /* BaseNavigationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseNavigationController.h; sourceTree = "<group>"; };
 		0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
-		0B523EB619DED4B30079EB25 /* ReportFilterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportFilterSet.h; path = Buyers/ReportFilterSet.h; sourceTree = "<group>"; };
-		0B523EB719DED4B30079EB25 /* ReportFilterSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportFilterSet.m; path = Buyers/ReportFilterSet.m; sourceTree = "<group>"; };
+		0B523EB919E280FA0079EB25 /* ReportFilterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportFilterSet.h; path = Buyers/ReportFilterSet.h; sourceTree = "<group>"; };
+		0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportFilterSet.m; path = Buyers/ReportFilterSet.m; sourceTree = "<group>"; };
+		0B52FC8919E56E0C00D1D747 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
+		0B52FC8A19E56E0C00D1D747 /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportData.m; path = Buyers/ReportData.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -616,6 +616,10 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
+				0B52FC8919E56E0C00D1D747 /* ReportData.h */,
+				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
+				0B523EB919E280FA0079EB25 /* ReportFilterSet.h */,
+				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
 				C6B9A7C519DD737400C832A1 /* Collection.h */,
 				C6B9A7C619DD737400C832A1 /* Collection.m */,
 				C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */,
@@ -644,13 +648,9 @@
 				5BDDAA2C19A5EA7600073B10 /* Settings.bundle */,
 				0B288AA019B9F74700F62B63 /* SyncStatus.h */,
 				0B288AA119B9F74700F62B63 /* SyncStatus.m */,
-				0B288AC819BF407900F62B63 /* ReportData.h */,
-				0B288AC919BF407900F62B63 /* ReportData.m */,
 				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
 				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
-				0B523EB619DED4B30079EB25 /* ReportFilterSet.h */,
-				0B523EB719DED4B30079EB25 /* ReportFilterSet.m */,
 				C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */,
 				C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */,
 				C6B9A7CB19DD73AC00C832A1 /* Product.h */,
@@ -971,8 +971,7 @@
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
-				0B523EB819DED4B30079EB25 /* ReportFilterSet.m in Sources */,
-				0B288ACA19BF407900F62B63 /* ReportData.m in Sources */,
+				0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */,
 				C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */,
 				0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
@@ -1003,6 +1002,7 @@
 				0B288A7019B9C80B00F62B63 /* SchPDFView.m in Sources */,
 				C6B9A7AC19DD6AB800C832A1 /* ProductButton.m in Sources */,
 				C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */,
+				0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0B288A8A19B9EFBF00F62B63 /* Colour.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
