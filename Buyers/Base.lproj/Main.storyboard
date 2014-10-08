@@ -1613,8 +1613,11 @@
         </scene>
     </scenes>
     <resources>
+        <image name="camera.png" width="32" height="32"/>
+        <image name="camera_lg.png" width="450" height="450"/>
         <image name="checkbox-checked.png" width="24" height="24"/>
         <image name="checkbox.png" width="24" height="24"/>
+        <image name="gallery.png" width="32" height="32"/>
         <image name="homeChangeSettingsButton.png" width="625" height="429"/>
         <image name="homeCollectionsButton.png" width="625" height="429"/>
         <image name="homeCustomProductButton.png" width="625" height="429"/>
