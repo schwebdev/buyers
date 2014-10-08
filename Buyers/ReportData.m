@@ -2,7 +2,7 @@
 //  ReportData.m
 //  Buyers
 //
-//  Created by webdevelopment on 09/09/2014.
+//  Created by webdevelopment on 08/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -11,10 +11,14 @@
 
 @implementation ReportData
 
-@dynamic name;
 @dynamic content;
-@dynamic notes;
 @dynamic createdBy;
 @dynamic lastModified;
+@dynamic name;
+@dynamic notes;
+@dynamic reportID;
+@dynamic lastSync;
+@dynamic isActive;
+@dynamic requiresSync;
 
 @end

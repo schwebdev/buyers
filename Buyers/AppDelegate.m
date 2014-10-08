@@ -20,9 +20,16 @@
     // Override point for customization after application launch.
     self.reachability = [Reachability reachabilityWithHostName:@"aws.schuhshark.com"];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
     [self.reachability startNotifier];
     
     return YES;
+}
+
+- (void)reachabilityChanged:(NSNotification *)notification {
+    
+    NSLog(@"%@", [self.reachability currentReachabilityString]);
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -35,11 +42,17 @@
 {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later. 
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    
+    self.reachability = [Reachability reachabilityWithHostName:@"aws.schuhshark.com"];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    
+    [self.reachability startNotifier];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application

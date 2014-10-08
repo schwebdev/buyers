@@ -63,9 +63,21 @@
     <entity name="ReportData" representedClassName="ReportData" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="createdBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isActive" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="lastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastSync" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="notes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="reportID" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="requiresSync" optional="YES" attributeType="Boolean" syncable="YES"/>
+    </entity>
+    <entity name="ReportFilterSet" representedClassName="ReportFilterSet" syncable="YES">
+        <attribute name="createdBy" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filterSetName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="filterValues" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="lastModified" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="lastSync" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="reportType" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="ReportOrderVsIntake" representedClassName="ReportOrderVsIntake" syncable="YES">
         <attribute name="diffonordvlyintake" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -106,7 +118,8 @@
         <element name="Product" positionX="-54" positionY="27" width="128" height="240"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
-        <element name="ReportData" positionX="18" positionY="153" width="128" height="120"/>
+        <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>
+        <element name="ReportFilterSet" positionX="-9" positionY="153" width="128" height="133"/>
         <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>

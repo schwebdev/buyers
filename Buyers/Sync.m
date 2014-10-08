@@ -18,6 +18,7 @@
 #import "Department.h"
 #import "Merch.h"
 #import "ReportOrderVsIntake.h"
+#import "ReportData.h"
 
 @implementation Sync
 
@@ -41,7 +42,7 @@
         return YES;
     } else {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"test" message:@"no wifi found" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"no wifi connection was found" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
         
         return NO;
@@ -52,6 +53,24 @@
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"SyncStatus"];
     [request setPredicate:[NSPredicate predicateWithFormat:@"(type == %@)",@"global"]];
+    
+    NSError *error;
+    NSArray *syncStatuses = [managedContext executeFetchRequest:request error:&error];
+    
+    if(syncStatuses.count > 0) {
+        SyncStatus *syncStatus = syncStatuses[0];
+        
+        return syncStatus.lastSync;
+    } else {
+        return nil;
+    }
+}
+
++ (NSDate *)getLastSyncForTable:(NSString *)table {
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:table];
+    [request setFetchLimit:1];
+    [request setSortDescriptors:[NSArray arrayWithObject:[[NSSortDescriptor alloc] initWithKey:@"lastSync" ascending:NO]]];
     
     NSError *error;
     NSArray *syncStatuses = [managedContext executeFetchRequest:request error:&error];
@@ -467,10 +486,129 @@
     return YES;
 }
 
++ (BOOL)syncReportData {
+    NSError *error;
+    NSArray *reports = [Sync getTable:@"ReportData" sortWith:@"reportID" withPredicate:[NSPredicate predicateWithFormat:@"(requiresSync == 1)"]];
+    
+    for (NSMutableDictionary *report in reports) {
+        [report removeObjectForKey:@"IDURI"];
+        for (NSString *key in [report allKeys]) {
+            id object = report[key];
+            
+            if([object isKindOfClass:[NSDate class]]) {
+                
+                NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                
+                report[key] = [dateFormat stringFromDate:(NSDate*)report[key]];
+            }
+        }
+        NSLog(@"uploading report %@ - %@", report[@"name"], report[@"reportID"]);
+    }
+    NSData *jsonReportData = [NSJSONSerialization dataWithJSONObject:reports options:kNilOptions error:&error];
+    NSString *reportData = [[NSString alloc] initWithData:jsonReportData encoding:NSUTF8StringEncoding];
+    
+    NSDate *lastSync = [Sync getLastSyncForTable:@"ReportData"];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://m.amazingfootwear.com/mstest.asmx/mstestsync"]];
+    
+    if(lastSync == nil) lastSync = [NSDate dateWithTimeIntervalSince1970:0];
+    NSMutableDictionary *dictionnary = [NSMutableDictionary dictionary];
+    [dictionnary setObject:reportData forKey:@"jsonData"];
+    [dictionnary setObject:[dateFormat stringFromDate:lastSync] forKey:@"lastSync"];
+    
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dictionnary
+                                                       options:kNilOptions
+                                                         error:&error];
+    
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+    [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"json" forHTTPHeaderField:@"Data-Type"];
+    [request setValue:[NSString stringWithFormat:@"%d", [jsonData length]]  forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:jsonData];
+    
+    NSURLResponse *response;
+    NSData *resultData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+    if(response) {
+        //save data
+        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:resultData options:kNilOptions error:nil];
+        NSString *jsonString = [json objectForKey:@"d"];
+        NSArray *jsonReports = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+        
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        
+        
+        NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
+        jsonDateFormat.dateFormat = @"dd/MM/yyyy HH:mm:ss";
+        for (NSDictionary *jsonReport in jsonReports) {
+            
+            NSString *reportID = [jsonReport[@"reportID"] uppercaseString];
+            //save report
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(reportID == %@)", reportID]];
+            
+            NSError *error;
+            NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+            ReportData *report;
+            
+            if(reports.count > 0) {
+                report = reports[0];
+            } else {
+                report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+            }
+            report.reportID = reportID;
+            report.name = jsonReport[@"name"];
+            report.createdBy = jsonReport[@"createdBy"];
+            report.content = jsonReport[@"content"];
+            report.notes = jsonReport[@"notes"];
+            report.isActive = ([jsonReport[@"isActive"] isEqualToString:@"True"]) ? @YES : @NO;
+            report.requiresSync = @NO;
+            report.lastModified = [jsonDateFormat dateFromString:jsonReport[@"lastModified"]];
+            report.lastSync = [jsonDateFormat dateFromString:jsonReport[@"lastSync"]];
+            
+            
+            NSLog(@"syncing report %@ - %@", jsonReport[@"name"], reportID);
+        }
+        
+        
+        NSError *saveError;
+        if(![managedContext save:&saveError]) {
+            NSLog(@"Could not sync reportdata");
+            
+            NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+            if(detailedErrors != nil && [detailedErrors count] > 0) {
+                for(NSError* detailedError in detailedErrors) {
+                    NSLog(@" detailed error:%@", [detailedError userInfo]);
+                    NSLog(@" detailed error:%ld", (long)[detailedError code]);
+                }
+            } else {
+                NSLog(@" detailed error:%@", [saveError userInfo]);
+            }
+
+            return NO;
+        } else {
+            NSLog(@"reportdata entry sync");
+        }
+    }
+    return YES;
+}
+
 + (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column {
+    return [self getTable:entityName sortWith:column withPredicate:nil];
+}
+
++ (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column withPredicate:(NSPredicate *)predicate {
     //fetch request to retrieve all collections
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];
+    if(predicate != nil) {
+        [request setPredicate:predicate];
+    }
+    
     NSError *error;
     NSArray *results = [managedContext executeFetchRequest:request error:&error];
     
@@ -481,6 +619,9 @@
     
     NSMutableArray *resultsArray = [NSMutableArray array];
     
+    for (ReportData *report in results) {
+        NSLog(@"%@",report);
+    }
     for (NSObject *row in results) {
         [resultsArray addObject:[self dictionaryWithPropertiesOfObject:row]];
     }
@@ -489,7 +630,7 @@
 }
 
 
-+ (NSDictionary *)dictionaryWithPropertiesOfObject:(id)obj {
++ (NSMutableDictionary *)dictionaryWithPropertiesOfObject:(id)obj {
     NSMutableDictionary *dict = [NSMutableDictionary dictionary];
     
     unsigned count;
@@ -504,13 +645,14 @@
         } else {
             id value = [obj valueForKey:key];
             if(value) [dict setObject:value forKey:key];
+            else [dict setObject:[NSNull null] forKey:key];
         }
     }
     free(properties);
     
     
     [dict setObject:[[obj objectID]URIRepresentation] forKey:@"IDURI"];
-    return [NSDictionary dictionaryWithDictionary:dict];
+    return dict;
 }
 
 @end
