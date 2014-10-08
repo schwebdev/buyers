@@ -11,7 +11,7 @@
 #import "SchTextField.h"
 #import "SchDropDown.h"
 #import "BaseViewController.h"
-@interface ProductsViewController : BaseViewController <UIScrollViewDelegate>
+@interface ProductsViewController : BaseViewController <UIScrollViewDelegate, UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet SchTextField *txtNewCollection;
 @property (weak, nonatomic) Collection *collection;

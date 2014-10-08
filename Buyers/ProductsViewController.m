@@ -118,6 +118,8 @@ static const float sProductColumnSpacer = 5.0;
 {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+    
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
     NSFetchRequest *pickerRequest = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
@@ -130,6 +132,7 @@ static const float sProductColumnSpacer = 5.0;
     if(!_collection){
         title2 = @"collection";
         self.txtNewCollection.hidden = NO;
+        self.txtNewCollection.delegate = self;
         if([collections count] >0) {
             self.collectionList.hidden = NO;
             self.collectionList.listItems = [NSMutableArray array];
@@ -540,6 +543,30 @@ static const float sProductColumnSpacer = 5.0;
     
     [selectedProducts removeAllObjects];
     [self constructsProducts];
+}
+
+-(void)onKeyboardHide:(NSNotification *)notification {
+    [self animateTextField:self.txtNewCollection up:NO];
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self animateTextField:textField up:YES];
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    
+}
+-(void)animateTextField:(UITextField *)textField up:(BOOL)up{
+    
+    const int movementDistance = -280;
+    const float movementDuration = 0.2f;
+    
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations:@"animateTextField" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    
+    [UIView commitAnimations];
 }
 - (void)didReceiveMemoryWarning
 {

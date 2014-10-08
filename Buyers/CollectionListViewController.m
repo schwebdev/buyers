@@ -69,8 +69,7 @@ static const float kProductColumnSpacer = 14.0;
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
-    txtSearch = [[SchTextField alloc] init];
-    txtSearch.frame = CGRectMake(0, 0, 200, 50);
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
     
     [tools addSubview:filterButton];
     [tools addSubview:txtSearch];
@@ -419,8 +418,8 @@ static const float kProductColumnSpacer = 14.0;
             deleteButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
             [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [deleteButton setSelected:NO];
-            [deleteButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-            [deleteButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML.png"] forState:UIControlStateNormal];
+            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML-checked.png"] forState:UIControlStateSelected];
             [deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
             [deleteButton setTag:i];
             [collectionButton addSubview:deleteButton];
