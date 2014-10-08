@@ -508,6 +508,8 @@
     }
     free(properties);
     
+    
+    [dict setObject:[[obj objectID]URIRepresentation] forKey:@"IDURI"];
     return [NSDictionary dictionaryWithDictionary:dict];
 }
 
