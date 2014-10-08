@@ -619,9 +619,6 @@
     
     NSMutableArray *resultsArray = [NSMutableArray array];
     
-    for (ReportData *report in results) {
-        NSLog(@"%@",report);
-    }
     for (NSObject *row in results) {
         [resultsArray addObject:[self dictionaryWithPropertiesOfObject:row]];
     }
