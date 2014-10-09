@@ -556,7 +556,7 @@ static const float sProductColumnSpacer = 5.0;
 }
 -(void)animateTextField:(UITextField *)textField up:(BOOL)up{
     
-    const int movementDistance = -280;
+    const int movementDistance = -310;
     const float movementDuration = 0.2f;
     
     int movement = (up ? movementDistance : -movementDistance);

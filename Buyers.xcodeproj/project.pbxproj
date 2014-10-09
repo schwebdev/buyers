@@ -624,10 +624,10 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
-				5BB66B0E19DEACD500422E87 /* checkboxSML-checked.png */,
-				5BB66B0F19DEACD500422E87 /* checkboxSML.png */,
-				5BB66B0819DEAC2300422E87 /* checkboxSML-checked@2x.png */,
-				5BB66B0919DEAC2300422E87 /* checkboxSML@2x.png */,
+				0B52FC8919E56E0C00D1D747 /* ReportData.h */,
+				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
+				0B523EB919E280FA0079EB25 /* ReportFilterSet.h */,
+				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
 				C6B9A7C519DD737400C832A1 /* Collection.h */,
 				C6B9A7C619DD737400C832A1 /* Collection.m */,
 				C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */,

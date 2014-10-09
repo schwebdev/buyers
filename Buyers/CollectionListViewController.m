@@ -35,6 +35,8 @@ static const float kProductColumnSpacer = 14.0;
     NSArray *collections;
     NSMutableArray *deletions;
     UIButton *filterButton;
+    UIButton *allUsersButton;
+    UIButton *yourOwnButton;
     SchTextField *txtSearch;
     UIView *tools;
 }
@@ -57,20 +59,40 @@ static const float kProductColumnSpacer = 14.0;
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
-    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 65)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.navigationController.toolbar.clipsToBounds = YES;
     
     
+    allUsersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 100, 24)];
+    [allUsersButton setTitle:@" all users" forState:UIControlStateNormal];
+    allUsersButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [allUsersButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [allUsersButton setSelected:YES];
+    [allUsersButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [allUsersButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [allUsersButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+    yourOwnButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 0, 100, 24)];
+    [yourOwnButton setTitle:@" your own" forState:UIControlStateNormal];
+    yourOwnButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [yourOwnButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [yourOwnButton setSelected:NO];
+    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [yourOwnButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [filterButton setTitle:@"filter" forState:UIControlStateNormal];
-    filterButton.frame = CGRectMake(210, 0, 100, 50);
+    filterButton.frame = CGRectMake(320, 0, 100, 50);
     [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
-    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(0, 0, 200, 50)];
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
     
+    [tools addSubview:allUsersButton];
+    [tools addSubview:yourOwnButton];
     [tools addSubview:filterButton];
     [tools addSubview:txtSearch];
     
@@ -134,11 +156,19 @@ static const float kProductColumnSpacer = 14.0;
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"collectionName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
     
-    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        collections = [results sortedArrayUsingDescriptors:sortDescriptors];
-        
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    
+    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && yourOwnButton.selected) {
+        //get only user's own collections
+         collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionCreator =[cd] %@", creatorName]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && yourOwnButton.selected) {
+        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@) AND collectionCreator =[cd] %@", txtSearch.text, txtSearch.text, creatorName]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allUsersButton.selected) {
+        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
     } else {
-     collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
+    
+         collections = [results sortedArrayUsingDescriptors:sortDescriptors];
     }
     
     deletions = [[NSMutableArray alloc] initWithCapacity:[collections count]];
@@ -584,6 +614,22 @@ static const float kProductColumnSpacer = 14.0;
     
     //NSLog(@"deletions: %d", [deletions count]);
 
+}
+- (void)filterClicked:(id)sender {
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = !button.selected;
+    
+    NSString *buttonTitle = button.currentTitle;
+    
+    if([buttonTitle  isEqual: @" all users"]) {
+        
+        yourOwnButton.selected = !yourOwnButton.selected;
+
+    } else {
+         allUsersButton.selected = !allUsersButton.selected;
+    }
+    
 }
 
 - (void)deleteCollections:(id)sender {
