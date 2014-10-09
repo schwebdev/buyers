@@ -166,6 +166,8 @@
 		C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */; };
 		C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CC19DD73AC00C832A1 /* Product.m */; };
 		C6B9A7D019DD73AC00C832A1 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */; };
+		C6C3D4C219E3FA9F009E8CAB /* AVCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */; };
+		C6C3D4C519E3FB2B009E8CAB /* AVCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -388,6 +390,10 @@
 		C6B9A7CC19DD73AC00C832A1 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
 		C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductCategory.h; path = Buyers/ProductCategory.h; sourceTree = "<group>"; };
 		C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductCategory.m; path = Buyers/ProductCategory.m; sourceTree = "<group>"; };
+		C6C3D4C019E3FA9F009E8CAB /* AVCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCameraViewController.h; sourceTree = "<group>"; };
+		C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCameraViewController.m; sourceTree = "<group>"; };
+		C6C3D4C319E3FB2B009E8CAB /* AVCameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCameraPreviewView.h; sourceTree = "<group>"; };
+		C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCameraPreviewView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -421,6 +427,10 @@
 			children = (
 				0B7630941998DDEC00949155 /* CustomHomeViewController.h */,
 				0B7630951998DDEC00949155 /* CustomHomeViewController.m */,
+				C6C3D4C019E3FA9F009E8CAB /* AVCameraViewController.h */,
+				C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */,
+				C6C3D4C319E3FB2B009E8CAB /* AVCameraPreviewView.h */,
+				C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */,
 			);
 			name = CustomProducts;
 			sourceTree = "<group>";
@@ -980,6 +990,7 @@
 				0B523EAF19DD5EC10079EB25 /* Merch.m in Sources */,
 				C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,
+				C6C3D4C519E3FB2B009E8CAB /* AVCameraPreviewView.m in Sources */,
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				0B288A7819B9C83600F62B63 /* Report.m in Sources */,
 				C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */,
@@ -992,6 +1003,7 @@
 				0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */,
 				0B288A9019B9EFBF00F62B63 /* Material.m in Sources */,
 				C6B9A7C719DD737400C832A1 /* Collection.m in Sources */,
+				C6C3D4C219E3FA9F009E8CAB /* AVCameraViewController.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				0B970B6A199376C9006D0358 /* PlayingCard.m in Sources */,
 				0B288A7019B9C80B00F62B63 /* SchPDFView.m in Sources */,
