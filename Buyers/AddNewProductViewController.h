@@ -24,7 +24,6 @@ UINavigationControllerDelegate>
 - (IBAction)ddlCategoryList:(id)sender;
 @property (weak, nonatomic) IBOutlet SchTextField *txtProductPrice;
 
-@property (weak, nonatomic) IBOutlet SchTextField *txtProductCode;
 @property (weak, nonatomic) IBOutlet SchDropDown *categoryList;
 @property (weak, nonatomic) IBOutlet SchDropDown *brandList;
 @property (weak, nonatomic) IBOutlet SchDropDown *supplierList;

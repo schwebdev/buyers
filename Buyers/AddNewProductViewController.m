@@ -48,6 +48,7 @@ static const float kPageWidth = 680.0;
     _isDirtyImage = NO;
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"product" title2:@"your custom product" image:@"homePaperClipLogo.png"];
     
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
     
     UIButton *saveProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveProductButton setTitle:@"add product" forState:UIControlStateNormal];
@@ -58,30 +59,29 @@ static const float kPageWidth = 680.0;
     [self.view addSubview:saveProductButton];
     
     UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" PRODUCT DETAIL";
+    pageTitle.text = @" Add New Product";
     pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    pageTitle.textAlignment = NSTextAlignmentCenter;
+    //pageTitle.textAlignment = NSTextAlignmentCenter;
     pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor; pageTitle.textColor = [UIColor blackColor];
+    //pageTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor; pageTitle.textColor = [UIColor blackColor];
     pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(0.0, 40.0, 1024.0, 30.0);
+    CGRect frameTitle = CGRectMake(206.0, 38.0, 1024.0, 30.0);
     pageTitle.frame = frameTitle;
     
     [self.view addSubview:pageTitle];
     
-    //separator
-    UIView *separator = [[UIView alloc] initWithFrame: CGRectMake(kPageWidth, 70.0, 1, 746.0)];
-    separator.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1];
-    [self.view addSubview:separator];
-    
+    CALayer *separator = [CALayer layer];
+    separator.frame = CGRectMake(kPageWidth, 100, 1, 589);
+    separator.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
+    [self.view.layer addSublayer:separator];
     
     UILabel *productsInfo = [[UILabel alloc] init];
-    productsInfo.text = @"Info";
+    productsInfo.text = @"info";
     productsInfo.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size: 26.0f];
     productsInfo.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     productsInfo.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     productsInfo.numberOfLines = 1;
-    CGRect productsInfoTitle = CGRectMake((kPageWidth+20.0), 70.0, 300, 30.0); //kPageWidth, 70.0, 300, 30.0
+    CGRect productsInfoTitle = CGRectMake((kPageWidth+20.0), 92.0, 300, 30.0); //kPageWidth, 70.0, 300, 30.0
     productsInfo.frame = productsInfoTitle;
     
     [self.view addSubview:productsInfo];
@@ -249,12 +249,12 @@ static const float kPageWidth = 680.0;
         pPrice = [NSNumber numberWithDouble:[self.txtProductPrice.text doubleValue]];
     }
     
-    if([self.txtProductCode.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+    /*if([self.txtProductCode.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please enter a product code\n"];
     } else {
         pCode =self.txtProductCode.text;
-    }
+    }*/
     
     if(!_isDirtyImage){
         _isValid = NO;
@@ -268,7 +268,7 @@ static const float kPageWidth = 680.0;
              
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             product.productCode = pCode;
+             product.productCode = @"00000000";
              
              product.productName = pName;
              product.productPrice = pPrice;
