@@ -30,6 +30,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *productMaterial;
 @property (weak, nonatomic) IBOutlet UILabel *productPrice;
 @property(nonatomic,retain) UIButton *notesButton;
+@property (weak, nonatomic) IBOutlet UILabel *productCode;
+@property (weak, nonatomic) IBOutlet UILabel *productCodeLabel;
 
 - (IBAction)editImage:(id)sender;
 - (void)saveCustomProduct:(id)sender;

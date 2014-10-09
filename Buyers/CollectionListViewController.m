@@ -26,7 +26,7 @@ static const float kButtonWidth = 341.5;
 static const float kButtonHeight = 288.0;
 static const float kPageWidth = 1024.0;
 static const float kPageHeight = 579.0;
-static const float kNavBarHeight = 40.0;
+static const float kNavBarHeight = 85.0;
 static const float kProductWidth = 68.0;
 static const float kProductHeight = 68.0;
 static const float kProductColumnSpacer = 14.0;
@@ -35,8 +35,12 @@ static const float kProductColumnSpacer = 14.0;
     NSArray *collections;
     NSMutableArray *deletions;
     UIButton *filterButton;
+    UIButton *allUsersButton;
+    UIButton *yourOwnButton;
     SchTextField *txtSearch;
     UIView *tools;
+    UILabel *numCollections;
+    NSString *collectionText;
 }
 @end
 
@@ -57,21 +61,52 @@ static const float kProductColumnSpacer = 14.0;
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
-    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    
+    UILabel *pageTitle = [[UILabel alloc] init];
+    pageTitle.text = @"List of Collections";
+    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    pageTitle.numberOfLines = 1;
+    CGRect frameTitle = CGRectMake(210.0, 38.0, 1024.0, 30.0);
+    pageTitle.frame = frameTitle;
+    
+    [self.view addSubview:pageTitle];
+    
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.navigationController.toolbar.clipsToBounds = YES;
     
     
+    allUsersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 100, 24)];
+    [allUsersButton setTitle:@" all users" forState:UIControlStateNormal];
+    allUsersButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [allUsersButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [allUsersButton setSelected:YES];
+    [allUsersButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [allUsersButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [allUsersButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+    yourOwnButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 0, 100, 24)];
+    [yourOwnButton setTitle:@" your own" forState:UIControlStateNormal];
+    yourOwnButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [yourOwnButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [yourOwnButton setSelected:NO];
+    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [yourOwnButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [filterButton setTitle:@"filter" forState:UIControlStateNormal];
-    filterButton.frame = CGRectMake(210, 0, 100, 50);
+    filterButton.frame = CGRectMake(320, 0, 100, 50);
     [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
-    txtSearch = [[SchTextField alloc] init];
-    txtSearch.frame = CGRectMake(0, 0, 200, 50);
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
     
+    [tools addSubview:allUsersButton];
+    [tools addSubview:yourOwnButton];
     [tools addSubview:filterButton];
     [tools addSubview:txtSearch];
     
@@ -105,6 +140,7 @@ static const float kProductColumnSpacer = 14.0;
     
 }
 - (void) filter {
+    [numCollections removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
@@ -135,12 +171,36 @@ static const float kProductColumnSpacer = 14.0;
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"collectionName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
     
-    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        collections = [results sortedArrayUsingDescriptors:sortDescriptors];
-        
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    
+    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && yourOwnButton.selected) {
+        //get only user's own collections
+         collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionCreator =[cd] %@", creatorName]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && yourOwnButton.selected) {
+        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@) AND collectionCreator =[cd] %@", txtSearch.text, txtSearch.text, creatorName]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allUsersButton.selected) {
+        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
     } else {
-     collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
+    
+         collections = [results sortedArrayUsingDescriptors:sortDescriptors];
     }
+    
+    collectionText = @"collections";
+    if([collections count] ==1) {
+        collectionText = @"collection";
+        
+    }
+    numCollections = [[UILabel alloc] init];
+    numCollections.text = [NSString stringWithFormat: @"%d %@", [collections count], collectionText];
+    numCollections.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    numCollections.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    numCollections.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    numCollections.numberOfLines = 1;
+    CGRect numCollectionsTitle = CGRectMake(210.0, 58.0, 500, 30.0);
+    numCollections.frame = numCollectionsTitle;
+    
+    [self.view addSubview:numCollections];
     
     deletions = [[NSMutableArray alloc] initWithCapacity:[collections count]];
     
@@ -302,7 +362,7 @@ static const float kProductColumnSpacer = 14.0;
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
              product.productCode = @"1159140970";
-             product.productName = @"irreg choice 1";
+             product.productName = @"irreg choice 2";
              product.productPrice = [NSNumber numberWithDouble:125.00];
              product.productNotes = @"This is a test product inserted manually";
              
@@ -419,8 +479,8 @@ static const float kProductColumnSpacer = 14.0;
             deleteButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
             [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
             [deleteButton setSelected:NO];
-            [deleteButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-            [deleteButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML.png"] forState:UIControlStateNormal];
+            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML-checked.png"] forState:UIControlStateSelected];
             [deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
             [deleteButton setTag:i];
             [collectionButton addSubview:deleteButton];
@@ -455,12 +515,12 @@ static const float kProductColumnSpacer = 14.0;
         [self.view addSubview:_scrollView];
         
         //show or hide next and previous arrows
-        _upArrow = [[UIImageView alloc] initWithFrame:CGRectMake(20, (kPageHeight+70), 35.5, 27)];
+        _upArrow = [[UIImageView alloc] initWithFrame:CGRectMake(20, (kPageHeight+90), 35.5, 27)];
         _upArrow.hidden = YES;
         [_upArrow setImage:[UIImage imageNamed:@"arrowUP.png"]];
         [self.view addSubview:_upArrow];
         
-        _downArrow = [[UIImageView alloc] initWithFrame:CGRectMake(968.5, (kPageHeight+70), 35.5, 27)];
+        _downArrow = [[UIImageView alloc] initWithFrame:CGRectMake(968.5, (kPageHeight+90), 35.5, 27)];
         _downArrow.hidden = YES;
         [_downArrow setImage:[UIImage imageNamed:@"arrowDOWN.png"]];
         [self.view addSubview:_downArrow];
@@ -585,6 +645,22 @@ static const float kProductColumnSpacer = 14.0;
     
     //NSLog(@"deletions: %d", [deletions count]);
 
+}
+- (void)filterClicked:(id)sender {
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = !button.selected;
+    
+    NSString *buttonTitle = button.currentTitle;
+    
+    if([buttonTitle  isEqual: @" all users"]) {
+        
+        yourOwnButton.selected = !yourOwnButton.selected;
+
+    } else {
+         allUsersButton.selected = !allUsersButton.selected;
+    }
+    
 }
 
 - (void)deleteCollections:(id)sender {

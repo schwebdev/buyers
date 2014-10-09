@@ -3,8 +3,6 @@
 #import "CollectionViewController.h"
 #import "SWRevealViewController.h"
 #import "BaseViewController.h"
-#import "PlayingCard.h"
-#import "PlayingCardCell.h"
 #import "Product.h"
 #import "ProductOrder.h"
 #import "ProductCell.h"
@@ -22,6 +20,8 @@
 
 @implementation CollectionViewController {
     NSMutableArray *deletions;
+    NSString *productText;
+    UILabel *numProducts;
 }
 
 @synthesize displayNotesPopover = _displayNotesPopover;
@@ -35,11 +35,8 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-     
-    
     self.products = [self constructsProducts];
     deletions = [[NSMutableArray alloc] initWithCapacity:[self.products count]];
-
     
     //set all the checkbox buttons back to a not selected state
     if([self.products count] > 0) {
@@ -130,12 +127,45 @@
     [super viewDidLoad];
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
+    
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
    
     //hack to push content down
-    self.collectionView.contentInset = UIEdgeInsetsMake(40, 0, 0, 0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectionNotesSaved:) name:@"CollectionNotesSaved" object:nil];
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy"];
+    NSDate *creationDate = _collection.collectionCreationDate;
+    NSString *formatDate = [dateFormat stringFromDate:creationDate];
+    UILabel *pageTitle = [[UILabel alloc] init];
+    pageTitle.text = [NSString stringWithFormat:@"%@ - %@", formatDate, _collection.collectionCreator];
+    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    pageTitle.numberOfLines = 1;
+    CGRect frameTitle = CGRectMake(210.0, 38.0, 500.0, 30.0);
+    pageTitle.frame = frameTitle;
+    
+    [self.view addSubview:pageTitle];
+    
+    /*productText = @"products";
+    if([self.products count] ==1) {
+        productText = @"product";
+        
+    }
+    numProducts = [[UILabel alloc] init];
+    numProducts.text = [NSString stringWithFormat: @"%d %@", [self.products count], productText];
+    numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    numProducts.numberOfLines = 1;
+    CGRect numProductsTitle = CGRectMake(100.0, 58.0, 500, 30.0);
+    numProducts.frame = numProductsTitle;
+    
+    [self.view addSubview:numProducts];
+     */
     
 }
 - (void)collectionNotesSaved:(NSNotification *)notification
@@ -170,7 +200,6 @@
     [super viewWillAppear:animated];
     
     [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-
     
     //clear menu buttons
     SidebarViewController *sidebar = (SidebarViewController*)self.revealViewController.rearViewController;
@@ -246,6 +275,8 @@
 }
 - (NSMutableArray *)constructsProducts {
     
+    [numProducts removeFromSuperview];
+    
     NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
     //NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"productName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
@@ -260,6 +291,22 @@
         Product *productElement = productOrder.orderProduct;
         [newProducts addObject:productElement];
     }
+    
+    productText = @"products";
+    if([products count] ==1) {
+        productText = @"product";
+        
+    }
+    numProducts = [[UILabel alloc] init];
+    numProducts.text = [NSString stringWithFormat: @"%d %@", [products count], productText];
+    numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    numProducts.numberOfLines = 1;
+    CGRect numProductsTitle = CGRectMake(210.0, 58.0, 500, 30.0);
+    numProducts.frame = numProductsTitle;
+    
+    [self.view addSubview:numProducts];
     
     return newProducts;
 }

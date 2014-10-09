@@ -16,6 +16,22 @@
 
 @implementation SchDropDown
 
+- (void)setSelectedValue:(NSString *)value {
+    for (NSDictionary *item in self.listItems) {
+        
+        if(self.listName != nil) {
+            if([value isEqualToString:[NSString stringWithFormat:@"%@",item[self.listValue]]]) {
+                self.text = [NSString stringWithFormat:@"%@",item[self.listName]];
+            }
+        } else {
+            if([value isEqualToString:[[item allKeys] objectAtIndex:0]]) {
+                self.text = [NSString stringWithFormat:@"%@",item[[[item allKeys] objectAtIndex:0]]];
+            }
+        }
+    }
+
+}
+
 - (NSString *)getSelectedValue {
     NSString *returnVal = @"";
     if(self.listItems!= nil) {
@@ -98,6 +114,7 @@
     self.listItems = listItems;
     self.listName = listName;
     self.listValue = listValue;
+    self.text = @"";
 }
 
 
@@ -119,9 +136,9 @@
 //        picker.dataSource = self;
 //        [popoverView addSubview:picker];
 
-        UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, 280, 200) style:UITableViewStylePlain];
-        //picker.backgroundColor = [UIColor redColor];
-        table.separatorInset = UIEdgeInsetsZero;
+        UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 200) style:UITableViewStylePlain];
+        [table setSeparatorInset:UIEdgeInsetsZero];
+        [table setLayoutMargins:UIEdgeInsetsZero];
         table.delegate = self;
         table.dataSource = self;
         [popoverView addSubview:table];
@@ -130,7 +147,7 @@
         
         self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
         self.popover.delegate = self;
-        [self.popover setPopoverContentSize:CGSizeMake(280, 200) animated:NO];
+        [self.popover setPopoverContentSize:CGSizeMake(self.frame.size.width, 200) animated:NO];
         
 //        if(![self.text isEqualToString:@""]) {
 //            for (int i = 0; i < self.listItems.count; i++) {
@@ -142,7 +159,7 @@
 //        }
         
         
-        [self.popover presentPopoverFromRect:textField.frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+        [self.popover presentPopoverFromRect:textField.frame inView:self.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:NO];
         
         return NO;
     } else {
@@ -187,7 +204,7 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"cellID";//[self.listItems objectAtIndex:indexPath.row];
+    static NSString *CellIdentifier = @"cellID";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {
@@ -203,7 +220,7 @@
     bgColorView.layer.masksToBounds = YES;
     cell.selectedBackgroundView = bgColorView;
     
-    
+    [cell setLayoutMargins:UIEdgeInsetsZero];
     return cell;
 }
 
@@ -215,6 +232,12 @@
     else self.text = listItem[[[listItem allKeys] objectAtIndex:0]];
     
     [self.popover dismissPopoverAnimated:YES];
+    
+    
+    if(self.observerName != nil) {
+        NSNotificationCenter *center = [NSNotificationCenter defaultCenter];
+        [center postNotificationName:self.observerName object:[self getSelectedValue]];
+    }
 }
 
 
