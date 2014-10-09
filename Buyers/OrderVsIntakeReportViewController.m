@@ -131,6 +131,7 @@
             //ReportData *report = reports[0];
             
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"warning" message:@"a filter set with this name already exists. would you like to overwrite it?" delegate:self cancelButtonTitle:@"cancel" otherButtonTitles:@"ok", nil];
+            alert.tag = 1;
             [alert show];
         } else {
             
@@ -180,7 +181,8 @@
 }
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) {
+    
+    if(alertView.tag == 1 && buttonIndex == 1) {
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
         [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
@@ -222,6 +224,35 @@
                 [alert show];
             }
         }
+    }
+    else if(alertView.tag == 2 && buttonIndex == 1) {
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
+        
+        NSError *error;
+        NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+        
+        if(filterSets.count > 0) {
+            
+            [managedContext deleteObject:filterSets[0]];
+            
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not delete filter set: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set delete failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                NSLog(@"%@ filter set entry marked as deleted", self.filterSetName);
+                
+                self.filterSetName = @"";
+                [self.navigationController popViewControllerAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"filter set has been deleted"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            }
+        }
+
     }
 }
 
@@ -306,6 +337,19 @@
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"order vs intake by week report: %@", self.filterSetName]]];
 }
 
+- (void)deleteFilter {
+    if(self.filterSetName != nil) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"warning" message:[NSString stringWithFormat:@"Are you sure you wish to delete this filter set?"] delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
+        alert.tag = 2;
+        [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"filter set has not been saved"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+        
+    }
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -334,7 +378,7 @@
     self.departmentsTable.layer.borderColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
     [self.departmentsTable setLayoutMargins:UIEdgeInsetsZero];
     
-    UIView *barButtons = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 85)];
+    UIView *barButtons = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 100, 65)];
     UIButton *saveButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
     //[button setBackgroundImage:[UIImage imageNamed:@"schuhMenuIcon-S.png"] forState:UIControlStateNormal];
@@ -345,7 +389,7 @@
     [saveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     //[button setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
     [saveButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
-    saveButton.frame = CGRectMake(0, 0, 100, 50);
+    saveButton.frame = CGRectMake(0, 0, 100, 40);
     //[button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
     [saveButton addTarget:self action:@selector(saveClick:) forControlEvents:UIControlEventTouchUpInside];
     [barButtons addSubview:saveButton];
@@ -359,6 +403,9 @@
     if(self.filterSetName != nil) {
         [self loadFilterSet];
     }
+    
+    
+    [[self setMenuButton:1 title:@"delete filter set"] addTarget:self action:@selector(deleteFilter) forControlEvents:UIControlEventTouchUpInside];
 }
 - (void)didReceiveMemoryWarning
 {

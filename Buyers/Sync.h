@@ -10,13 +10,8 @@
 
 @interface Sync : NSObject
 
-+ (BOOL)syncAll;
-+ (BOOL)syncSuppliers;
-+ (BOOL)syncBrands;
-+ (BOOL)syncCalYearWeeks;
-+ (BOOL)syncReportsOrderVsIntake;
-+ (BOOL)syncDepartments;
-+ (BOOL)syncMerch;
++ (BOOL)syncTable:(NSString *)type;
+
 + (BOOL)syncReportData;
 
 + (void)updateSyncStatus:(NSString *)type;

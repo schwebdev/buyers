@@ -108,16 +108,14 @@
     UISwitch *currentSwitch = (UISwitch *)sender;
     [currentSwitch setOn:YES animated:YES];
     
-    //if(currentSwitch.on) {
-        for (UIView *subview in currentSwitch.superview.subviews) {
-            if([subview isKindOfClass:[UISwitch class]]) {
-                if(subview.tag != currentSwitch.tag) {
-                    UISwitch *otherSwitch = (UISwitch*)subview;
-                    [otherSwitch setOn:NO animated:YES];
-                }
+    for (UIView *subview in self.ReportFilterView.subviews) {
+        if([subview isKindOfClass:[UISwitch class]]) {
+            if(subview.tag != currentSwitch.tag) {
+                UISwitch *otherSwitch = (UISwitch*)subview;
+                [otherSwitch setOn:NO animated:YES];
             }
         }
-    //}
+    }
     self.reportList.text = @"";
     
     
@@ -125,7 +123,7 @@
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    if(currentSwitch.tag == 0) {
+    if(currentSwitch.tag == 1) {
         [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
         
     } else {
@@ -172,17 +170,24 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
+    UISwitch *ownSwitch = (UISwitch*)[self.ReportFilterView viewWithTag:1];
+    
     self.reportList.text = @"";
+    
     self.reportList.listItems = [NSMutableArray array];
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+    if([ownSwitch isOn]) {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+    } else {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];
+    }
     
     NSError *error;
     NSArray *reports = [managedContext executeFetchRequest:request error:&error];
     
-    if(reports.count > 0) {        
+    if(reports.count > 0) {
         for (ReportData *report in reports) {
             [self.reportList.listItems addObject:@{report.name:report.name}];
         }
