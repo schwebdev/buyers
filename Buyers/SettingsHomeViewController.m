@@ -169,23 +169,23 @@
     CGFloat syncCount = 6;
     
     if(success) {
-        success = [Sync syncSuppliers];
+        success = [Sync syncTable:@"Supplier"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:1/syncCount] waitUntilDone:YES];
     }
     if(success) {
-        success = [Sync syncBrands];
+        success = [Sync syncTable:@"Brand"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:2/syncCount] waitUntilDone:YES];
     }
     if(success) {
-        success = [Sync syncCalYearWeeks];
+        success = [Sync syncTable:@"CalYearWeek"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:3/syncCount] waitUntilDone:YES];
     }
     if(success) {
-        success = [Sync syncMerch];
+        success = [Sync syncTable:@"Merch"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:4/syncCount] waitUntilDone:YES];
     }
     if(success) {
-        success = [Sync syncDepartments];
+        success = [Sync syncTable:@"Department"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:5/syncCount] waitUntilDone:YES];
     }
    

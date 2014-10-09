@@ -3,8 +3,6 @@
 #import "CollectionViewController.h"
 #import "SWRevealViewController.h"
 #import "BaseViewController.h"
-#import "PlayingCard.h"
-#import "PlayingCardCell.h"
 #import "Product.h"
 #import "ProductOrder.h"
 #import "ProductCell.h"

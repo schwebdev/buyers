@@ -154,6 +154,10 @@
     if(self.filePath != nil) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Are you sure you wish to delete this report?"] delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
         [alert show];
+    } else {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report has not been saved"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+
     }
 }
 
