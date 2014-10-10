@@ -128,27 +128,18 @@
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy"];
+    NSDate *creationDate = _collection.collectionCreationDate;
+    NSString *formatDate = [dateFormat stringFromDate:creationDate];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@ - %@", formatDate, _collection.collectionCreator]]];
    
     //hack to push content down
     self.collectionView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectionNotesSaved:) name:@"CollectionNotesSaved" object:nil];
-    
-    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-    [dateFormat setDateFormat:@"dd MMMM yyyy"];
-    NSDate *creationDate = _collection.collectionCreationDate;
-    NSString *formatDate = [dateFormat stringFromDate:creationDate];
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = [NSString stringWithFormat:@"%@ - %@", formatDate, _collection.collectionCreator];
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(210.0, 38.0, 500.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
+        
     
     /*productText = @"products";
     if([self.products count] ==1) {

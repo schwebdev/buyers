@@ -153,7 +153,7 @@ static const float sProductColumnSpacer = 5.0;
     }
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"add products to" title2:title2 image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Add Products To Collection"]];
     
     tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -199,16 +199,6 @@ static const float sProductColumnSpacer = 5.0;
     [self.view addSubview:_clearAll];
     [self.view addSubview:_saveSelection];
     
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" Add Products To Collection";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    //pageTitle.textAlignment = NSTextAlignmentCenter;
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(206.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
     
     UILabel *productsAvailable = [[UILabel alloc] init];
     productsAvailable.text = @"products available";
@@ -460,7 +450,6 @@ static const float sProductColumnSpacer = 5.0;
     for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
         
         if(selectedProductsListView == nil)
-           //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
         
         
@@ -505,7 +494,6 @@ static const float sProductColumnSpacer = 5.0;
             [selectedProductsScrollView addSubview:selectedProductsListView];
             page++;
             row = 1;
-            //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
              //NSLog(@"y: %f page: %d",((page - 1) * sPageHeight), page);
         } else if(isLastPage) {

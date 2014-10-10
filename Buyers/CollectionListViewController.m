@@ -61,17 +61,7 @@ static const float kProductColumnSpacer = 14.0;
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
-    
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @"List of Collections";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(210.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"List of Collections"]];
     
     tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
