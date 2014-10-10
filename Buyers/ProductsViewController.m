@@ -298,7 +298,7 @@ static const float sProductColumnSpacer = 5.0;
     numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     numProducts.numberOfLines = 1;
-    CGRect numProductsTitle = CGRectMake(206.0, 58.0, 500, 30.0);
+    CGRect numProductsTitle = CGRectMake(210.0, 58.0, 500, 30.0);
     numProducts.frame = numProductsTitle;
     
     [self.view addSubview:numProducts];
