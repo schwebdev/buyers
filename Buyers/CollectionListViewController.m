@@ -320,6 +320,7 @@ static const float kProductColumnSpacer = 14.0;
              Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
              material.materialName = @"man-made";
+             material.materialRef = [NSNumber numberWithInt:20];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save material: %@", [error localizedDescription]);
@@ -329,6 +330,7 @@ static const float kProductColumnSpacer = 14.0;
              Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
              
              colour.colourName = @"multi";
+             colour.colourRef = [NSNumber numberWithInt:10];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save colour: %@", [error localizedDescription]);
@@ -338,6 +340,7 @@ static const float kProductColumnSpacer = 14.0;
              ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
              
              category.categoryName = @"high heels";
+             category.category2Ref = [NSNumber numberWithInt:7];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save category: %@", [error localizedDescription]);
@@ -352,8 +355,8 @@ static const float kProductColumnSpacer = 14.0;
              //add dummy product to each collection
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             product.productCode = @"1159140970";
-             product.productName = @"irreg choice";
+             product.productCode = @"1945097370";
+             product.productName = @"irregular choice";
              product.productPrice = [NSNumber numberWithDouble:125.00];
              product.productNotes = @"This is a test product inserted manually";
              
@@ -376,7 +379,7 @@ static const float kProductColumnSpacer = 14.0;
              product.supplier = [suppliers objectAtIndex:0];
              
              //add image
-             UIImage *image = [UIImage imageNamed:@"1159140970_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+             UIImage *image = [UIImage imageNamed:@"1945097370_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
              NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
              
              product.productImageData = imageData;

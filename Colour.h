@@ -2,7 +2,7 @@
 //  Colour.h
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Web Development on 10/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface Colour : NSManagedObject
 
 @property (nonatomic, retain) NSString * colourName;
+@property (nonatomic, retain) NSNumber * colourRef;
 @property (nonatomic, retain) NSSet *productColour;
 @end
 

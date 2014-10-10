@@ -2,7 +2,7 @@
 //  ProductCategory.h
 //  Buyers
 //
-//  Created by Schuh Webdev on 02/10/2014.
+//  Created by Web Development on 10/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -14,6 +14,7 @@
 @interface ProductCategory : NSManagedObject
 
 @property (nonatomic, retain) NSString * categoryName;
+@property (nonatomic, retain) NSNumber * category2Ref;
 @property (nonatomic, retain) NSSet *productCategory;
 @end
 

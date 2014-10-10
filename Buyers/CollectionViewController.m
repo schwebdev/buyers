@@ -139,24 +139,7 @@
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectionNotesSaved:) name:@"CollectionNotesSaved" object:nil];
-        
-    
-    /*productText = @"products";
-    if([self.products count] ==1) {
-        productText = @"product";
-        
-    }
-    numProducts = [[UILabel alloc] init];
-    numProducts.text = [NSString stringWithFormat: @"%d %@", [self.products count], productText];
-    numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
-    numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
-    numProducts.numberOfLines = 1;
-    CGRect numProductsTitle = CGRectMake(100.0, 58.0, 500, 30.0);
-    numProducts.frame = numProductsTitle;
-    
-    [self.view addSubview:numProducts];
-     */
+
     
 }
 - (void)collectionNotesSaved:(NSNotification *)notification
