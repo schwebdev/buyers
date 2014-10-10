@@ -40,7 +40,14 @@ static const float sProductColumnSpacer = 5.0;
 @interface ProductsViewController () {
     NSArray *products;
     NSMutableArray *selectedProducts;
-
+    UIButton *filterButton;
+    UIButton *allProductsButton;
+    UIButton *customProductsButton;
+    SchTextField *txtSearch;
+    UIView *tools;
+    UILabel *numProducts;
+    NSString *productText;
+    UILabel *noResults;
 }
 
 @end
@@ -147,22 +154,52 @@ static const float sProductColumnSpacer = 5.0;
     }
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"add products to" title2:title2 image:@"homePaperClipLogo.png"];
     
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Add Products To Collection"]];
+    
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
+    tools.layer.backgroundColor = [UIColor clearColor].CGColor;
+    self.navigationController.toolbar.clipsToBounds = YES;
+    
+    
+    allProductsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 100, 24)];
+    [allProductsButton setTitle:@" all products" forState:UIControlStateNormal];
+    allProductsButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [allProductsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [allProductsButton setSelected:YES];
+    [allProductsButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [allProductsButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [allProductsButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    customProductsButton = [[UIButton alloc] initWithFrame:CGRectMake(-11, 0, 100, 24)];
+    [customProductsButton setTitle:@" custom" forState:UIControlStateNormal];
+    customProductsButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
+    [customProductsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [customProductsButton setSelected:NO];
+    [customProductsButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
+    [customProductsButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [customProductsButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
+    
+    filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [filterButton setTitle:@"filter" forState:UIControlStateNormal];
+    filterButton.frame = CGRectMake(320, 0, 100, 50);
+    [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
+    filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+    filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
+    
+    [tools addSubview:allProductsButton];
+    [tools addSubview:customProductsButton];
+    [tools addSubview:filterButton];
+    [tools addSubview:txtSearch];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
+    
     selectedProducts = [[NSMutableArray alloc]  init];
     
     [self.view addSubview:_clearAll];
     [self.view addSubview:_saveSelection];
     
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" ADD PRODUCTS TO COLLECTION";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    pageTitle.textAlignment = NSTextAlignmentCenter;
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;    pageTitle.textColor = [UIColor blackColor];
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(0.0, 40.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
     
     UILabel *productsAvailable = [[UILabel alloc] init];
     productsAvailable.text = @"products available";
@@ -170,7 +207,7 @@ static const float sProductColumnSpacer = 5.0;
     productsAvailable.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     productsAvailable.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     productsAvailable.numberOfLines = 1;
-    CGRect productsAvailableTitle = CGRectMake(20.0, 70.0, 300, 30.0);
+    CGRect productsAvailableTitle = CGRectMake(20.0, 90.0, 300, 30.0);
     productsAvailable.frame = productsAvailableTitle;
     
     [self.view addSubview:productsAvailable];
@@ -181,16 +218,15 @@ static const float sProductColumnSpacer = 5.0;
     productsAvailableSub.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     productsAvailableSub.textColor = [UIColor blackColor];
     productsAvailableSub.numberOfLines = 1;
-    CGRect productsAvailableSubText = CGRectMake(20.0, 100.0, 300, 20.0);
+    CGRect productsAvailableSubText = CGRectMake(20.0, 120.0, 300, 20.0);
     productsAvailableSub.frame = productsAvailableSubText;
     
     [self.view addSubview:productsAvailableSub];
     
-    //separator
-    UIView *separator = [[UIView alloc] initWithFrame: CGRectMake(kPageWidth, 70.0, 1, 746.0)];
-    separator.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1];
-    [self.view addSubview:separator];
-    
+    CALayer *separator = [CALayer layer];
+    separator.frame = CGRectMake(kPageWidth, 100, 1, 589);
+    separator.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
+    [self.view.layer addSublayer:separator];
     
     UILabel *productsAdd = [[UILabel alloc] init];
     productsAdd.text = @"products to add";
@@ -198,7 +234,7 @@ static const float sProductColumnSpacer = 5.0;
     productsAdd.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     productsAdd.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     productsAdd.numberOfLines = 1;
-    CGRect productsAddTitle = CGRectMake((kPageWidth+20.0), 70.0, 300, 30.0); //kPageWidth, 70.0, 300, 30.0
+    CGRect productsAddTitle = CGRectMake((kPageWidth+20.0), 90.0, 300, 30.0); //kPageWidth, 70.0, 300, 30.0
     productsAdd.frame = productsAddTitle;
     
     [self.view addSubview:productsAdd];
@@ -209,16 +245,26 @@ static const float sProductColumnSpacer = 5.0;
     productsAddSub.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     productsAddSub.textColor = [UIColor blackColor];
     productsAddSub.numberOfLines = 1;
-    CGRect productsAddSubText = CGRectMake((kPageWidth+20.0), 100.0, 300, 20.0);
+    CGRect productsAddSubText = CGRectMake((kPageWidth+20.0), 120.0, 300, 20.0);
     productsAddSub.frame = productsAddSubText;
     
     [self.view addSubview:productsAddSub];
 
+    [self fetchResults];
+    [self constructsProducts];
+
+}
+
+- (void)fetchResults
+{
     UIView *productListView;
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(20, 140, kPageWidth, kPageHeight)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(20, 160, kPageWidth, kPageHeight)];
     scrollView.pagingEnabled = NO;
+    scrollView.tag = 888888888;
     
-    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSError *error;
+
     //fetch request to retrieve all products
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
     NSArray *results = [managedContext executeFetchRequest:request error:&error];
@@ -228,8 +274,37 @@ static const float sProductColumnSpacer = 5.0;
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
     products = [results sortedArrayUsingDescriptors:sortDescriptors];
     
-    if ([products count] > 0) {
+    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && customProductsButton.selected) {
+        //get only custom products
+        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productCode =''"]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && customProductsButton.selected) {
+        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='' %@", txtSearch.text, txtSearch.text]];
+    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allProductsButton.selected) {
+        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productName CONTAINS[cd] %@ OR productName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
+    } else {
         
+        products = [results sortedArrayUsingDescriptors:sortDescriptors];
+
+    }
+    
+    productText = @"products";
+    if([products count] ==1) {
+        productText = @"product";
+        
+    }
+    numProducts = [[UILabel alloc] init];
+    numProducts.text = [NSString stringWithFormat: @"%d %@", [products count], productText];
+    numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    numProducts.numberOfLines = 1;
+    CGRect numProductsTitle = CGRectMake(210.0, 58.0, 500, 30.0);
+    numProducts.frame = numProductsTitle;
+    
+    [self.view addSubview:numProducts];
+    
+    if ([products count] > 0) {
+        [noResults removeFromSuperview];
         int page =1;
         int col= 1;
         int row = 1;
@@ -237,7 +312,7 @@ static const float sProductColumnSpacer = 5.0;
         for (int p = 0, pc = [products count]; p < pc; p++) {
             
             if(productListView == nil)
-             productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
+                productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
             
             int x = (col -1) * kColumnWidth;
             int y = (row - 1) * kRowHeight;
@@ -265,7 +340,7 @@ static const float sProductColumnSpacer = 5.0;
             CGRect frameTitle = CGRectMake(x+((col -1) * kProductColumnSpacer),y+(kButtonHeight+2.0), kButtonWidth, 20.0);
             productTitle.frame = frameTitle;
             [productListView addSubview:productTitle];
-
+            
             col++;
             
             if(col > 3) {
@@ -273,7 +348,7 @@ static const float sProductColumnSpacer = 5.0;
                 col= 1;
             }
             
-
+            
             BOOL isLastPage = ((pc % 9 > 0) && (pc - p == 1));
             
             if(row > 3 && !isLastPage) {
@@ -291,11 +366,55 @@ static const float sProductColumnSpacer = 5.0;
             // NSLog(@"height: %f",(kPageHeight * page));
         }
         [self.view addSubview:scrollView];
+        
+    } else {
+        noResults = [[UILabel alloc] init];
+        noResults.text = @"no products returned, please search again or sync data";
+        noResults.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        noResults.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+        noResults.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
+        noResults.numberOfLines = 1;
+        CGRect noResultsTitle = CGRectMake(20.0, 160.0, 500.0, 30.0);
+        noResults.frame = noResultsTitle;
+        
+        [self.view addSubview:noResults];
     }
-    [self constructsProducts];
 
 }
 
+- (void) filter {
+    
+    [numProducts removeFromSuperview];
+    //clear scroll view so it can be redrawn in case of changes
+    for(UIView *view in self.view.subviews) {
+        if(view.tag == 888888888) {
+            [view removeFromSuperview];
+        }
+        
+    }
+    [self fetchResults];
+    [selectedProducts removeAllObjects];
+    [self constructsProducts];
+    //NSLog(@"count %d", [products count]);
+    
+}
+
+- (void)filterClicked:(id)sender {
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = !button.selected;
+    
+    NSString *buttonTitle = button.currentTitle;
+    
+    if([buttonTitle  isEqual: @" all products"]) {
+        
+        customProductsButton.selected = !customProductsButton.selected;
+        
+    } else {
+        allProductsButton.selected = !allProductsButton.selected;
+    }
+    
+}
 - (void)addProductToSelection:(id)sender {
     Product *product = [(ProductButton *)sender product];
     UIButton *button = (UIButton *)sender;
@@ -333,7 +452,7 @@ static const float sProductColumnSpacer = 5.0;
      }
     
     UIView *selectedProductsListView;
-    UIScrollView *selectedProductsScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake((kPageWidth+20.0), 130, sPageWidth, sPageHeight)];
+    UIScrollView *selectedProductsScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake((kPageWidth+20.0), 150, sPageWidth, sPageHeight)];
     selectedProductsScrollView.pagingEnabled = NO;
     selectedProductsScrollView.tag=999999999;
     
@@ -344,7 +463,6 @@ static const float sProductColumnSpacer = 5.0;
     for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
         
         if(selectedProductsListView == nil)
-           //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
         
         
@@ -389,7 +507,6 @@ static const float sProductColumnSpacer = 5.0;
             [selectedProductsScrollView addSubview:selectedProductsListView];
             page++;
             row = 1;
-            //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
              //NSLog(@"y: %f page: %d",((page - 1) * sPageHeight), page);
         } else if(isLastPage) {
@@ -546,7 +663,10 @@ static const float sProductColumnSpacer = 5.0;
 }
 
 -(void)onKeyboardHide:(NSNotification *)notification {
+    //only animate if the view frame's y co-ordinate has been shifted up
+    if(CGRectGetMaxY(self.view.frame) < 700) {
     [self animateTextField:self.txtNewCollection up:NO];
+    }
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
     [self animateTextField:textField up:YES];
@@ -556,7 +676,7 @@ static const float sProductColumnSpacer = 5.0;
 }
 -(void)animateTextField:(UITextField *)textField up:(BOOL)up{
     
-    const int movementDistance = -280;
+    const int movementDistance = -330;
     const float movementDuration = 0.2f;
     
     int movement = (up ? movementDistance : -movementDistance);

@@ -18,6 +18,7 @@
     </entity>
     <entity name="Colour" representedClassName="Colour" syncable="YES">
         <attribute name="colourName" attributeType="String" maxValueString="100" syncable="YES"/>
+        <attribute name="colourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="productColour" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="colour" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Department" representedClassName="Department" syncable="YES">
@@ -30,6 +31,7 @@
     </entity>
     <entity name="Material" representedClassName="Material" syncable="YES">
         <attribute name="materialName" attributeType="String" maxValueString="100" syncable="YES"/>
+        <attribute name="materialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <relationship name="productMaterial" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="material" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Merch" representedClassName="Merch" syncable="YES">
@@ -52,6 +54,7 @@
         <relationship name="supplier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Supplier" inverseName="productSupplier" inverseEntity="Supplier" syncable="YES"/>
     </entity>
     <entity name="ProductCategory" representedClassName="ProductCategory" syncable="YES">
+        <attribute name="category2Ref" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="productCategory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
     </entity>
@@ -110,13 +113,13 @@
         <element name="Brand" positionX="-27" positionY="126" width="128" height="88"/>
         <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
         <element name="Collection" positionX="-63" positionY="-18" width="128" height="135"/>
-        <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
+        <element name="Colour" positionX="18" positionY="153" width="128" height="88"/>
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
-        <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
+        <element name="Material" positionX="0" positionY="144" width="128" height="88"/>
         <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
         <element name="Product" positionX="-54" positionY="27" width="128" height="240"/>
-        <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
+        <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="88"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>
         <element name="ReportFilterSet" positionX="-9" positionY="153" width="128" height="133"/>
