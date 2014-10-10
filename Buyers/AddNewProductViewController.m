@@ -86,8 +86,9 @@ static const float kPageWidth = 680.0;
     
     [self.view addSubview:productsInfo];
     
-   
-    
+    if(_selectedImage !=nil){
+        _cameraView.image = _selectedImage;
+    }     
     
     //categories drop down
     [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
@@ -123,6 +124,7 @@ static const float kPageWidth = 680.0;
         
         CGRect f = imagePicker.view.bounds;
         f.size.height -= imagePicker.navigationBar.bounds.size.height;
+        //f.size.width = f.size.height;
         CGFloat barHeight = (f.size.height - f.size.width) / 2;
         UIGraphicsBeginImageContext(f.size);
         [[UIColor colorWithWhite:0 alpha:.5] set];
@@ -142,7 +144,7 @@ static const float kPageWidth = 680.0;
     }
 }
 
-- (void) useCameraRoll:(id)sender
+/*- (void) useCameraRoll:(id)sender
 {
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeSavedPhotosAlbum])
@@ -159,7 +161,7 @@ static const float kPageWidth = 680.0;
         _newMedia = NO;
         _isDirtyImage = YES;
     }
-}
+}*/
 
 - (IBAction)categoryList:(id)sender {
     [_txtProductName resignFirstResponder];
@@ -167,7 +169,7 @@ static const float kPageWidth = 680.0;
 
 - (void)saveCustomProduct:(id)sender {
     
-    NSString *pName, *pCode;
+    NSString *pName;
     ProductCategory *pCategory;
     Brand *pBrand;
     Supplier *pSupplier;
@@ -268,7 +270,6 @@ static const float kPageWidth = 680.0;
              
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             product.productCode = @"00000000";
              
              product.productName = pName;
              product.productPrice = pPrice;

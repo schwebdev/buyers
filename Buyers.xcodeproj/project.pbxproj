@@ -143,6 +143,9 @@
 		5BB66B1119DEACD500422E87 /* checkboxSML.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0F19DEACD500422E87 /* checkboxSML.png */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
+		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
+		C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */; };
+		C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */; };
 		C618D3A019DEEBC7005977D6 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D39F19DEEBC7005977D6 /* camera.png */; };
 		C618D3A219DEEC7F005977D6 /* gallery.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A119DEEC7F005977D6 /* gallery.png */; };
 		C618D3A419DEF114005977D6 /* camera_lg.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A319DEF114005977D6 /* camera_lg.png */; };
@@ -355,6 +358,11 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
+		C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRollViewController.h; sourceTree = "<group>"; };
+		C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraRollViewController.m; sourceTree = "<group>"; };
+		C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		C60A7AFC19E6E2F1000ABE88 /* PhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCell.h; sourceTree = "<group>"; };
+		C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCell.m; sourceTree = "<group>"; };
 		C618D39F19DEEBC7005977D6 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		C618D3A119DEEC7F005977D6 /* gallery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gallery.png; sourceTree = "<group>"; };
 		C618D3A319DEF114005977D6 /* camera_lg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_lg.png; sourceTree = "<group>"; };
@@ -401,6 +409,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */,
 				0B288AC219BE032C00F62B63 /* SystemConfiguration.framework in Frameworks */,
 				5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */,
 				0BC95634198FDABD00CD45D5 /* CoreGraphics.framework in Frameworks */,
@@ -431,6 +440,10 @@
 				C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */,
 				C6C3D4C319E3FB2B009E8CAB /* AVCameraPreviewView.h */,
 				C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */,
+				C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */,
+				C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */,
+				C60A7AFC19E6E2F1000ABE88 /* PhotoCell.h */,
+				C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */,
 			);
 			name = CustomProducts;
 			sourceTree = "<group>";
@@ -617,9 +630,7 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
-				0B52FC8919E56E0C00D1D747 /* ReportData.h */,
 				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
-				0B523EB919E280FA0079EB25 /* ReportFilterSet.h */,
 				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
 				C6B9A7C519DD737400C832A1 /* Collection.h */,
 				C6B9A7C619DD737400C832A1 /* Collection.m */,
@@ -693,6 +704,7 @@
 		0BC95630198FDABD00CD45D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */,
 				0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */,
 				5B35503019A49CF40031E33C /* CoreData.framework */,
 				0BC95631198FDABD00CD45D5 /* Foundation.framework */,
@@ -975,6 +987,7 @@
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
+				C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */,
 				0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */,
 				C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */,
 				0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */,
@@ -990,6 +1003,7 @@
 				C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,
 				C6C3D4C519E3FB2B009E8CAB /* AVCameraPreviewView.m in Sources */,
+				C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */,
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				0B288A7819B9C83600F62B63 /* Report.m in Sources */,
 				C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */,
