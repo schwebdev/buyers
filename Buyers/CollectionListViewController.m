@@ -295,11 +295,12 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
             products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
             
-           /* if(i==0){
+            /*if(i==0){
              
              Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
              brand.brandName = @"irregular choice";
+             brand.brandRef = [NSNumber numberWithInt:100];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save brand: %@", [error localizedDescription]);
@@ -352,7 +353,7 @@ static const float kProductColumnSpacer = 14.0;
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
              product.productCode = @"1159140970";
-             product.productName = @"irreg choice 2";
+             product.productName = @"irreg choice";
              product.productPrice = [NSNumber numberWithDouble:125.00];
              product.productNotes = @"This is a test product inserted manually";
              
@@ -594,6 +595,7 @@ static const float kProductColumnSpacer = 14.0;
     [self.navigationController pushViewController:collectionViewController animated:YES];
      */
     
+    [numCollections removeFromSuperview];
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
             [view removeFromSuperview];
@@ -670,6 +672,7 @@ static const float kProductColumnSpacer = 14.0;
             
         }
         
+        [numCollections removeFromSuperview];
         //clear scroll view so it can be redrawn in case of changes
         for(UIView *view in self.view.subviews) {
             if(view.tag == 999999999) {
