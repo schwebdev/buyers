@@ -22,6 +22,8 @@
     NSMutableArray *deletions;
     NSString *productText;
     UILabel *numProducts;
+    UIView *tools;
+    UIButton *saveCollectionButton;
 }
 
 @synthesize displayNotesPopover = _displayNotesPopover;
@@ -61,41 +63,13 @@
     
     [self.collectionView reloadData];
     
-
-    if([self.products count] == 0){
-        //display message
-        UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 300, 50))];
-        label.text = @"no products have been added to this collection";
-        label.font = [UIFont fontWithName:@"HelveticaNeue" size:30.0];
-        label.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
-        label.numberOfLines = 1;
-        label.adjustsFontSizeToFitWidth = YES;
-        [self.collectionView addSubview:label];
-        
-        //display add new product button
-        _addProductButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [_addProductButton setTitle:@"+ product(s)" forState:UIControlStateNormal];
-        [_addProductButton addTarget:self action:@selector(addProductToCollection:) forControlEvents:UIControlEventTouchUpInside];
-        [_addProductButton setFrame:CGRectMake(210, 120, 200, 60)];
-        [ _addProductButton setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229/255.0 alpha:1]];
-        [_addProductButton setTitleColor:[UIColor colorWithRed:143.0/255.0 green:143.0/255.0 blue:143.0/255.0 alpha:1] forState:UIControlStateNormal];
-        _addProductButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0];
-        [_addProductButton setTag:1];
-        [self.collectionView addSubview:_addProductButton];
-        
-    } else {
-        for(UIView *view in self.collectionView.subviews) {
-            [view removeFromSuperview];
-        }
-    }
     
-    
-    UIView *tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.navigationController.toolbar.clipsToBounds = YES;
     
     
-    UIButton *saveCollectionButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    saveCollectionButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveCollectionButton setTitle:@"save collection" forState:UIControlStateNormal];
     saveCollectionButton.frame = CGRectMake(160, 0, 150, 50);
     [saveCollectionButton addTarget:self action:@selector(saveCollection:) forControlEvents:UIControlEventTouchUpInside];
@@ -264,6 +238,34 @@
         ProductOrder *productOrder = [products objectAtIndex:i];
         Product *productElement = productOrder.orderProduct;
         [newProducts addObject:productElement];
+    }
+    
+    if([products count] == 0){
+        //display message
+        UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 300, 50))];
+        label.text = @"no products have been added to this collection";
+        label.font = [UIFont fontWithName:@"HelveticaNeue" size:30.0];
+        label.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
+        label.numberOfLines = 1;
+        label.adjustsFontSizeToFitWidth = YES;
+        [self.collectionView addSubview:label];
+        
+        //display add new product button
+        _addProductButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
+        [_addProductButton setTitle:@"+ product(s)" forState:UIControlStateNormal];
+        [_addProductButton addTarget:self action:@selector(addProductToCollection:) forControlEvents:UIControlEventTouchUpInside];
+        [_addProductButton setFrame:CGRectMake(210, 120, 200, 60)];
+        [ _addProductButton setBackgroundColor:[UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229/255.0 alpha:1]];
+        [_addProductButton setTitleColor:[UIColor colorWithRed:143.0/255.0 green:143.0/255.0 blue:143.0/255.0 alpha:1] forState:UIControlStateNormal];
+        _addProductButton.titleLabel.font = [UIFont fontWithName:@"HelveticaNeue" size:20.0];
+        [_addProductButton setTag:1];
+        [self.collectionView addSubview:_addProductButton];
+        [saveCollectionButton removeFromSuperview];
+         _notesButton.frame = CGRectMake(160, 0, 150, 50);
+    } else {
+        for(UIView *view in self.collectionView.subviews) {
+            [view removeFromSuperview];
+        }
     }
     
     productText = @"products";
