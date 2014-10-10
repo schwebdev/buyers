@@ -47,6 +47,7 @@ static const float sProductColumnSpacer = 5.0;
     UIView *tools;
     UILabel *numProducts;
     NSString *productText;
+    UILabel *noResults;
 }
 
 @end
@@ -303,7 +304,7 @@ static const float sProductColumnSpacer = 5.0;
     [self.view addSubview:numProducts];
     
     if ([products count] > 0) {
-        
+        [noResults removeFromSuperview];
         int page =1;
         int col= 1;
         int row = 1;
@@ -365,6 +366,18 @@ static const float sProductColumnSpacer = 5.0;
             // NSLog(@"height: %f",(kPageHeight * page));
         }
         [self.view addSubview:scrollView];
+        
+    } else {
+        noResults = [[UILabel alloc] init];
+        noResults.text = @"no products returned, please search again or sync data";
+        noResults.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        noResults.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+        noResults.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
+        noResults.numberOfLines = 1;
+        CGRect noResultsTitle = CGRectMake(20.0, 160.0, 500.0, 30.0);
+        noResults.frame = noResultsTitle;
+        
+        [self.view addSubview:noResults];
     }
 
 }
