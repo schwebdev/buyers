@@ -5,7 +5,6 @@
 //  Created by webdevelopment on 18/08/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
-
 #import "ReportViewController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "AppDelegate.h"
@@ -19,7 +18,7 @@
 @property SchTextField *saveText;
 @property UITextView *notesTextView;
 @property UIPopoverController *popover;
-@property NSString *filePath;
+@property NSString *reportName;
 
 @property UIButton *menuSavePDF;
 @property UIButton *menuAddNotes;
@@ -33,24 +32,38 @@
     if(fileName.length > 0) {
         fileName = [fileName stringByAppendingString:@".pdf"];
        
-        [Report exportReportAsPDF:self.webView withName:fileName];
+        NSString *filePath = [Report exportReportAsPDF:self.webView withName:fileName];
+        
         
         
         [self.popover dismissPopoverAnimated:YES];
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-        [alert show];
+        //UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        //[alert show];
         [self.revealViewController setFrontViewPosition:FrontViewPositionLeft animated:YES];
         
         //[self.side setFrontViewPosition:toggledFrontViewPosition animated:animated];
+        
+        MFMailComposeViewController *vc = [[MFMailComposeViewController alloc] init];
+        vc.mailComposeDelegate = self;
+        
+        NSMutableData *data = [NSMutableData dataWithContentsOfFile:filePath];
+        
+        [vc addAttachmentData:data mimeType:@"application/pdf" fileName:fileName];
+        
+        [self presentViewController:vc animated:YES completion:nil];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please enter a file name"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     }
 }
-
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+    NSLog(@"done");
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 - (void)saveReport {
     NSString *fileName = self.saveText.text;
-    self.filePath = fileName;
+    self.reportName = fileName;
     
     if([fileName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0) {
         /*
@@ -71,15 +84,14 @@
         
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",fileName]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@ && isActive == 1)",fileName]];
         
         NSError *error;
         NSArray *reports = [managedContext executeFetchRequest:request error:&error];
         
         if(reports.count > 0) {
-            //ReportData *report = reports[0];
-            
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"a report with this name already exists" delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"a report with this name already exists. would you like to overwrite?" delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
+            alert.tag = 1;
             [alert show];
         } else {
             NSString *htmlString = [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
@@ -103,7 +115,7 @@
             } else {
                 NSLog(@"%@ reportdata entry created", fileName);
                 
-                self.filePath = fileName;
+                self.reportName = fileName;
                 [self.popover dismissPopoverAnimated:YES];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", fileName] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
                 [alert show];
@@ -123,7 +135,7 @@
 
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.filePath]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
     
     NSError *error;
     NSArray *reports = [managedContext executeFetchRequest:request error:&error];
@@ -143,7 +155,7 @@
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"notes save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
             [alert show];
         } else {
-            NSLog(@"%@ reportdata entry modified", self.filePath);
+            NSLog(@"%@ reportdata entry modified", self.reportName);
         }
     }
     
@@ -151,8 +163,9 @@
 }
 
 - (void)deleteReport {
-    if(self.filePath != nil) {
+    if(self.reportName != nil) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:[NSString stringWithFormat:@"Are you sure you wish to delete this report?"] delegate:self cancelButtonTitle:@"no" otherButtonTitles:@"yes",nil];
+        alert.tag = 2;
         [alert show];
     } else {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report has not been saved"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
@@ -163,10 +176,48 @@
 
 
 -(void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if(buttonIndex == 1) {
+    
+    if(alertView.tag == 1 && buttonIndex == 1) {
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.filePath]];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
+        
+        NSError *error;
+        NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+        
+        if(reports.count > 0) {
+            ReportData *report = reports[0];
+            
+            NSString *htmlString = [self.webView stringByEvaluatingJavaScriptFromString:@"document.documentElement.outerHTML"];
+            report.name = self.saveText.text;
+            report.content = htmlString;
+            report.notes = @"";
+            report.createdBy = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
+            report.lastModified = [NSDate date];
+            report.requiresSync = @YES;
+            report.isActive = @YES;
+            
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+                
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            } else {
+                NSLog(@"%@ reportdata entry created", self.saveText.text);
+                
+                self.reportName = self.saveText.text;
+                [self.popover dismissPopoverAnimated:YES];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been saved as %@", self.saveText.text] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                [alert show];
+            }
+            
+        }
+    }
+    if(alertView.tag == 2 && buttonIndex == 1) {
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
         
         NSError *error;
         NSArray *reports = [managedContext executeFetchRequest:request error:&error];
@@ -184,9 +235,9 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report delete failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
                 [alert show];
             } else {
-                NSLog(@"%@ reportdata entry marked as deleted", self.filePath);
+                NSLog(@"%@ reportdata entry marked as deleted", self.reportName);
                 
-                self.filePath = @"";
+                self.reportName = @"";
                 [self.navigationController popViewControllerAnimated:YES];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"report has been deleted"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
                 [alert show];
@@ -199,7 +250,7 @@
 
 - (IBAction)addNotesClick:(UIButton *)sender {
     
-    if(self.filePath != nil) {
+    if(self.reportName != nil) {
         UIViewController *popoverContent = [[UIViewController alloc] init];
         
         UIView *popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 720, 680)];
@@ -221,10 +272,10 @@
         self.notesTextView.delegate = self;
             
             
-        if(self.filePath != nil) {
+        if(self.reportName != nil) {
             NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-            [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.filePath]];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
             
             NSError *error;
             NSArray *reports = [managedContext executeFetchRequest:request error:&error];
@@ -266,73 +317,84 @@
 }
 
 - (IBAction)exportPDFClick:(id)sender {
-    UIViewController *popoverContent = [[UIViewController alloc] init];
-    UIView *popoverView = [[UIView alloc] init];
-    
-    self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
-    self.saveText.autocorrectionType = UITextAutocorrectionTypeNo;
-    [popoverView addSubview:self.saveText];
-    
-    UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];
-    [saveConfirm setTitle:@"confirm" forState:UIControlStateNormal];
-    [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
-    
-    //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
-    [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
-    
-    [saveConfirm setFrame:CGRectMake(60, 70, 150, 50)];
-    [saveConfirm addTarget:self action:@selector(exportReport) forControlEvents:UIControlEventTouchUpInside];
-    
-    [popoverView addSubview:saveConfirm];
-    
-    popoverContent.view = popoverView;
-    
-    self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
-    self.popover.delegate = self;
-    [self.popover setPopoverContentSize:CGSizeMake(270, 130) animated:NO];
-    
-    [self.popover presentPopoverFromRect:self.menuSavePDF.frame inView:self.menuSavePDF.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-    
+    if([MFMailComposeViewController canSendMail]) {
+        UIViewController *popoverContent = [[UIViewController alloc] init];
+        UIView *popoverView = [[UIView alloc] init];
+        
+        self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
+        self.saveText.autocorrectionType = UITextAutocorrectionTypeNo;
+        [popoverView addSubview:self.saveText];
+        
+        UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];
+        [saveConfirm setTitle:@"confirm" forState:UIControlStateNormal];
+        [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+        
+        //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
+        [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
+        
+        [saveConfirm setFrame:CGRectMake(60, 70, 150, 50)];
+        [saveConfirm addTarget:self action:@selector(exportReport) forControlEvents:UIControlEventTouchUpInside];
+        
+        [popoverView addSubview:saveConfirm];
+        
+        popoverContent.view = popoverView;
+        
+        self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
+        self.popover.delegate = self;
+        [self.popover setPopoverContentSize:CGSizeMake(270, 130) animated:NO];
+        
+        [self.popover presentPopoverFromRect:self.menuSavePDF.frame inView:self.menuSavePDF.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    } else {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"this device has not been configured to send emails."] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    }
 }
 
 - (IBAction)saveClick:(UIButton*)sender {
-    //[self createPDFFromUIVIew:self.webView saveToDocumentWithFileName:@"test.pdf"];
-    //[self savePDFFromWebView:self.webView fileName:@"test2.pdf"];
-    
-    //UIBarButtonItem *btn = (UIBarButtonItem *)sender;
-    
-    UIViewController *popoverContent = [[UIViewController alloc] init];
-    
-    UIView *popoverView = [[UIView alloc] init];
-    
-    self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
-    self.saveText.autocorrectionType = UITextAutocorrectionTypeNo;
-    [popoverView addSubview:self.saveText];
-    
-    
-    UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];    
-    [saveConfirm setTitle:@"confirm" forState:UIControlStateNormal];
-    [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
-    
-    //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
-    [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
-    
-    [saveConfirm setFrame:CGRectMake(60, 70, 150, 50)];
-    [saveConfirm addTarget:self action:@selector(saveReport) forControlEvents:UIControlEventTouchUpInside];
-    
-    [popoverView addSubview:saveConfirm];
-    
-    popoverContent.view = popoverView;
-    
-    self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
-    self.popover.delegate = self;
-    [self.popover setPopoverContentSize:CGSizeMake(270, 130) animated:NO];
-    
-    [self.popover presentPopoverFromRect:sender.frame inView:sender.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-    //[self.popover presentPopoverFromBarButtonItem:btn permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
-    
+    if([[NSUserDefaults standardUserDefaults] objectForKey:@"username"] == nil) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please set your username on the settings screen."] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+        
+    } else {
+        //[self createPDFFromUIVIew:self.webView saveToDocumentWithFileName:@"test.pdf"];
+        //[self savePDFFromWebView:self.webView fileName:@"test2.pdf"];
+        
+        //UIBarButtonItem *btn = (UIBarButtonItem *)sender;
+        
+        UIViewController *popoverContent = [[UIViewController alloc] init];
+        
+        UIView *popoverView = [[UIView alloc] init];
+        
+        self.saveText = [[SchTextField alloc] initWithFrame:CGRectMake(10, 10, 250, 50)];
+        self.saveText.autocorrectionType = UITextAutocorrectionTypeNo;
+        [popoverView addSubview:self.saveText];
+        
+        
+        UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];    
+        [saveConfirm setTitle:@"confirm" forState:UIControlStateNormal];
+        [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+        
+        //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
+        [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
+        
+        [saveConfirm setFrame:CGRectMake(60, 70, 150, 50)];
+        [saveConfirm addTarget:self action:@selector(saveReport) forControlEvents:UIControlEventTouchUpInside];
+        
+        [popoverView addSubview:saveConfirm];
+        
+        popoverContent.view = popoverView;
+        
+        self.popover = [[UIPopoverController alloc] initWithContentViewController:popoverContent];
+        self.popover.delegate = self;
+        [self.popover setPopoverContentSize:CGSizeMake(270, 130) animated:NO];
+        
+        [self.popover presentPopoverFromRect:sender.frame inView:sender.superview permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+        //[self.popover presentPopoverFromBarButtonItem:btn permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    }
 }
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -349,7 +411,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"run and view" title2:@"reports" image:@"homeReportsLogo.png"];
+    self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"view" title2:@"report" image:@"homeReportsLogo.png"];
 
     
     //UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithTitle:@"save" style:UIBarButtonItemStylePlain target:self action:@selector(saveClick:)];
@@ -389,7 +451,7 @@
     [super viewWillAppear:animated];
     
     
-    self.menuSavePDF = [self setMenuButton:1 title:@"export as PDF"];
+    self.menuSavePDF = [self setMenuButton:1 title:@"email as PDF"];
     [self.menuSavePDF addTarget:self action:@selector(exportPDFClick:) forControlEvents:UIControlEventTouchUpInside];
     
     //self.menuAddNotes = [self setMenuButton:2 title:@"add notes"];
@@ -407,9 +469,9 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)generateReport {
+- (void)generateReport:(NSString *)reportFilter {
     
-    NSString *htmlString = [Report generateReport:self.reportType];
+    NSString *htmlString = [Report generateReport:self.reportType withFilters:reportFilter];
     
     [self.webView loadHTMLString:htmlString baseURL:nil];
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportType ]]];
@@ -418,9 +480,12 @@
 
 - (void)loadReport:(NSString *)fileName {
     
-    self.filePath = fileName;
-    
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",fileName ]]];
+    self.reportName = fileName;
+    if([fileName containsString:@"filterReport:"]) {
+        [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"filter set report: %@",[fileName stringByReplacingOccurrencesOfString:@"filterReport:" withString:@""] ]]];
+    } else {
+        [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",fileName ]]];
+    }
     
     NSLog(@"load report: %@", fileName);
     

@@ -7,12 +7,13 @@
 //
 
 #import "BaseViewController.h"
+#import <MessageUI/MessageUI.h>
 
-@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UITextViewDelegate, UIAlertViewDelegate>
+@interface ReportViewController : BaseViewController <UIWebViewDelegate, UIPopoverControllerDelegate, UITextViewDelegate, UIAlertViewDelegate, MFMailComposeViewControllerDelegate>
 
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSString *reportType;
 
-- (void)generateReport;
+- (void)generateReport:(NSString *)reportFilter;
 - (void)loadReport:(NSString *)fileName;
 @end

@@ -26,6 +26,7 @@
 		0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */; };
 		0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */; };
 		0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B52FC8A19E56E0C00D1D747 /* ReportData.m */; };
+		0B52FC8E19E7E28B00D1D747 /* BaseReportFilterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B52FC8D19E7E28B00D1D747 /* BaseReportFilterViewController.m */; };
 		0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630951998DDEC00949155 /* CustomHomeViewController.m */; };
 		0B7630991998DE0100949155 /* SettingsHomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630981998DE0100949155 /* SettingsHomeViewController.m */; };
 		0B76309C199A31F700949155 /* SchTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B76309B199A31F700949155 /* SchTextField.m */; };
@@ -214,6 +215,8 @@
 		0B523EB419DEB32A0079EB25 /* BaseNavigationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseNavigationController.m; sourceTree = "<group>"; };
 		0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportFilterSet.m; path = Buyers/ReportFilterSet.m; sourceTree = "<group>"; };
 		0B52FC8A19E56E0C00D1D747 /* ReportData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ReportData.m; path = Buyers/ReportData.m; sourceTree = "<group>"; };
+		0B52FC8C19E7E28B00D1D747 /* BaseReportFilterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseReportFilterViewController.h; sourceTree = "<group>"; };
+		0B52FC8D19E7E28B00D1D747 /* BaseReportFilterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BaseReportFilterViewController.m; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -568,6 +571,8 @@
 				0B288A7419B9C83600F62B63 /* BusinessReviewReportControllerViewController.m */,
 				0B7630A419A2121700949155 /* ReportViewController.h */,
 				0B7630A519A2121700949155 /* ReportViewController.m */,
+				0B52FC8C19E7E28B00D1D747 /* BaseReportFilterViewController.h */,
+				0B52FC8D19E7E28B00D1D747 /* BaseReportFilterViewController.m */,
 			);
 			name = Reports;
 			sourceTree = "<group>";
@@ -1002,6 +1007,7 @@
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B288A8419B9EFBF00F62B63 /* Image.m in Sources */,
+				0B52FC8E19E7E28B00D1D747 /* BaseReportFilterViewController.m in Sources */,
 				0B523EB219DD5EC20079EB25 /* Department.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
