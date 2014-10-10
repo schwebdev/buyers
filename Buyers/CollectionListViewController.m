@@ -538,7 +538,7 @@ static const float kProductColumnSpacer = 14.0;
         
         //display message
         UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 300, 50))];
-        label.text = @"no collections have been added";
+        label.text = @"no collections have been returned";
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:30.0];
         label.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
         label.numberOfLines = 1;
