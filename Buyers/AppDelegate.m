@@ -27,6 +27,7 @@
     return YES;
 }
 
+
 - (void)reachabilityChanged:(NSNotification *)notification {
     
     NSLog(@"%@", [self.reachability currentReachabilityString]);

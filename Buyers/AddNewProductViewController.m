@@ -48,7 +48,7 @@ static const float kPageWidth = 680.0;
     _isDirtyImage = NO;
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"product" title2:@"your custom product" image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Add New Product"]];
     
     UIButton *saveProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveProductButton setTitle:@"add product" forState:UIControlStateNormal];
@@ -58,17 +58,6 @@ static const float kPageWidth = 680.0;
     saveProductButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     [self.view addSubview:saveProductButton];
     
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" Add New Product";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    //pageTitle.textAlignment = NSTextAlignmentCenter;
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    //pageTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor; pageTitle.textColor = [UIColor blackColor];
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(206.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
     
     CALayer *separator = [CALayer layer];
     separator.frame = CGRectMake(kPageWidth, 100, 1, 589);
@@ -355,4 +344,6 @@ finishedSavingWithError:(NSError *)error
 
 - (IBAction)ddlCategoryList:(id)sender {
 }
+
+
 @end

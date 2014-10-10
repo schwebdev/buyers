@@ -52,7 +52,7 @@ static const float kPageWidth = 680.0;
     
      self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Product Detail"]];
     
     UIView *tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 65)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -89,23 +89,6 @@ static const float kPageWidth = 680.0;
     [tools addSubview:_notesButton];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
     }
-    
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" Product Detail";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    //pageTitle.textAlignment = NSTextAlignmentCenter;
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    //pageTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor; pageTitle.textColor = [UIColor blackColor];
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(206.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
-    
-    //separator
-    //UIView *separator = [[UIView alloc] initWithFrame: CGRectMake(kPageWidth, 70.0, 1, 746.0)];
-    //separator.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1];
-    //[self.view addSubview:separator];
     
     CALayer *separator = [CALayer layer];
     separator.frame = CGRectMake(kPageWidth, 100, 1, 589);

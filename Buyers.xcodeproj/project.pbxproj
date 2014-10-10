@@ -13,8 +13,6 @@
 		0B288A7819B9C83600F62B63 /* Report.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A7619B9C83600F62B63 /* Report.m */; };
 		0B288A8119B9E73300F62B63 /* Sync.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8019B9E73300F62B63 /* Sync.m */; };
 		0B288A8419B9EFBF00F62B63 /* Image.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8319B9EFBF00F62B63 /* Image.m */; };
-		0B288A8A19B9EFBF00F62B63 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8919B9EFBF00F62B63 /* Colour.m */; };
-		0B288A9019B9EFBF00F62B63 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A8F19B9EFBF00F62B63 /* Material.m */; };
 		0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288A9219B9EFBF00F62B63 /* Supplier.m */; };
 		0B288AA219B9F74700F62B63 /* SyncStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288AA119B9F74700F62B63 /* SyncStatus.m */; };
 		0B288ABD19BDF06500F62B63 /* Brand.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B288ABC19BDF06500F62B63 /* Brand.m */; };
@@ -170,7 +168,6 @@
 		C6B9A7C719DD737400C832A1 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7C619DD737400C832A1 /* Collection.m */; };
 		C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */; };
 		C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CC19DD73AC00C832A1 /* Product.m */; };
-		C6B9A7D019DD73AC00C832A1 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */; };
 		C6C3D4C219E3FA9F009E8CAB /* AVCameraViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */; };
 		C6C3D4C519E3FB2B009E8CAB /* AVCameraPreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */; };
 /* End PBXBuildFile section */
@@ -197,10 +194,6 @@
 		0B288A8019B9E73300F62B63 /* Sync.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sync.m; sourceTree = "<group>"; };
 		0B288A8219B9EFBF00F62B63 /* Image.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Image.h; path = Buyers/Image.h; sourceTree = "<group>"; };
 		0B288A8319B9EFBF00F62B63 /* Image.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Image.m; path = Buyers/Image.m; sourceTree = "<group>"; };
-		0B288A8819B9EFBF00F62B63 /* Colour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Colour.h; path = Buyers/Colour.h; sourceTree = "<group>"; };
-		0B288A8919B9EFBF00F62B63 /* Colour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Colour.m; path = Buyers/Colour.m; sourceTree = "<group>"; };
-		0B288A8E19B9EFBF00F62B63 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = Buyers/Material.h; sourceTree = "<group>"; };
-		0B288A8F19B9EFBF00F62B63 /* Material.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Material.m; path = Buyers/Material.m; sourceTree = "<group>"; };
 		0B288A9119B9EFBF00F62B63 /* Supplier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Supplier.h; path = Buyers/Supplier.h; sourceTree = "<group>"; };
 		0B288A9219B9EFBF00F62B63 /* Supplier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Supplier.m; path = Buyers/Supplier.m; sourceTree = "<group>"; };
 		0B288AA019B9F74700F62B63 /* SyncStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SyncStatus.h; path = Buyers/SyncStatus.h; sourceTree = "<group>"; };
@@ -396,8 +389,6 @@
 		C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductOrder.m; path = Buyers/ProductOrder.m; sourceTree = "<group>"; };
 		C6B9A7CB19DD73AC00C832A1 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
 		C6B9A7CC19DD73AC00C832A1 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
-		C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductCategory.h; path = Buyers/ProductCategory.h; sourceTree = "<group>"; };
-		C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductCategory.m; path = Buyers/ProductCategory.m; sourceTree = "<group>"; };
 		C6C3D4C019E3FA9F009E8CAB /* AVCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCameraViewController.h; sourceTree = "<group>"; };
 		C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AVCameraViewController.m; sourceTree = "<group>"; };
 		C6C3D4C319E3FB2B009E8CAB /* AVCameraPreviewView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCameraPreviewView.h; sourceTree = "<group>"; };
@@ -663,8 +654,12 @@
 				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
 				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
-				C6B9A7CE19DD73AC00C832A1 /* ProductCategory.h */,
-				C6B9A7CF19DD73AC00C832A1 /* ProductCategory.m */,
+				5BEA5C0619E7E1D30007DE40 /* ProductCategory.h */,
+				5BEA5C0719E7E1D30007DE40 /* ProductCategory.m */,
+				5BEA5C0319E7E1A30007DE40 /* Material.h */,
+				5BEA5C0419E7E1A30007DE40 /* Material.m */,
+				5BEA5C0019E7E13F0007DE40 /* Colour.h */,
+				5BEA5C0119E7E13F0007DE40 /* Colour.m */,
 				C6B9A7CB19DD73AC00C832A1 /* Product.h */,
 				C6B9A7CC19DD73AC00C832A1 /* Product.m */,
 				C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */,
@@ -679,10 +674,6 @@
 				0B288ABC19BDF06500F62B63 /* Brand.m */,
 				0B288A9119B9EFBF00F62B63 /* Supplier.h */,
 				0B288A9219B9EFBF00F62B63 /* Supplier.m */,
-				0B288A8E19B9EFBF00F62B63 /* Material.h */,
-				0B288A8F19B9EFBF00F62B63 /* Material.m */,
-				0B288A8819B9EFBF00F62B63 /* Colour.h */,
-				0B288A8919B9EFBF00F62B63 /* Colour.m */,
 				0B288A8219B9EFBF00F62B63 /* Image.h */,
 				0B288A8319B9EFBF00F62B63 /* Image.m */,
 				0BC95637198FDABD00CD45D5 /* Buyers */,
@@ -994,6 +985,7 @@
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				0B288ABD19BDF06500F62B63 /* Brand.m in Sources */,
+				5BEA5C0219E7E13F0007DE40 /* Colour.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportControllerViewController.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
@@ -1014,17 +1006,16 @@
 				0B970B68199376C9006D0358 /* CollectionViewController.m in Sources */,
 				C6B9A7A919DD6A4C00C832A1 /* CollectionNotesViewController.m in Sources */,
 				0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */,
-				0B288A9019B9EFBF00F62B63 /* Material.m in Sources */,
 				C6B9A7C719DD737400C832A1 /* Collection.m in Sources */,
+				5BEA5C0519E7E1A30007DE40 /* Material.m in Sources */,
 				C6C3D4C219E3FA9F009E8CAB /* AVCameraViewController.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				C6B9A7AC19DD6AB800C832A1 /* ProductButton.m in Sources */,
 				C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */,
+				5BEA5C0819E7E1D30007DE40 /* ProductCategory.m in Sources */,
 				0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
-				0B288A8A19B9EFBF00F62B63 /* Colour.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
-				C6B9A7D019DD73AC00C832A1 /* ProductCategory.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B288A8419B9EFBF00F62B63 /* Image.m in Sources */,

@@ -61,17 +61,7 @@ static const float kProductColumnSpacer = 14.0;
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
-    
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @"List of Collections";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(210.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"List of Collections"]];
     
     tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -305,11 +295,12 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
             products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
             
-           /* if(i==0){
+            /*if(i==0){
              
              Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
              brand.brandName = @"irregular choice";
+             brand.brandRef = [NSNumber numberWithInt:100];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save brand: %@", [error localizedDescription]);
@@ -329,6 +320,7 @@ static const float kProductColumnSpacer = 14.0;
              Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
              material.materialName = @"man-made";
+             material.materialRef = [NSNumber numberWithInt:20];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save material: %@", [error localizedDescription]);
@@ -338,6 +330,7 @@ static const float kProductColumnSpacer = 14.0;
              Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
              
              colour.colourName = @"multi";
+             colour.colourRef = [NSNumber numberWithInt:10];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save colour: %@", [error localizedDescription]);
@@ -347,6 +340,7 @@ static const float kProductColumnSpacer = 14.0;
              ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
              
              category.categoryName = @"high heels";
+             category.category2Ref = [NSNumber numberWithInt:7];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save category: %@", [error localizedDescription]);
@@ -361,8 +355,8 @@ static const float kProductColumnSpacer = 14.0;
              //add dummy product to each collection
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             product.productCode = @"1159140970";
-             product.productName = @"irreg choice 2";
+             product.productCode = @"1945097370";
+             product.productName = @"irregular choice";
              product.productPrice = [NSNumber numberWithDouble:125.00];
              product.productNotes = @"This is a test product inserted manually";
              
@@ -385,7 +379,7 @@ static const float kProductColumnSpacer = 14.0;
              product.supplier = [suppliers objectAtIndex:0];
              
              //add image
-             UIImage *image = [UIImage imageNamed:@"1159140970_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+             UIImage *image = [UIImage imageNamed:@"1945097370_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
              NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
              
              product.productImageData = imageData;
@@ -544,7 +538,7 @@ static const float kProductColumnSpacer = 14.0;
         
         //display message
         UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 300, 50))];
-        label.text = @"no collections have been added";
+        label.text = @"no collections have been returned";
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:30.0];
         label.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
         label.numberOfLines = 1;
@@ -604,6 +598,7 @@ static const float kProductColumnSpacer = 14.0;
     [self.navigationController pushViewController:collectionViewController animated:YES];
      */
     
+    [numCollections removeFromSuperview];
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
             [view removeFromSuperview];
@@ -680,6 +675,7 @@ static const float kProductColumnSpacer = 14.0;
             
         }
         
+        [numCollections removeFromSuperview];
         //clear scroll view so it can be redrawn in case of changes
         for(UIView *view in self.view.subviews) {
             if(view.tag == 999999999) {

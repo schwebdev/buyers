@@ -2,7 +2,7 @@
 //  Material.m
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Web Development on 10/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -13,6 +13,7 @@
 @implementation Material
 
 @dynamic materialName;
+@dynamic materialRef;
 @dynamic productMaterial;
 
 @end

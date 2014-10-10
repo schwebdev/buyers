@@ -47,6 +47,7 @@ static const float sProductColumnSpacer = 5.0;
     UIView *tools;
     UILabel *numProducts;
     NSString *productText;
+    UILabel *noResults;
 }
 
 @end
@@ -153,7 +154,7 @@ static const float sProductColumnSpacer = 5.0;
     }
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"add products to" title2:title2 image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Add Products To Collection"]];
     
     tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -199,16 +200,6 @@ static const float sProductColumnSpacer = 5.0;
     [self.view addSubview:_clearAll];
     [self.view addSubview:_saveSelection];
     
-    UILabel *pageTitle = [[UILabel alloc] init];
-    pageTitle.text = @" Add Products To Collection";
-    pageTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-    //pageTitle.textAlignment = NSTextAlignmentCenter;
-    pageTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-    pageTitle.numberOfLines = 1;
-    CGRect frameTitle = CGRectMake(206.0, 38.0, 1024.0, 30.0);
-    pageTitle.frame = frameTitle;
-    
-    [self.view addSubview:pageTitle];
     
     UILabel *productsAvailable = [[UILabel alloc] init];
     productsAvailable.text = @"products available";
@@ -307,13 +298,13 @@ static const float sProductColumnSpacer = 5.0;
     numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     numProducts.numberOfLines = 1;
-    CGRect numProductsTitle = CGRectMake(206.0, 58.0, 500, 30.0);
+    CGRect numProductsTitle = CGRectMake(210.0, 58.0, 500, 30.0);
     numProducts.frame = numProductsTitle;
     
     [self.view addSubview:numProducts];
     
     if ([products count] > 0) {
-        
+        [noResults removeFromSuperview];
         int page =1;
         int col= 1;
         int row = 1;
@@ -375,6 +366,18 @@ static const float sProductColumnSpacer = 5.0;
             // NSLog(@"height: %f",(kPageHeight * page));
         }
         [self.view addSubview:scrollView];
+        
+    } else {
+        noResults = [[UILabel alloc] init];
+        noResults.text = @"no products returned, please search again or sync data";
+        noResults.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        noResults.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+        noResults.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
+        noResults.numberOfLines = 1;
+        CGRect noResultsTitle = CGRectMake(20.0, 160.0, 500.0, 30.0);
+        noResults.frame = noResultsTitle;
+        
+        [self.view addSubview:noResults];
     }
 
 }
@@ -460,7 +463,6 @@ static const float sProductColumnSpacer = 5.0;
     for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
         
         if(selectedProductsListView == nil)
-           //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
         
         
@@ -505,7 +507,6 @@ static const float sProductColumnSpacer = 5.0;
             [selectedProductsScrollView addSubview:selectedProductsListView];
             page++;
             row = 1;
-            //productListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * sPageWidth), 0, sPageWidth, sPageHeight)];
             selectedProductsListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * sPageHeight), sPageWidth, sPageHeight)];
              //NSLog(@"y: %f page: %d",((page - 1) * sPageHeight), page);
         } else if(isLastPage) {
