@@ -6,11 +6,10 @@
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "BaseViewController.h"
+#import "BaseReportFilterViewController.h"
 
-@interface BusinessReviewReportControllerViewController : BaseViewController <UITableViewDataSource, UITableViewDelegate>
+@interface BusinessReviewReportControllerViewController : BaseReportFilterViewController <UITableViewDataSource, UITableViewDelegate, ReportFilterViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *departmentsTable;
-- (IBAction)runReportClick:(id)sender;
 
 @end

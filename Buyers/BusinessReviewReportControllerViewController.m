@@ -7,7 +7,6 @@
 //
 
 #import "BusinessReviewReportControllerViewController.h"
-#import "ReportViewController.h"
 
 @interface BusinessReviewReportControllerViewController ()
 
@@ -17,34 +16,54 @@
 
 @implementation BusinessReviewReportControllerViewController
 
-- (IBAction)runReportClick:(id)sender {
+- (NSString *)getFilterString {
+    NSMutableString *filterString = [NSMutableString new];
     
-    for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
-        
-        NSDictionary *listItem = (NSDictionary *)self.departmentsList[path.row];
-        NSLog(@"%@ - %@",[[listItem allKeys] objectAtIndex:0], listItem[[[listItem allKeys] objectAtIndex:0]]);
-    }
-    ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
-    vc.reportType = @"BusinessReviewReport";
-    // [vc preLoadView];
+    return filterString;
+}
+
+- (void)loadFilterSet {
+//    NSLog(@"load filter set");
+//    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//    
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+//    [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
+//    
+//    NSError *error;
+//    NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+//    
+//    if(filterSets.count > 0) {
+//        ReportFilterSet *filterSet = [filterSets objectAtIndex:0];
+//        
+//        NSLog(@"filterString value, %@",filterSet.filterValues);
+//        NSArray *filterSetValues = [filterSet.filterValues componentsSeparatedByString:@";"];
+//        [self.CalWeekFrom setSelectedValue:filterSetValues[0]];
+//        [self.CalWeekTo setSelectedValue:filterSetValues[1]];
+//        [self.BrandsList setSelectedValue:filterSetValues[2]];
+//        [self.MerchList setSelectedValue:filterSetValues[3]];
+//        [self.SuppliersList setSelectedValue:filterSetValues[4]];
+//        self.AnalysisCode.text = filterSetValues[5];
+//        
+//        
+//        for (NSString *value in [filterSetValues[6] componentsSeparatedByString:@","]) {
+//            
+//            for (int i = 0; i < self.departmentsList.count; i++) {
+//                if([self.departmentsList[i][@"depCode"] intValue] == [value intValue]) {
+//                    
+//                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+//                    
+//                    [self.departmentsTable selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+//                }
+//            }
+//            
+//        }
+//    }
     
-    [vc view];
-    [vc generateReport];
-    
-    [self.navigationController pushViewController:vc animated:YES];
 }
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"run and view" title2:@"reports" image:@"homeReportsLogo.png"];
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"business review report"]];
-    
-    CALayer *separator = [CALayer layer];
-    separator.frame = CGRectMake(802, 100, 1, 589);
-    separator.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
-    [self.view.layer addSublayer:separator];
     
     self.departmentsList = [NSMutableArray arrayWithObjects:
                             @{@"1":@"blah1"},
@@ -63,6 +82,10 @@
                             @{@"14":@"blah14"},
                             @{@"15":@"blah15"},
                             nil];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
 }
 
 - (void)didReceiveMemoryWarning

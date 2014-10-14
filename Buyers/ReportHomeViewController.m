@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import "ReportData.h"
 #import "ReportFilterSet.h"
-
+#import "BaseReportFilterViewController.h"
 #import "Sync.h"
 
 @interface ReportHomeViewController ()
@@ -45,7 +45,10 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+        BaseReportFilterViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+                
+        vc.reportType = [self.reportType getSelectedValue];
+        vc.reportTypeName = self.reportType.text;
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -57,9 +60,12 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+        BaseReportFilterViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
         
-        [vc setValue:self.filterSets.getSelectedValue forKey:@"filterSetName"];
+        vc.filterSetName = [self.filterSets getSelectedValue];
+        vc.reportType = [self.reportType getSelectedValue];
+        vc.reportTypeName = self.reportType.text;
+        
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -69,7 +75,7 @@
     if(self.filterSets.getSelectedValue.length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
-    } else if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+    } else if([self.filterSets getSelectedObject][@"lastSync"] == [NSNull null]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"this filter set has not been synced yet"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
@@ -91,7 +97,7 @@
 
 
 - (void) filterSetsChange:(NSNotification *)notification {
-    if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+    if([self.filterSets getSelectedObject][@"lastSync"] == [NSNull null]) {
         self.FilterLabel.text = @"Last sync: n/a";
     } else {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];

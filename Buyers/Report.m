@@ -104,7 +104,7 @@
 
 
 
-+ (NSString *)generateReport:(NSString *)reportType {
++ (NSString *)generateReport:(NSString *)reportType withFilters:(NSString *)filters {
     
     NSString *htmlFile = [[NSBundle mainBundle] pathForResource:reportType ofType:@"html"];
     
@@ -217,7 +217,7 @@
     
 }
 
-+ (void)exportReportAsPDF:(UIWebView *)webView withName:(NSString *)fileName {
++ (NSString *)exportReportAsPDF:(UIWebView *)webView withName:(NSString *)fileName {
     
     int height, width, header, sidespace;
     height = [[webView stringByEvaluatingJavaScriptFromString:@"document.height"] intValue] * 0.8; //1351;// * 0.805;
@@ -258,7 +258,7 @@
     
     UIGraphicsEndPDFContext();
     
-    NSString *reportsPath = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingString:@"/PDFreports"];
+    NSString *reportsPath = NSTemporaryDirectory();
     
     if(![[NSFileManager defaultManager] fileExistsAtPath:reportsPath]) [[NSFileManager defaultManager] createDirectoryAtPath:reportsPath withIntermediateDirectories:NO attributes:nil error:nil];
     
@@ -266,6 +266,8 @@
    // NSString *filePath = [NSTemporaryDirectory() stringByAppendingPathComponent:fileName];
     
     [pdfData writeToFile:filePath  atomically: YES];
+    
+    return filePath;
 }
 
 

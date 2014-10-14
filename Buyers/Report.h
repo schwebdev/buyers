@@ -11,7 +11,7 @@
 @interface Report : NSObject
 
 
-+ (NSString *)generateReport:(NSString *)reportType;
-+ (void)exportReportAsPDF:(UIWebView *)webView withName:(NSString *)fileName;
++ (NSString *)generateReport:(NSString *)reportType withFilters:(NSString *)filters;
++ (NSString *)exportReportAsPDF:(UIWebView *)webView withName:(NSString *)fileName;
 
 @end
