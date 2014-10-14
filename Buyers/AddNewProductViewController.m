@@ -77,6 +77,7 @@ static const float kPageWidth = 680.0;
     
     if(_selectedImage !=nil){
         _cameraView.image = _selectedImage;
+        _isDirtyImage = YES;
     }     
     
     //categories drop down
@@ -198,6 +199,7 @@ static const float kPageWidth = 680.0;
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.brandList.getSelectedObject[@"IDURI"]];
         NSManagedObject *brandElement = [managedContext objectWithID:c];
         pBrand = (Brand*)brandElement;
+        
     }
     
     if([self.supplierList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
@@ -268,8 +270,12 @@ static const float kPageWidth = 680.0;
              product.colour = pColour;
              product.material = pMaterial;
              product.supplier = pSupplier;
-             
-             NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+             NSData *imageData;
+             if(_selectedImage !=nil){
+                imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
+             }else{
+                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+             }
              product.productImageData = imageData;
              
              
