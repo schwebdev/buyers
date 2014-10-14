@@ -16,7 +16,7 @@
 #import "Material.h"
 #import "AppDelegate.h"
 #import "Sync.h"
-
+#import "CameraRollViewController.h"
 
 static const float kPageWidth = 680.0;
 
@@ -30,6 +30,7 @@ static const float kPageWidth = 680.0;
 @synthesize product = _product;
 @synthesize displayNotesPopover = _displayNotesPopover;
 @synthesize productNotes = _productNotes;
+UIImage *image;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,6 +59,8 @@ static const float kPageWidth = 680.0;
     self.productColour_edit.hidden=YES;
     self.productMaterial_edit.hidden=YES;
     
+    self.btnUseCamera.hidden=YES;
+    self.btnUseCameraRoll.hidden=YES;
     
     
     
@@ -96,7 +99,9 @@ static const float kPageWidth = 680.0;
     if([_product.productCode  isEqual:@""] || [_product.productCode  isEqual:@"0000000000"]) {
     [self.view addSubview:deleteProductButton];
     [self.view addSubview:saveProductButton];
-    self.editImageButton.hidden = NO;
+    //self.editImageButton.hidden = NO;
+        self.btnUseCamera.hidden=NO;
+        self.btnUseCameraRoll.hidden=NO;
         _productCodeLabel.hidden = YES;
         _productCode.hidden = YES;
         self.productName_edit.hidden = NO;
@@ -172,14 +177,26 @@ static const float kPageWidth = 680.0;
     self.productName_edit.text=_product.productName;
     self.productPrice_edit.text=[NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
     
-    [self.productCategory_edit setSelectedValue:_product.category.categoryName];
-    [self.productBrand_edit setSelectedValue:_product.brand.brandName];
+    [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.category.category2Ref]];
+    [self.productBrand_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.brand.brandRef]];
+    [self.productSupplier_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.supplier.supplierCode]];
+    [self.productColour_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.colour.colourRef]];
+    [self.productMaterial_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.material.materialRef]];
     
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotesSaved:) name:@"ProductNotesSaved" object:nil];
     
     
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if(_selectedImage !=nil){
+        self.productImage.image = _selectedImage;
+        //_isDirtyImage = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -225,25 +242,105 @@ static const float kPageWidth = 680.0;
     
     //save the product changes
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+
     NSError *error;
     
-    //_product.productName = self.txtProductName.text;
-    //_product.category =
-    //_product.brand =
-    //_product.supplier =
-    //_product.colour =
-    //_product.material =
-    //_product.productPrice =
-    //_product.productImageData = //this may be saved when the image is changed already
+    _isValid = YES;
+    NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
     
-    if(![managedContext save:&error]) {
-        NSLog(@"Could not save product: %@", [error localizedDescription]);
-
+    if([self.productName_edit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a product name\n"];
+    } else {
+        _product.productName = self.productName_edit.text;
     }
     
-    //alert user that product has been saved
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product" message:@"The product changes have been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-    [alert show];
+    if([self.productCategory_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a category\n"];
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productCategory_edit.getSelectedObject[@"IDURI"]];
+        NSManagedObject *categoryElement = [managedContext objectWithID:c];
+        _product.category = (ProductCategory*)categoryElement;
+    }
+    
+    if([self.productBrand_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a brand\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productBrand_edit.getSelectedObject[@"IDURI"]];
+        NSManagedObject *brandElement = [managedContext objectWithID:c];
+        _product.brand = (Brand*)brandElement;
+        
+    }
+    
+    if([self.productSupplier_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a supplier\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productSupplier_edit.getSelectedObject[@"IDURI"]];
+        NSManagedObject *supplierElement = [managedContext objectWithID:c];
+        _product.supplier = (Supplier*)supplierElement;
+    }
+    
+    if([self.productColour_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a colour\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productColour_edit.getSelectedObject[@"IDURI"]];
+        NSManagedObject *colourElement = [managedContext objectWithID:c];
+        _product.colour = (Colour*)colourElement;
+        //pColour = [self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    
+    if([self.productMaterial_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a material\n"];
+        
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productMaterial_edit.getSelectedObject[@"IDURI"]];
+        NSManagedObject *materialElement = [managedContext objectWithID:c];
+        _product.material = (Material*)materialElement;
+        //pMaterial = [self.materialList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+    }
+    
+    if([self.productPrice_edit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a price\n"];
+    } else {
+        _product.productPrice = [NSNumber numberWithDouble:[self.productPrice_edit.text doubleValue]];
+    }
+    
+    
+    NSData *imageData;
+    if(_selectedImage !=nil){
+        imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
+    }else{
+        imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+    }
+    _product.productImageData = imageData;
+
+    if(_isValid){
+        if(![managedContext save:&error]) {
+        NSLog(@"Could not save product: %@", [error localizedDescription]);
+
+    }else{
+        //alert user that product has been saved
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product" message:@"The product changes have been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+    }
+    }else{
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+    }
+    
+    
+    
+    
     
 }
 - (void)productNotesSaved:(NSNotification *)notification
@@ -274,16 +371,17 @@ static const float kPageWidth = 680.0;
     
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    CameraRollViewController *vc = (CameraRollViewController*)[segue destinationViewController];
+    vc.sourceController = self;
 }
-*/
+
+
 
 - (IBAction)editImage:(id)sender {
 }

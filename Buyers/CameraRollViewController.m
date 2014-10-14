@@ -9,6 +9,7 @@
 #import "CameraRollViewController.h"
 #import "PhotoCell.h"
 #import "AddNewProductViewController.h"
+#import "ProductViewController.h"
 
 @interface CameraRollViewController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @property(nonatomic, weak) IBOutlet UICollectionView *collectionView;
@@ -82,10 +83,21 @@
     
     NSLog((@"cell clicked"));
     
-    AddNewProductViewController *picked = [self.storyboard instantiateViewControllerWithIdentifier:@"addNewProduct"];
-    [self.navigationController pushViewController:picked animated:YES];
-    picked.selectedImage = image;
+    //AddNewProductViewController *picked = [self.storyboard instantiateViewControllerWithIdentifier:@"addNewProduct"];
+    //[self.navigationController pushViewController:picked animated:YES];
+    //picked.selectedImage = image;
     
+    if([self.sourceController isKindOfClass:[AddNewProductViewController class]]) {
+        AddNewProductViewController *vc = (AddNewProductViewController *)self.sourceController;
+        vc.selectedImage = image;
+    }
+    
+    if([self.sourceController isKindOfClass:[ProductViewController class]]) {
+        AddNewProductViewController *vc = (ProductViewController *)self.sourceController;
+        vc.selectedImage = image;
+    }
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 #pragma mark - assets

@@ -10,4 +10,6 @@
 
 @interface CameraRollViewController : UIViewController
 
+@property (weak,nonatomic) UIViewController* sourceController;
+
 @end

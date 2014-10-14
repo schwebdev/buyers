@@ -17,6 +17,8 @@
 #import "Material.h"
 #import "Sync.h"
 
+#import "CameraRollViewController.h"
+
 static const float kPageWidth = 680.0;
 
 @interface AddNewProductViewController (){
@@ -75,10 +77,7 @@ static const float kPageWidth = 680.0;
     
     [self.view addSubview:productsInfo];
     
-    if(_selectedImage !=nil){
-        _cameraView.image = _selectedImage;
-        _isDirtyImage = YES;
-    }     
+    
     
     //categories drop down
     [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
@@ -91,6 +90,15 @@ static const float kPageWidth = 680.0;
     //material drop down
     [self.materialList setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
 
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if(_selectedImage !=nil){
+        _cameraView.image = _selectedImage;
+        _isDirtyImage = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -299,16 +307,21 @@ static const float kPageWidth = 680.0;
 
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    // Pass the selected object to the new view
+    
+    CameraRollViewController *vc = (CameraRollViewController*)[segue destinationViewController];
+    vc.sourceController = self;
+    
+    
 }
-*/
+
 
 #pragma mark -
 #pragma mark UIImagePickerControllerDelegate

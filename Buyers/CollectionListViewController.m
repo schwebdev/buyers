@@ -317,7 +317,7 @@ static const float kProductColumnSpacer = 14.0;
              
              }*/
              
-            /* Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
+            /*Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
              material.materialName = @"man-made";
              material.materialRef = [NSNumber numberWithInt:20];

@@ -18,6 +18,9 @@
     ProductNotesViewController *_productNotes;
 }
 @property (weak, nonatomic) IBOutlet UIButton *editImageButton;
+@property (weak, nonatomic) IBOutlet UIButton *btnUseCamera;
+@property (weak, nonatomic) IBOutlet UIButton *btnUseCameraRoll;
+@property BOOL isValid;
 
 @property (nonatomic, retain) ProductNotesViewController *productNotes;
 @property (nonatomic, retain) UIPopoverController *displayNotesPopover;
@@ -41,6 +44,8 @@
 @property (weak, nonatomic) IBOutlet SchDropDown *productSupplier_edit;
 @property (weak, nonatomic) IBOutlet SchDropDown *productColour_edit;
 @property (weak, nonatomic) IBOutlet SchDropDown *productMaterial_edit;
+
+@property (nonatomic,strong) UIImage *selectedImage;
 
 - (IBAction)editImage:(id)sender;
 - (void)saveCustomProduct:(id)sender;
