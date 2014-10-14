@@ -264,7 +264,7 @@ static const float kPageWidth = 680.0;
              
              product.productName = pName;
              product.productPrice = pPrice;
-             
+             product.productCode = @"0000000000";
              product.category = pCategory;
              product.brand = pBrand;
              product.colour = pColour;
@@ -281,6 +281,13 @@ static const float kPageWidth = 680.0;
              
              if(![managedContext save:&error]) {
                  NSLog(@"Could not save product: %@", [error localizedDescription]);
+                 [errorMsg appendString:@"Sorry, there has been a problem trying to save this product\n"];
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                 [alert show];
+             } else{
+                 [errorMsg appendString:@"Product saved successfully\n"];
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                 [alert show];
              }
          }else{
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];

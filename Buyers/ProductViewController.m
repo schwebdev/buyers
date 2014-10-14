@@ -15,6 +15,7 @@
 #import "Colour.h"
 #import "Material.h"
 #import "AppDelegate.h"
+#import "Sync.h"
 
 
 static const float kPageWidth = 680.0;
@@ -48,6 +49,18 @@ static const float kPageWidth = 680.0;
     // Do any additional setup after loading the view.
     
     self.editImageButton.hidden = YES;
+    self.productName_edit.hidden = YES;
+    self.productPrice_edit.hidden=YES;
+    
+    self.productCategory_edit.hidden=YES;
+    self.productBrand_edit.hidden=YES;
+    self.productSupplier_edit.hidden=YES;
+    self.productColour_edit.hidden=YES;
+    self.productMaterial_edit.hidden=YES;
+    
+    
+    
+    
      //if custom product need to hide label content and replace with textfields and dropdown menus.  Also need to allow the image to be changed
     
      self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
@@ -80,12 +93,41 @@ static const float kPageWidth = 680.0;
     [_notesButton addTarget:self action:@selector(displayNotesPopover:) forControlEvents:UIControlEventTouchUpInside];
     
     //only add save, notes and edit image button to a custom product and don't show product code
-    if([_product.productCode  isEqual:@""]) {
+    if([_product.productCode  isEqual:@""] || [_product.productCode  isEqual:@"0000000000"]) {
     [self.view addSubview:deleteProductButton];
     [self.view addSubview:saveProductButton];
     self.editImageButton.hidden = NO;
         _productCodeLabel.hidden = YES;
         _productCode.hidden = YES;
+        self.productName_edit.hidden = NO;
+        self.productPrice_edit.hidden=NO;
+        self.productCategory_edit.hidden=NO;
+        self.productBrand_edit.hidden=NO;
+        self.productSupplier_edit.hidden=NO;
+        self.productColour_edit.hidden=NO;
+        self.productMaterial_edit.hidden=NO;
+        
+        
+        self.productName.hidden = YES;
+        self.productPrice.hidden=YES;
+        self.productCategory.hidden=YES;
+        self.productBrand.hidden=YES;
+        self.productSupplier.hidden=YES;
+        self.productColour.hidden=YES;
+        self.productMaterial.hidden=YES;
+        
+        
+        //categories drop down
+        [self.productCategory_edit setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
+        //brand drop down
+        [self.productBrand_edit setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
+        //supplier drop down
+        [self.productSupplier_edit setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
+        //colour drop down
+        [self.productColour_edit setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourCode"];
+        //material drop down
+        [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
+        
     [tools addSubview:_notesButton];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
     }
@@ -119,10 +161,20 @@ static const float kPageWidth = 680.0;
     self.productColour .text = _product.colour.colourName;
     self.productMaterial.text = _product.material.materialName;
     
+    
+    
     NSNumberFormatter *formatPrice = [[NSNumberFormatter alloc] init];
     [formatPrice setNumberStyle:NSNumberFormatterDecimalStyle];
     [formatPrice setDecimalSeparator:@"###.##"];
     self.productPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
+    
+    
+    self.productName_edit.text=_product.productName;
+    self.productPrice_edit.text=[NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
+    
+    [self.productCategory_edit setSelectedValue:_product.category.categoryName];
+    [self.productBrand_edit setSelectedValue:_product.brand.brandName];
+    
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotesSaved:) name:@"ProductNotesSaved" object:nil];

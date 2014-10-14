@@ -10,6 +10,8 @@
 #import "Product.h"
 #import "Collection.h"
 #import "ProductNotesViewController.h"
+#import "SchDropDown.h"
+#import "SchTextField.h"
 
 @interface ProductViewController : UIViewController <ProductNotesViewControllerDelegate> {
     UIPopoverController *_displayNotesPopover;
@@ -32,6 +34,13 @@
 @property(nonatomic,retain) UIButton *notesButton;
 @property (weak, nonatomic) IBOutlet UILabel *productCode;
 @property (weak, nonatomic) IBOutlet UILabel *productCodeLabel;
+@property (weak, nonatomic) IBOutlet SchTextField *productName_edit;
+@property (weak, nonatomic) IBOutlet SchTextField *productPrice_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productCategory_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productBrand_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productSupplier_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productColour_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productMaterial_edit;
 
 - (IBAction)editImage:(id)sender;
 - (void)saveCustomProduct:(id)sender;

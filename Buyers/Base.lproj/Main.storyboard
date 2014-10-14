@@ -1441,6 +1441,48 @@
                                 <color key="textColor" red="0.49803921569999998" green="0.68627450980000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="zJn-eC-A86" customClass="SchTextField">
+                                <rect key="frame" x="720" y="151" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="4qV-1X-5Lr" customClass="SchTextField">
+                                <rect key="frame" x="720" y="578" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="dK5-QA-3DM" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="223" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="XSl-mI-2GQ" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="294" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="1nP-gL-gg1" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="365" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="l7Q-Yc-oj3" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="436" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="U9d-Zz-BDh" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="507" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -1448,15 +1490,22 @@
                     <connections>
                         <outlet property="editImageButton" destination="Eza-Lb-Xbo" id="GZ2-Yn-ihe"/>
                         <outlet property="productBrand" destination="MVa-a5-MDp" id="vAq-6F-mtr"/>
+                        <outlet property="productBrand_edit" destination="XSl-mI-2GQ" id="C48-g1-DGa"/>
                         <outlet property="productCategory" destination="qNR-uG-wPv" id="aea-oI-dYn"/>
+                        <outlet property="productCategory_edit" destination="dK5-QA-3DM" id="jgD-sk-r1t"/>
                         <outlet property="productCode" destination="QcP-1x-Tqm" id="axj-ge-ddq"/>
                         <outlet property="productCodeLabel" destination="Fgw-Jn-y7S" id="r0S-XG-kwg"/>
                         <outlet property="productColour" destination="Tyq-9A-k1m" id="rHB-ef-iio"/>
+                        <outlet property="productColour_edit" destination="l7Q-Yc-oj3" id="sKw-hQ-p4Z"/>
                         <outlet property="productImage" destination="rP8-em-8Oe" id="A36-0v-pxs"/>
                         <outlet property="productMaterial" destination="iXg-UH-e8D" id="Bu5-Yd-a3m"/>
+                        <outlet property="productMaterial_edit" destination="U9d-Zz-BDh" id="nSj-rQ-imD"/>
                         <outlet property="productName" destination="VJr-Wg-N23" id="usn-vw-P3T"/>
+                        <outlet property="productName_edit" destination="zJn-eC-A86" id="19g-al-fmi"/>
                         <outlet property="productPrice" destination="h1Y-TZ-NKD" id="a5o-qX-Wjr"/>
+                        <outlet property="productPrice_edit" destination="4qV-1X-5Lr" id="iKQ-Rv-IFv"/>
                         <outlet property="productSupplier" destination="SVL-tl-SXM" id="Wcm-d1-o7E"/>
+                        <outlet property="productSupplier_edit" destination="1nP-gL-gg1" id="X9T-6B-cQt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVe-LF-I2F" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -24,6 +24,8 @@
     
     [self.reachability startNotifier];
     
+    NSLog(@"documents path: %@",[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]);
+    
     return YES;
 }
 

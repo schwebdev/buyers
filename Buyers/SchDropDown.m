@@ -138,7 +138,10 @@
 
         UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 200) style:UITableViewStylePlain];
         [table setSeparatorInset:UIEdgeInsetsZero];
-        [table setLayoutMargins:UIEdgeInsetsZero];
+        
+        if ([table respondsToSelector:@selector(setLayoutMargins:)]) {
+            [table setLayoutMargins:UIEdgeInsetsZero];
+        }
         table.delegate = self;
         table.dataSource = self;
         [popoverView addSubview:table];
@@ -220,7 +223,9 @@
     bgColorView.layer.masksToBounds = YES;
     cell.selectedBackgroundView = bgColorView;
     
-    [cell setLayoutMargins:UIEdgeInsetsZero];
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
     return cell;
 }
 
