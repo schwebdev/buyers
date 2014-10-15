@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="d40-Gm-g4r">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -1265,6 +1264,63 @@
             </objects>
             <point key="canvasLocation" x="-4806" y="953"/>
         </scene>
+        <!--Camera Roll View Controller-->
+        <scene sceneID="o78-PC-Dja">
+            <objects>
+                <viewController id="2zw-HX-REF" customClass="CameraRollViewController" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9fe-CF-fgU">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="ZNm-35-YJY">
+                                <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="XXa-xP-AKW">
+                                    <size key="itemSize" width="140" height="140"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="PhotoCell" id="GQ6-Ks-gMv" customClass="PhotoCell">
+                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
+                                            <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="9ms-L3-5lh">
+                                                    <rect key="frame" x="0.0" y="0.0" width="140" height="140"/>
+                                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        </view>
+                                        <size key="customSize" width="140" height="140"/>
+                                        <connections>
+                                            <outlet property="photoImageView" destination="9ms-L3-5lh" id="J3j-2H-rdx"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                                <connections>
+                                    <outlet property="dataSource" destination="2zw-HX-REF" id="6fh-Gw-Tng"/>
+                                    <outlet property="delegate" destination="2zw-HX-REF" id="7Yk-ie-Ce4"/>
+                                </connections>
+                            </collectionView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="2Oi-7e-WVA"/>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <connections>
+                        <outlet property="collectionView" destination="ZNm-35-YJY" id="Rn8-1L-TYO"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jSV-dX-pgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-4806" y="1857"/>
+        </scene>
         <!--Product View Controller-->
         <scene sceneID="Imy-K6-nKJ">
             <objects>
@@ -1402,22 +1458,96 @@
                                 <color key="textColor" red="0.49803921569999998" green="0.68627450980000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="zJn-eC-A86" customClass="SchTextField">
+                                <rect key="frame" x="720" y="151" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="4qV-1X-5Lr" customClass="SchTextField">
+                                <rect key="frame" x="720" y="578" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="dK5-QA-3DM" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="223" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="XSl-mI-2GQ" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="294" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="1nP-gL-gg1" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="365" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="l7Q-Yc-oj3" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="436" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="U9d-Zz-BDh" customClass="SchDropDown">
+                                <rect key="frame" x="720" y="507" width="200" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" id="dd9-5A-HR2">
+                                <rect key="frame" x="150" y="629" width="157" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
+                                <state key="normal" title=" take photo" image="camera.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="z8q-1q-NUp">
+                                <rect key="frame" x="443" y="629" width="157" height="50"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" red="0.1305742446" green="0.061196141689999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                <state key="normal" title=" camera roll" image="gallery.png">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="2zw-HX-REF" kind="push" id="7Z4-4L-HFI"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                     <navigationItem key="navigationItem" id="RUN-l8-0mK"/>
                     <connections>
+                        <outlet property="btnUseCamera" destination="dd9-5A-HR2" id="fhI-vs-Lqa"/>
+                        <outlet property="btnUseCameraRoll" destination="z8q-1q-NUp" id="FaY-uz-rKP"/>
                         <outlet property="editImageButton" destination="Eza-Lb-Xbo" id="GZ2-Yn-ihe"/>
                         <outlet property="productBrand" destination="MVa-a5-MDp" id="vAq-6F-mtr"/>
+                        <outlet property="productBrand_edit" destination="XSl-mI-2GQ" id="C48-g1-DGa"/>
                         <outlet property="productCategory" destination="qNR-uG-wPv" id="aea-oI-dYn"/>
+                        <outlet property="productCategory_edit" destination="dK5-QA-3DM" id="jgD-sk-r1t"/>
                         <outlet property="productCode" destination="QcP-1x-Tqm" id="axj-ge-ddq"/>
                         <outlet property="productCodeLabel" destination="Fgw-Jn-y7S" id="r0S-XG-kwg"/>
                         <outlet property="productColour" destination="Tyq-9A-k1m" id="rHB-ef-iio"/>
+                        <outlet property="productColour_edit" destination="l7Q-Yc-oj3" id="sKw-hQ-p4Z"/>
                         <outlet property="productImage" destination="rP8-em-8Oe" id="A36-0v-pxs"/>
                         <outlet property="productMaterial" destination="iXg-UH-e8D" id="Bu5-Yd-a3m"/>
+                        <outlet property="productMaterial_edit" destination="U9d-Zz-BDh" id="nSj-rQ-imD"/>
                         <outlet property="productName" destination="VJr-Wg-N23" id="usn-vw-P3T"/>
+                        <outlet property="productName_edit" destination="zJn-eC-A86" id="19g-al-fmi"/>
                         <outlet property="productPrice" destination="h1Y-TZ-NKD" id="a5o-qX-Wjr"/>
+                        <outlet property="productPrice_edit" destination="4qV-1X-5Lr" id="iKQ-Rv-IFv"/>
                         <outlet property="productSupplier" destination="SVL-tl-SXM" id="Wcm-d1-o7E"/>
+                        <outlet property="productSupplier_edit" destination="1nP-gL-gg1" id="X9T-6B-cQt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVe-LF-I2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1487,7 +1617,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="useCameraRoll:" destination="uyH-5c-Jlp" eventType="touchUpInside" id="hAE-JG-ejJ"/>
+                                    <segue destination="2zw-HX-REF" kind="push" id="rdB-ds-HCC"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" minimumFontSize="17" id="qNh-Ac-fD0" customClass="SchTextField">
@@ -1557,16 +1687,6 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="qSP-3l-fVP">
-                                <rect key="frame" x="559" y="408" width="46" height="30"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <segue destination="zzH-9W-MiK" kind="push" id="keo-7R-gWw"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -2279,10 +2399,11 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="aGa-ph-cAx"/>
         <segue reference="xii-QN-o1o"/>
         <segue reference="GDM-t3-wVL"/>
-        <segue reference="aGa-ph-cAx"/>
+        <segue reference="rdB-ds-HCC"/>
         <segue reference="8zL-Jv-JNu"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+    <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
 </document>

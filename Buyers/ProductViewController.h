@@ -10,12 +10,17 @@
 #import "Product.h"
 #import "Collection.h"
 #import "ProductNotesViewController.h"
+#import "SchDropDown.h"
+#import "SchTextField.h"
 
 @interface ProductViewController : UIViewController <ProductNotesViewControllerDelegate> {
     UIPopoverController *_displayNotesPopover;
     ProductNotesViewController *_productNotes;
 }
 @property (weak, nonatomic) IBOutlet UIButton *editImageButton;
+@property (weak, nonatomic) IBOutlet UIButton *btnUseCamera;
+@property (weak, nonatomic) IBOutlet UIButton *btnUseCameraRoll;
+@property BOOL isValid;
 
 @property (nonatomic, retain) ProductNotesViewController *productNotes;
 @property (nonatomic, retain) UIPopoverController *displayNotesPopover;
@@ -32,6 +37,15 @@
 @property(nonatomic,retain) UIButton *notesButton;
 @property (weak, nonatomic) IBOutlet UILabel *productCode;
 @property (weak, nonatomic) IBOutlet UILabel *productCodeLabel;
+@property (weak, nonatomic) IBOutlet SchTextField *productName_edit;
+@property (weak, nonatomic) IBOutlet SchTextField *productPrice_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productCategory_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productBrand_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productSupplier_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productColour_edit;
+@property (weak, nonatomic) IBOutlet SchDropDown *productMaterial_edit;
+
+@property (nonatomic,strong) UIImage *selectedImage;
 
 - (IBAction)editImage:(id)sender;
 - (void)saveCustomProduct:(id)sender;

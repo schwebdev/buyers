@@ -481,7 +481,8 @@
 - (void)loadReport:(NSString *)fileName {
     
     self.reportName = fileName;
-    if([fileName containsString:@"filterReport:"]) {
+    //if([fileName containsString:@"filterReport:"]) {
+    if ([fileName rangeOfString:@"filterReport:"].location != NSNotFound) {
         [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"filter set report: %@",[fileName stringByReplacingOccurrencesOfString:@"filterReport:" withString:@""] ]]];
     } else {
         [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",fileName ]]];

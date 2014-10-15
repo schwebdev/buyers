@@ -91,7 +91,10 @@
     
     self.departmentsTable.layer.borderWidth = 1.0;
     self.departmentsTable.layer.borderColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
-    [self.departmentsTable setLayoutMargins:UIEdgeInsetsZero];
+    
+    if ([self.departmentsTable respondsToSelector:@selector(setLayoutMargins:)]) {
+        [self.departmentsTable setLayoutMargins:UIEdgeInsetsZero];
+    }
     
 }
 
@@ -140,7 +143,9 @@
         }
     }
     
-    [cell setLayoutMargins:UIEdgeInsetsZero];
+    if ([cell respondsToSelector:@selector(setLayoutMargins:)]) {
+        [cell setLayoutMargins:UIEdgeInsetsZero];
+    }
     return cell;
 }
 

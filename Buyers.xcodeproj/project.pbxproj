@@ -148,9 +148,12 @@
 		5BB66B1119DEACD500422E87 /* checkboxSML.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0F19DEACD500422E87 /* checkboxSML.png */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
-		5BEA5C0219E7E13F0007DE40 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEA5C0119E7E13F0007DE40 /* Colour.m */; };
-		5BEA5C0519E7E1A30007DE40 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEA5C0419E7E1A30007DE40 /* Material.m */; };
-		5BEA5C0819E7E1D30007DE40 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BEA5C0719E7E1D30007DE40 /* ProductCategory.m */; };
+		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
+		C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */; };
+		C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */; };
+		C60A7B0119E7FE78000ABE88 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7B0019E7FE78000ABE88 /* Material.m */; };
+		C60A7B0419E7FEB0000ABE88 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7B0319E7FEB0000ABE88 /* ProductCategory.m */; };
+		C60A7B0719E7FED1000ABE88 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7B0619E7FED1000ABE88 /* Colour.m */; };
 		C618D3A019DEEBC7005977D6 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D39F19DEEBC7005977D6 /* camera.png */; };
 		C618D3A219DEEC7F005977D6 /* gallery.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A119DEEC7F005977D6 /* gallery.png */; };
 		C618D3A419DEF114005977D6 /* camera_lg.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A319DEF114005977D6 /* camera_lg.png */; };
@@ -367,12 +370,17 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
-		5BEA5C0019E7E13F0007DE40 /* Colour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Colour.h; sourceTree = "<group>"; };
-		5BEA5C0119E7E13F0007DE40 /* Colour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Colour.m; sourceTree = "<group>"; };
-		5BEA5C0319E7E1A30007DE40 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Material.h; sourceTree = "<group>"; };
-		5BEA5C0419E7E1A30007DE40 /* Material.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Material.m; sourceTree = "<group>"; };
-		5BEA5C0619E7E1D30007DE40 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCategory.h; sourceTree = "<group>"; };
-		5BEA5C0719E7E1D30007DE40 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCategory.m; sourceTree = "<group>"; };
+		C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRollViewController.h; sourceTree = "<group>"; };
+		C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraRollViewController.m; sourceTree = "<group>"; };
+		C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		C60A7AFC19E6E2F1000ABE88 /* PhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCell.h; sourceTree = "<group>"; };
+		C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCell.m; sourceTree = "<group>"; };
+		C60A7AFF19E7FE78000ABE88 /* Material.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Material.h; path = Buyers/Material.h; sourceTree = "<group>"; };
+		C60A7B0019E7FE78000ABE88 /* Material.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Material.m; path = Buyers/Material.m; sourceTree = "<group>"; };
+		C60A7B0219E7FEB0000ABE88 /* ProductCategory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductCategory.h; path = Buyers/ProductCategory.h; sourceTree = "<group>"; };
+		C60A7B0319E7FEB0000ABE88 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductCategory.m; path = Buyers/ProductCategory.m; sourceTree = "<group>"; };
+		C60A7B0519E7FED1000ABE88 /* Colour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Colour.h; path = Buyers/Colour.h; sourceTree = "<group>"; };
+		C60A7B0619E7FED1000ABE88 /* Colour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Colour.m; path = Buyers/Colour.m; sourceTree = "<group>"; };
 		C618D39F19DEEBC7005977D6 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		C618D3A119DEEC7F005977D6 /* gallery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gallery.png; sourceTree = "<group>"; };
 		C618D3A319DEF114005977D6 /* camera_lg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_lg.png; sourceTree = "<group>"; };
@@ -417,6 +425,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */,
 				0B288AC219BE032C00F62B63 /* SystemConfiguration.framework in Frameworks */,
 				5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */,
 				0BC95634198FDABD00CD45D5 /* CoreGraphics.framework in Frameworks */,
@@ -447,6 +456,10 @@
 				C6C3D4C119E3FA9F009E8CAB /* AVCameraViewController.m */,
 				C6C3D4C319E3FB2B009E8CAB /* AVCameraPreviewView.h */,
 				C6C3D4C419E3FB2B009E8CAB /* AVCameraPreviewView.m */,
+				C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */,
+				C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */,
+				C60A7AFC19E6E2F1000ABE88 /* PhotoCell.h */,
+				C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */,
 			);
 			name = CustomProducts;
 			sourceTree = "<group>";
@@ -675,12 +688,8 @@
 				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
 				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
-				5BEA5C0619E7E1D30007DE40 /* ProductCategory.h */,
-				5BEA5C0719E7E1D30007DE40 /* ProductCategory.m */,
-				5BEA5C0319E7E1A30007DE40 /* Material.h */,
-				5BEA5C0419E7E1A30007DE40 /* Material.m */,
-				5BEA5C0019E7E13F0007DE40 /* Colour.h */,
-				5BEA5C0119E7E13F0007DE40 /* Colour.m */,
+				C60A7AFF19E7FE78000ABE88 /* Material.h */,
+				C60A7B0019E7FE78000ABE88 /* Material.m */,
 				C6B9A7CB19DD73AC00C832A1 /* Product.h */,
 				C6B9A7CC19DD73AC00C832A1 /* Product.m */,
 				C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */,
@@ -716,6 +725,7 @@
 		0BC95630198FDABD00CD45D5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */,
 				0B288AC119BE032C00F62B63 /* SystemConfiguration.framework */,
 				5B35503019A49CF40031E33C /* CoreData.framework */,
 				0BC95631198FDABD00CD45D5 /* Foundation.framework */,
@@ -1003,13 +1013,13 @@
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
+				C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */,
 				0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */,
 				C6B9A7CD19DD73AC00C832A1 /* Product.m in Sources */,
 				0B288A9319B9EFBF00F62B63 /* Supplier.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				0B288ABD19BDF06500F62B63 /* Brand.m in Sources */,
-				5BEA5C0219E7E13F0007DE40 /* Colour.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
@@ -1019,6 +1029,8 @@
 				C6B9A7CA19DD73AC00C832A1 /* ProductOrder.m in Sources */,
 				0BC036441993B5EB00B175AD /* ReportHomeViewController.m in Sources */,
 				C6C3D4C519E3FB2B009E8CAB /* AVCameraPreviewView.m in Sources */,
+				C60A7B0419E7FEB0000ABE88 /* ProductCategory.m in Sources */,
+				C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */,
 				0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */,
 				0B288A7819B9C83600F62B63 /* Report.m in Sources */,
 				C6B9A7A519DD6A1900C832A1 /* ProductsViewController.m in Sources */,
@@ -1029,14 +1041,14 @@
 				0B970B68199376C9006D0358 /* CollectionViewController.m in Sources */,
 				C6B9A7A919DD6A4C00C832A1 /* CollectionNotesViewController.m in Sources */,
 				0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */,
+				C60A7B0119E7FE78000ABE88 /* Material.m in Sources */,
 				C6B9A7C719DD737400C832A1 /* Collection.m in Sources */,
-				5BEA5C0519E7E1A30007DE40 /* Material.m in Sources */,
 				C6C3D4C219E3FA9F009E8CAB /* AVCameraViewController.m in Sources */,
 				5B14383519ADE40800A68865 /* CollectionButton.m in Sources */,
 				C6B9A7AC19DD6AB800C832A1 /* ProductButton.m in Sources */,
 				C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */,
-				5BEA5C0819E7E1D30007DE40 /* ProductCategory.m in Sources */,
 				0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */,
+				C60A7B0719E7FED1000ABE88 /* Colour.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,

@@ -19,11 +19,11 @@ UINavigationControllerDelegate>
 @property (weak, nonatomic) IBOutlet UIButton *addImageButton;
 @property (weak, nonatomic) IBOutlet UIImageView *cameraView;
 - (IBAction)useCamera:(id)sender;
-- (IBAction)useCameraRoll:(id)sender;
+//- (IBAction)useCameraRoll:(id)sender;
 @property (weak, nonatomic) IBOutlet SchTextField *txtProductName;
 - (IBAction)ddlCategoryList:(id)sender;
 @property (weak, nonatomic) IBOutlet SchTextField *txtProductPrice;
-
+@property (nonatomic,strong) UIImage *selectedImage;
 @property (weak, nonatomic) IBOutlet SchDropDown *categoryList;
 @property (weak, nonatomic) IBOutlet SchDropDown *brandList;
 @property (weak, nonatomic) IBOutlet SchDropDown *supplierList;
