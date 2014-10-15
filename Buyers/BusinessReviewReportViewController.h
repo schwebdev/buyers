@@ -8,8 +8,9 @@
 
 #import "BaseReportFilterViewController.h"
 
-@interface BusinessReviewReportControllerViewController : BaseReportFilterViewController <UITableViewDataSource, UITableViewDelegate, ReportFilterViewDelegate>
+@interface BusinessReviewReportViewController : BaseReportFilterViewController <UITableViewDataSource, UITableViewDelegate, ReportFilterViewDelegate>
 
+@property (weak, nonatomic) IBOutlet UIScrollView *container;
 @property (weak, nonatomic) IBOutlet UITableView *departmentsTable;
 
 @end

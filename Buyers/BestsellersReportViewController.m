@@ -1,20 +1,20 @@
 //
-//  BusinessReviewReportControllerViewController.m
+//  BestsellersReportViewController.m
 //  Buyers
 //
-//  Created by webdevelopment on 25/08/2014.
+//  Created by webdevelopment on 14/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
-#import "BusinessReviewReportControllerViewController.h"
+#import "BestsellersReportViewController.h"
 
-@interface BusinessReviewReportControllerViewController ()
+@interface BestsellersReportViewController ()
 
 @property (nonatomic) NSMutableArray * departmentsList;
-
 @end
 
-@implementation BusinessReviewReportControllerViewController
+@implementation BestsellersReportViewController
+
 
 - (NSString *)getFilterString {
     NSMutableString *filterString = [NSMutableString new];
@@ -23,41 +23,41 @@
 }
 
 - (void)loadFilterSet {
-//    NSLog(@"load filter set");
-//    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-//    
-//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
-//    [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
-//    
-//    NSError *error;
-//    NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
-//    
-//    if(filterSets.count > 0) {
-//        ReportFilterSet *filterSet = [filterSets objectAtIndex:0];
-//        
-//        NSLog(@"filterString value, %@",filterSet.filterValues);
-//        NSArray *filterSetValues = [filterSet.filterValues componentsSeparatedByString:@";"];
-//        [self.CalWeekFrom setSelectedValue:filterSetValues[0]];
-//        [self.CalWeekTo setSelectedValue:filterSetValues[1]];
-//        [self.BrandsList setSelectedValue:filterSetValues[2]];
-//        [self.MerchList setSelectedValue:filterSetValues[3]];
-//        [self.SuppliersList setSelectedValue:filterSetValues[4]];
-//        self.AnalysisCode.text = filterSetValues[5];
-//        
-//        
-//        for (NSString *value in [filterSetValues[6] componentsSeparatedByString:@","]) {
-//            
-//            for (int i = 0; i < self.departmentsList.count; i++) {
-//                if([self.departmentsList[i][@"depCode"] intValue] == [value intValue]) {
-//                    
-//                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-//                    
-//                    [self.departmentsTable selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
-//                }
-//            }
-//            
-//        }
-//    }
+    //    NSLog(@"load filter set");
+    //    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    //
+    //    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+    //    [request setPredicate:[NSPredicate predicateWithFormat:@"(filterSetName == %@)",self.filterSetName]];
+    //
+    //    NSError *error;
+    //    NSArray *filterSets = [managedContext executeFetchRequest:request error:&error];
+    //
+    //    if(filterSets.count > 0) {
+    //        ReportFilterSet *filterSet = [filterSets objectAtIndex:0];
+    //
+    //        NSLog(@"filterString value, %@",filterSet.filterValues);
+    //        NSArray *filterSetValues = [filterSet.filterValues componentsSeparatedByString:@";"];
+    //        [self.CalWeekFrom setSelectedValue:filterSetValues[0]];
+    //        [self.CalWeekTo setSelectedValue:filterSetValues[1]];
+    //        [self.BrandsList setSelectedValue:filterSetValues[2]];
+    //        [self.MerchList setSelectedValue:filterSetValues[3]];
+    //        [self.SuppliersList setSelectedValue:filterSetValues[4]];
+    //        self.AnalysisCode.text = filterSetValues[5];
+    //
+    //
+    //        for (NSString *value in [filterSetValues[6] componentsSeparatedByString:@","]) {
+    //
+    //            for (int i = 0; i < self.departmentsList.count; i++) {
+    //                if([self.departmentsList[i][@"depCode"] intValue] == [value intValue]) {
+    //
+    //                    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+    //
+    //                    [self.departmentsTable selectRowAtIndexPath:indexPath animated:NO scrollPosition:UITableViewScrollPositionNone];
+    //                }
+    //            }
+    //
+    //        }
+    //    }
     
 }
 
@@ -82,10 +82,31 @@
                             @{@"14":@"blah14"},
                             @{@"15":@"blah15"},
                             nil];
+    
+    self.departmentsTable.layer.borderWidth = 1.0;
+    self.departmentsTable.layer.borderColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
+    [self.departmentsTable setLayoutMargins:UIEdgeInsetsZero];
+    
+    //UIScrollView *sv = (UIScrollView*)self.view;
+    [self.container setFrame:CGRectMake(0, 85, 834, 619)];
+    [self.container setContentSize:CGSizeMake(self.container.frame.size.width, 1238)];
+    
+    UIButton *btn = (UIButton*)[self.view viewWithTag:2];
+    
+    [btn setSelected:YES];
+    
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    
+    [self.container flashScrollIndicators];
 }
 
 - (void)didReceiveMemoryWarning
@@ -125,6 +146,7 @@
             [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
         }
     }
+    [cell setLayoutMargins:UIEdgeInsetsZero];
     return cell;
 }
 
