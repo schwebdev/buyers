@@ -12,7 +12,7 @@
 #import "AppDelegate.h"
 #import "ReportData.h"
 #import "ReportFilterSet.h"
-
+#import "BaseReportFilterViewController.h"
 #import "Sync.h"
 
 @interface ReportHomeViewController ()
@@ -45,7 +45,10 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a report type"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+        BaseReportFilterViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+                
+        vc.reportType = [self.reportType getSelectedValue];
+        vc.reportTypeName = self.reportType.text;
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -57,9 +60,12 @@
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
-        UIViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
+        BaseReportFilterViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:[NSString stringWithFormat:@"%@Report",[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]]]];
         
-        [vc setValue:self.filterSets.getSelectedValue forKey:@"filterSetName"];
+        vc.filterSetName = [self.filterSets getSelectedValue];
+        vc.reportType = [self.reportType getSelectedValue];
+        vc.reportTypeName = self.reportType.text;
+        
         [self.navigationController pushViewController:vc animated:YES];
     }
     
@@ -69,7 +75,7 @@
     if(self.filterSets.getSelectedValue.length == 0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"please select a filter set"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
-    } else if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+    } else if([self.filterSets getSelectedObject][@"lastSync"] == [NSNull null]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"this filter set has not been synced yet"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
     } else {
@@ -91,7 +97,7 @@
 
 
 - (void) filterSetsChange:(NSNotification *)notification {
-    if([self.filterSets getSelectedObject][@"lastSync"] == nil) {
+    if([self.filterSets getSelectedObject][@"lastSync"] == [NSNull null]) {
         self.FilterLabel.text = @"Last sync: n/a";
     } else {
         NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
@@ -140,7 +146,42 @@
     }
 
 }
-
+- (IBAction)reportFilterClicked:(id)sender {
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = YES;
+    
+    for (UIView *subview in self.ReportFilterView.subviews) {
+        if([subview isKindOfClass:[UIButton class]]) {
+            if(subview.tag != button.tag) {
+                UIButton *other = (UIButton*)subview;
+                other.selected = NO;
+            }
+        }
+    }
+    self.reportList.text = @"";
+    
+    
+    self.reportList.listItems = [NSMutableArray array];
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+    if(button.tag == 1) {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+        
+    } else {
+        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];
+    }
+    
+    NSError *error;
+    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+    
+    if(reports.count > 0) {
+        for (ReportData *report in reports) {
+            [self.reportList.listItems addObject:@{report.name:report.name}];
+        }
+    }
+}
 
 - (void)viewDidLoad
 {
@@ -149,20 +190,21 @@
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"run and view" title2:@"reports" image:@"homeReportsLogo.png"];
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@""]];
     
-    CALayer *separator = [CALayer layer];
-    separator.frame = CGRectMake(512, 100, 1, 589);
-    separator.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
-    [self.view.layer addSublayer:separator];
     
     
     self.reportType.listItems = [NSMutableArray arrayWithObjects:
                                  @{@"OrderVsIntake":@"Order vs Intake Report"},
                                  @{@"BusinessReview":@"Business Review Report"},
+                                 @{@"Bestsellers":@"Bestsellers Report"},
                                  nil];
     
     self.reportType.observerName = @"reportTypeSelect";
     
     self.filterSets.observerName = @"filterSetsSelect";
+    
+    
+    UIButton *ownCheck = (UIButton*)[self.ReportFilterView viewWithTag:1];
+    ownCheck.selected = YES;
 
 }
 
@@ -170,7 +212,7 @@
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
 
-    UISwitch *ownSwitch = (UISwitch*)[self.ReportFilterView viewWithTag:1];
+    UIButton *ownCheck = (UIButton*)[self.ReportFilterView viewWithTag:1];
     
     self.reportList.text = @"";
     
@@ -178,7 +220,7 @@
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    if([ownSwitch isOn]) {
+    if([ownCheck isSelected]) {
         [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
     } else {
         [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];

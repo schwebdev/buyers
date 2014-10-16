@@ -17,6 +17,8 @@
 #import "Material.h"
 #import "Sync.h"
 
+#import "CameraRollViewController.h"
+
 static const float kPageWidth = 680.0;
 
 @interface AddNewProductViewController (){
@@ -76,6 +78,7 @@ static const float kPageWidth = 680.0;
     [self.view addSubview:productsInfo];
     
     
+    
     //categories drop down
     [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
     //brand drop down
@@ -87,6 +90,15 @@ static const float kPageWidth = 680.0;
     //material drop down
     [self.materialList setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
 
+}
+
+-(void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if(_selectedImage !=nil){
+        _cameraView.image = _selectedImage;
+        _isDirtyImage = YES;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,6 +122,7 @@ static const float kPageWidth = 680.0;
         
         CGRect f = imagePicker.view.bounds;
         f.size.height -= imagePicker.navigationBar.bounds.size.height;
+        //f.size.width = f.size.height;
         CGFloat barHeight = (f.size.height - f.size.width) / 2;
         UIGraphicsBeginImageContext(f.size);
         [[UIColor colorWithWhite:0 alpha:.5] set];
@@ -129,7 +142,7 @@ static const float kPageWidth = 680.0;
     }
 }
 
-- (void) useCameraRoll:(id)sender
+/*- (void) useCameraRoll:(id)sender
 {
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeSavedPhotosAlbum])
@@ -146,7 +159,7 @@ static const float kPageWidth = 680.0;
         _newMedia = NO;
         _isDirtyImage = YES;
     }
-}
+}*/
 
 - (IBAction)categoryList:(id)sender {
     [_txtProductName resignFirstResponder];
@@ -154,7 +167,7 @@ static const float kPageWidth = 680.0;
 
 - (void)saveCustomProduct:(id)sender {
     
-    NSString *pName, *pCode;
+    NSString *pName;
     ProductCategory *pCategory;
     Brand *pBrand;
     Supplier *pSupplier;
@@ -194,6 +207,7 @@ static const float kPageWidth = 680.0;
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.brandList.getSelectedObject[@"IDURI"]];
         NSManagedObject *brandElement = [managedContext objectWithID:c];
         pBrand = (Brand*)brandElement;
+        
     }
     
     if([self.supplierList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
@@ -255,23 +269,33 @@ static const float kPageWidth = 680.0;
              
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             product.productCode = @"";
              
              product.productName = pName;
              product.productPrice = pPrice;
-             
+             product.productCode = @"0000000000";
              product.category = pCategory;
              product.brand = pBrand;
              product.colour = pColour;
              product.material = pMaterial;
              product.supplier = pSupplier;
-             
-             NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+             NSData *imageData;
+             if(_selectedImage !=nil){
+                imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
+             }else{
+                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+             }
              product.productImageData = imageData;
              
              
              if(![managedContext save:&error]) {
                  NSLog(@"Could not save product: %@", [error localizedDescription]);
+                 [errorMsg appendString:@"Sorry, there has been a problem trying to save this product\n"];
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                 [alert show];
+             } else{
+                 [errorMsg appendString:@"Product saved successfully\n"];
+                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+                 [alert show];
              }
          }else{
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
@@ -283,16 +307,21 @@ static const float kPageWidth = 680.0;
 
 }
 
-/*
+
 #pragma mark - Navigation
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    // Pass the selected object to the new view
+    
+    CameraRollViewController *vc = (CameraRollViewController*)[segue destinationViewController];
+    vc.sourceController = self;
+    
+    
 }
-*/
+
 
 #pragma mark -
 #pragma mark UIImagePickerControllerDelegate
