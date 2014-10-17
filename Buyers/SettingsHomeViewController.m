@@ -166,7 +166,7 @@
     
     //internet check
     
-    CGFloat syncCount = 6;
+    CGFloat syncCount = 7;
     
     if(success) {
         success = [Sync syncTable:@"Supplier"];
@@ -190,11 +190,15 @@
     }
    
     if(success) {
-        success = [Sync syncReportData];
-        
+        success = [Sync syncReportData];        
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:6/syncCount] waitUntilDone:YES];
     }
     
+    if(success) {
+        success = [Sync syncFilterReports];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:7/syncCount] waitUntilDone:YES];
+        
+    }
     
     if(success) {
         

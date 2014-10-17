@@ -13,6 +13,7 @@
 + (BOOL)syncTable:(NSString *)type;
 
 + (BOOL)syncReportData;
++ (BOOL)syncFilterReports;
 
 + (void)updateSyncStatus:(NSString *)type;
 + (NSDate *)getLastSyncDate;
