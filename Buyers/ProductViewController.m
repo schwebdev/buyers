@@ -11,6 +11,7 @@
 #import "BaseViewController.h"
 #import "Brand.h"
 #import "ProductCategory.h"
+#import "ProductOrder.h"
 #import "Supplier.h"
 #import "Colour.h"
 #import "Material.h"
@@ -62,8 +63,6 @@ UIImage *image;
     self.btnUseCamera.hidden=YES;
     self.btnUseCameraRoll.hidden=YES;
     
-    
-    
      //if custom product need to hide label content and replace with textfields and dropdown menus.  Also need to allow the image to be changed
     
      self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
@@ -76,14 +75,14 @@ UIImage *image;
     
     UIButton *saveProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveProductButton setTitle:@"save" forState:UIControlStateNormal];
-    saveProductButton.frame = CGRectMake(720, 620, 100, 50);
+    saveProductButton.frame = CGRectMake(720, 629, 100, 50);
     [saveProductButton addTarget:self action:@selector(saveCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     saveProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     saveProductButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
     UIButton *deleteProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [deleteProductButton setTitle:@"delete" forState:UIControlStateNormal];
-    deleteProductButton.frame = CGRectMake(900, 620, 100, 50);
+    deleteProductButton.frame = CGRectMake(900, 629, 100, 50);
     [deleteProductButton addTarget:self action:@selector(deleteCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     deleteProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     deleteProductButton.backgroundColor = [UIColor redColor]; //[UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
@@ -99,6 +98,8 @@ UIImage *image;
     if([_product.productCode  isEqual:@""] || [_product.productCode  isEqual:@"0000000000"]) {
     [self.view addSubview:deleteProductButton];
     [self.view addSubview:saveProductButton];
+        
+        
     //self.editImageButton.hidden = NO;
         self.btnUseCamera.hidden=NO;
         self.btnUseCameraRoll.hidden=NO;
@@ -106,6 +107,7 @@ UIImage *image;
         _productCode.hidden = YES;
         self.productName_edit.hidden = NO;
         self.productPrice_edit.hidden=NO;
+        self.productPrice_edit.delegate = self;
         self.productCategory_edit.hidden=NO;
         self.productBrand_edit.hidden=NO;
         self.productSupplier_edit.hidden=NO;
@@ -129,9 +131,9 @@ UIImage *image;
         //supplier drop down
         [self.productSupplier_edit setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
         //colour drop down
-        [self.productColour_edit setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourCode"];
+        [self.productColour_edit setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourRef"];
         //material drop down
-        [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
+        [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialRef"];
         
     [tools addSubview:_notesButton];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
@@ -170,14 +172,15 @@ UIImage *image;
     
     NSNumberFormatter *formatPrice = [[NSNumberFormatter alloc] init];
     [formatPrice setNumberStyle:NSNumberFormatterDecimalStyle];
-    [formatPrice setDecimalSeparator:@"###.##"];
+    [formatPrice setMaximumFractionDigits:2];
+    [formatPrice setMinimumFractionDigits:2];
     self.productPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
     
     
     self.productName_edit.text=_product.productName;
-    self.productPrice_edit.text=[NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
+    self.productPrice_edit.text=[formatPrice stringFromNumber:_product.productPrice];
     
-    [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.category.category2Ref]];
+    [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.category.categoryName]];
     [self.productBrand_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.brand.brandRef]];
     [self.productSupplier_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.supplier.supplierCode]];
     [self.productColour_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.colour.colourRef]];
@@ -186,6 +189,9 @@ UIImage *image;
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotesSaved:) name:@"ProductNotesSaved" object:nil];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
+    
     
     
 }
@@ -224,7 +230,41 @@ UIImage *image;
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSError *error;
         
-        //shouldn't need to delete from collection or ordering if the object itself is deleted
+        //need to remove the object from every relationship prior to deleting otherwise the object is set to nil and causes an error
+        if([_product.brand.productBrand containsObject:_product]) {
+            [_product.brand removeProductBrandObject:_product];
+        }
+        if([_product.category.productCategory containsObject:_product]) {
+        [_product.category removeProductCategoryObject:_product];
+        }
+        if([_product.supplier.productSupplier containsObject:_product]) {
+            [_product.supplier removeProductSupplierObject:_product];
+        }
+        if([_product.colour.productColour containsObject:_product]) {
+            [_product.colour removeProductColourObject:_product];
+        }
+        if([_product.material.productMaterial containsObject:_product]) {
+            [_product.material removeProductMaterialObject:_product];
+        }
+        
+        NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+        NSArray *collections = [managedContext executeFetchRequest:requestCollections error:&error];
+        for (int i = 0, ic = [collections count]; i < ic; i++) {
+            Collection *collection = [collections objectAtIndex:i];
+            if([collection.products containsObject:_product]) {
+                [collection removeProductsObject:_product];
+            }
+        }
+        
+        NSFetchRequest *requestProductOrders = [[NSFetchRequest alloc] initWithEntityName:@"ProductOrder"];
+        NSArray *orders = [managedContext executeFetchRequest:requestProductOrders error:&error];
+        for (int i = 0, ip = [orders count]; i < ip; i++) {
+            ProductOrder *pOrder = [orders objectAtIndex:i];
+            if([pOrder.orderProduct isEqual:_product]) {
+                [managedContext deleteObject:pOrder];
+            }
+        }
+        
         [managedContext deleteObject:_product];
         
         if (![managedContext save:&error]) {
@@ -238,7 +278,6 @@ UIImage *image;
 
 - (void)saveCustomProduct:(id)sender
 {
-    //validate fields
     
     //save the product changes
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -294,6 +333,7 @@ UIImage *image;
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productColour_edit.getSelectedObject[@"IDURI"]];
         NSManagedObject *colourElement = [managedContext objectWithID:c];
         _product.colour = (Colour*)colourElement;
+        //NSLog(@"colour: %@", _product.colour.colourName);
         //pColour = [self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
     
@@ -320,9 +360,19 @@ UIImage *image;
     if(_selectedImage !=nil){
         imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
     }else{
-        imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
+        imageData = _product.productImageData;
+        
     }
-    _product.productImageData = imageData;
+    
+    if(imageData == nil) {
+        _isValid = NO;
+        [errorMsg appendString:@"please take a photo or select an image\n"];
+    } else {
+         _product.productImageData = imageData;
+    }
+
+    
+    
 
     if(_isValid){
         if(![managedContext save:&error]) {
@@ -384,5 +434,37 @@ UIImage *image;
 
 
 - (IBAction)editImage:(id)sender {
+}
+
+
+
+-(void)onKeyboardHide:(NSNotification *)notification {
+
+    //only animate if the view frame's y co-ordinate has been shifted up
+    if(CGRectGetMaxY(self.view.frame) < 700) {
+        [self animateTextField:self.productPrice_edit up:NO];
+    }
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self animateTextField:textField up:YES];
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    
+}
+-(void)animateTextField:(UITextField *)textField up:(BOOL)up{
+    
+   
+    
+    const int movementDistance = -316;
+    const float movementDuration = 0.2f;
+    
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations:@"animateTextField" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    
+    [UIView commitAnimations];
 }
 @end

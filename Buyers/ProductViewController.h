@@ -13,7 +13,7 @@
 #import "SchDropDown.h"
 #import "SchTextField.h"
 
-@interface ProductViewController : UIViewController <ProductNotesViewControllerDelegate> {
+@interface ProductViewController : UIViewController <ProductNotesViewControllerDelegate,UITextFieldDelegate> {
     UIPopoverController *_displayNotesPopover;
     ProductNotesViewController *_productNotes;
 }

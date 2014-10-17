@@ -295,7 +295,7 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
             products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
             
-            /*if(i==0){*/
+            /*if(i==0){
              
              /*Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
@@ -346,7 +346,7 @@ static const float kProductColumnSpacer = 14.0;
              NSLog(@"Could not save category: %@", [error localizedDescription]);
              
              }
-             
+            
              
              }*/
             

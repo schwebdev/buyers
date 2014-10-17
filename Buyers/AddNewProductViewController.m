@@ -77,7 +77,7 @@ static const float kPageWidth = 680.0;
     
     [self.view addSubview:productsInfo];
     
-    
+    self.txtProductPrice.delegate = self;
     
     //categories drop down
     [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
@@ -86,9 +86,11 @@ static const float kPageWidth = 680.0;
     //supplier drop down
     [self.supplierList setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
     //colour drop down
-    [self.colourList setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourCode"];
+    [self.colourList setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourRef"];
     //material drop down
-    [self.materialList setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialCode"];
+    [self.materialList setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialRef"];
+    
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
 
 }
 
@@ -370,6 +372,34 @@ finishedSavingWithError:(NSError *)error
 
 - (IBAction)ddlCategoryList:(id)sender {
 }
+-(void)onKeyboardHide:(NSNotification *)notification {
 
+    //only animate if the view frame's y co-ordinate has been shifted up
+    if(CGRectGetMaxY(self.view.frame) < 700) {
+        [self animateTextField:self.txtProductPrice up:NO];
+    }
+}
+-(void)textFieldDidBeginEditing:(UITextField *)textField{
+    [self animateTextField:textField up:YES];
+}
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    
+}
+-(void)animateTextField:(UITextField *)textField up:(BOOL)up{
+    
+    
+    
+    const int movementDistance = -190;
+    const float movementDuration = 0.2f;
+    
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations:@"animateTextField" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    
+    [UIView commitAnimations];
+}
 
 @end

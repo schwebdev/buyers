@@ -2399,10 +2399,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
+        <segue reference="7Z4-4L-HFI"/>
         <segue reference="aGa-ph-cAx"/>
-        <segue reference="xii-QN-o1o"/>
         <segue reference="GDM-t3-wVL"/>
-        <segue reference="rdB-ds-HCC"/>
+        <segue reference="xii-QN-o1o"/>
         <segue reference="8zL-Jv-JNu"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

@@ -12,7 +12,7 @@
 #import "SchDropDown.h"
 
 @interface AddNewProductViewController : UIViewController <UIImagePickerControllerDelegate,
-UINavigationControllerDelegate>
+UINavigationControllerDelegate,UITextFieldDelegate>
 @property BOOL newMedia;
 @property BOOL isValid;
 @property BOOL isDirtyImage;

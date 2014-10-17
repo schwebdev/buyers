@@ -106,8 +106,17 @@ static const float sProductColumnSpacer = 5.0;
 //    [sidebar.view addSubview:button];
 //    
 //    [button addTarget:self action:@selector(addNewProduct:) forControlEvents:UIControlEventTouchUpInside];
-//    
-    
+//
+    [numProducts removeFromSuperview];
+    //clear scroll view so it can be redrawn in case of changes
+    for(UIView *view in self.view.subviews) {
+        if(view.tag == 888888888) {
+            [view removeFromSuperview];
+        }
+        
+    }
+    [self fetchResults];
+    [self constructsProducts];
     
     UIButton *menu1 = [self setMenuButton:1 title:@"add new product"];
     
@@ -250,8 +259,7 @@ static const float sProductColumnSpacer = 5.0;
     
     [self.view addSubview:productsAddSub];
 
-    [self fetchResults];
-    [self constructsProducts];
+   
 
 }
 
