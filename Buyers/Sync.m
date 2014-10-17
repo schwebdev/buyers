@@ -17,6 +17,8 @@
 #import "CalYearWeek.h"
 #import "Department.h"
 #import "Merch.h"
+
+#import "Report.h"
 #import "ReportOrderVsIntake.h"
 #import "ReportData.h"
 #import "ProductCategory.h"
@@ -427,6 +429,68 @@
         }
     }
     return YES;
+}
+
++ (BOOL)syncFilterReports {
+    NSError *error;
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportFilterSet"];
+    NSArray *results = [managedContext executeFetchRequest:request error:&error];
+    
+    for (ReportFilterSet *filterSet in results) {
+        NSString *htmlString = [Report generateReport:filterSet.reportType withFilters:filterSet.filterValues];
+        
+        if(htmlString.length > 0) {
+            NSString *reportName = [NSString stringWithFormat:@"filterReport:%@",filterSet.filterSetName];
+            
+            request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+            [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",reportName]];
+            
+            NSError *error;
+            NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+            ReportData *report;
+            
+            if(reports.count > 0) {
+                report = reports[0];
+            } else {
+                report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                report.name = reportName;
+            }
+            
+            report.content = htmlString;
+            report.lastModified = [NSDate date];
+            report.createdBy = @"sync";
+            report.requiresSync = @NO;
+            
+            
+            filterSet.lastSync = [NSDate date];
+            
+        }
+
+    }
+    
+    NSError *saveError;
+    if(![managedContext save:&saveError]) {
+        NSLog(@"Could not save filter set reports: %@", [saveError localizedDescription]);
+        
+        NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+        if(detailedErrors != nil && [detailedErrors count] > 0) {
+            for(NSError* detailedError in detailedErrors) {
+                NSLog(@" detailed error:%@", [detailedError userInfo]);
+                NSLog(@" detailed error:%ld", (long)[detailedError code]);
+            }
+        } else {
+            NSLog(@" detailed error:%@", [saveError userInfo]);
+        }
+        return NO;
+    } else {
+        NSLog(@"filter sets synced");
+        
+    }
+
+    return YES;
+
 }
 
 + (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column {

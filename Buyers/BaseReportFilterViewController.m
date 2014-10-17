@@ -96,6 +96,7 @@
     NSLog(@"filterString value, %@",filterString);
     ReportViewController *vc = [self.storyboard instantiateViewControllerWithIdentifier:@"ReportViewController"];
     vc.reportType = self.reportType;
+    vc.reportTypeName = self.reportTypeName;
     // [vc preLoadView];
     
     [vc view];

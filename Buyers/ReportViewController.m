@@ -474,7 +474,7 @@
     NSString *htmlString = [Report generateReport:self.reportType withFilters:reportFilter];
     
     [self.webView loadHTMLString:htmlString baseURL:nil];
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportType ]]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportTypeName ]]];
     self.webView.hidden = YES;
 }
 

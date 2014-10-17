@@ -13,6 +13,7 @@
 
 @property (strong, nonatomic) IBOutlet UIWebView *webView;
 @property (strong, nonatomic) NSString *reportType;
+@property (strong, nonatomic) NSString *reportTypeName;
 
 - (void)generateReport:(NSString *)reportFilter;
 - (void)loadReport:(NSString *)fileName;

@@ -19,15 +19,19 @@
 
 - (NSString *)getFilterString {
     NSMutableString *filterString = [NSMutableString new];
-    [filterString appendFormat:@"%@;", [self.CalWeekFrom getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.CalWeekTo getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.BrandsList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.MerchList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [self.SuppliersList getSelectedValue]];
-    [filterString appendFormat:@"%@;", self.AnalysisCode.text];
+    [filterString appendFormat:@"%@;", [[self.CalWeekFrom getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekFrom getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[self.CalWeekTo getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekTo getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[self.BrandsList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.BrandsList getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[self.MerchList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.MerchList getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[self.SuppliersList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.SuppliersList getSelectedValue]];
+    [filterString appendFormat:@"%@;", [self.AnalysisCode.text isEqualToString:@""] ? @"-1" : self.AnalysisCode.text];
     
-    for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
-        [filterString appendFormat:@"%@,", self.departmentsList[path.row][@"depCode"]];
+    if([self.departmentsTable indexPathsForSelectedRows].count == 0) {
+        [filterString appendFormat:@"-1"];
+    } else {
+        for (NSIndexPath *path in [self.departmentsTable indexPathsForSelectedRows]) {
+            [filterString appendFormat:@"%@,", self.departmentsList[path.row][@"depCode"]];
+        }
     }
     
     return filterString;
@@ -48,14 +52,14 @@
         
         NSLog(@"filterString value, %@",filterSet.filterValues);
         NSArray *filterSetValues = [filterSet.filterValues componentsSeparatedByString:@";"];
-        [self.CalWeekFrom setSelectedValue:filterSetValues[0]];
-        [self.CalWeekTo setSelectedValue:filterSetValues[1]];
-        [self.BrandsList setSelectedValue:filterSetValues[2]];
-        [self.MerchList setSelectedValue:filterSetValues[3]];
-        [self.SuppliersList setSelectedValue:filterSetValues[4]];
-        self.AnalysisCode.text = filterSetValues[5];
+        if(![filterSetValues[0] isEqualToString:@"-1"])[self.CalWeekFrom setSelectedValue:filterSetValues[0]];
+        if(![filterSetValues[1] isEqualToString:@"-1"])[self.CalWeekTo setSelectedValue:filterSetValues[1]];
+        if(![filterSetValues[2] isEqualToString:@"-1"])[self.BrandsList setSelectedValue:filterSetValues[2]];
+        if(![filterSetValues[3] isEqualToString:@"-1"])[self.MerchList setSelectedValue:filterSetValues[3]];
+        if(![filterSetValues[4] isEqualToString:@"-1"])[self.SuppliersList setSelectedValue:filterSetValues[4]];
+        if(![filterSetValues[5] isEqualToString:@"-1"])self.AnalysisCode.text = filterSetValues[5];
         
-        
+        if(![filterSetValues[6] isEqualToString:@"-1"]) {
         for (NSString *value in [filterSetValues[6] componentsSeparatedByString:@","]) {
             
             for (int i = 0; i < self.departmentsList.count; i++) {
@@ -67,6 +71,7 @@
                 }
             }
             
+        }
         }
     }
     
