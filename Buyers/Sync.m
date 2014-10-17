@@ -21,6 +21,7 @@
 #import "Report.h"
 #import "ReportOrderVsIntake.h"
 #import "ReportData.h"
+#import "ReportFilterSet.h"
 #import "ProductCategory.h"
 #import "Colour.h"
 #import "Material.h"
@@ -121,12 +122,10 @@
     if([type isEqualToString:@"CalYearWeek"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcalyearweeks"];
     if([type isEqualToString:@"Merch"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmerch"];
     if([type isEqualToString:@"Department"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getdepartments"];
-    if([type isEqualToString:@"ProductCategory"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcategories"];
-    if([type isEqualToString:@"Colour"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcolours"];
-    if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterials"];
-    if([type isEqualToString:@"Product"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getproducts"];
-    //if([type isEqualToString:@"Collection"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcollections"];
-    //if([type isEqualToString:@"ProductOrder"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getordering"];
+    //if([type isEqualToString:@"ProductCategory"]) url = [NSURL URLWithString:@"http://m.amazingfootwear.com/mstest.asmx/smTestGetCategories"];
+    //if([type isEqualToString:@"Colour"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcolours"];
+    //if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterials"];
+    //if([type isEqualToString:@"Product"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getproducts"];
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -134,6 +133,7 @@
         NSLog(@"%@ download error:%@", type, error.localizedDescription);
         return NO;
     }
+    
     
     NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
     if(results == nil) {
@@ -174,10 +174,11 @@
             department.depCode = [NSNumber numberWithInt:[result[@"DepCode"] intValue]];
             department.depDesc = result[@"Desc"];
         }
+        
         /*if([type isEqualToString:@"ProductCategory"]) {
             ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-            category.category2Ref = result[@"cat2Ref"];
-            category.categoryName = result[@"cat2Name"];
+            category.category2Ref = result[@"C2Ref"];
+            category.categoryName = result[@"C2Name"];
         }
         if([type isEqualToString:@"Colour"]) {
             Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
@@ -195,25 +196,12 @@
             product.productName = result[@"productName"];
             product.productNotes = result[@"productNotes"];
             product.productPrice = result[@"productPrice"];
-            product.productImageData = result[@"productImageData"];
-            product.brand = result[@"productBrand"];
-            product.supplier = result[@"productSupplier"];
-            product.category = result[@"productCategory"];
-            product.colour = result[@"productColour"];
-            product.material = result[@"productMaterial"];
-        }*/
-       /* if([type isEqualToString:@"Collection"]) {
-            Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
-            collection.collectionName= result[@"collectionName"];
-            collection.collectionCreator = result[@"collectionCreator"];
-            collection.collectionCreationDate = result[@"collectionCreationDate"];
-            collection.collectionNotes = result[@"collectionNotes"];
-        }
-        if([type isEqualToString:@"ProductOrder"]) {
-            ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:managedContext];
-            productOrder.productOrder= result[@"productOrder"];
-            productOrder.orderCollection = result[@"product"];
-            productOrder.orderProduct = result[@"collection"];
+            //product.productImageData = result[@"productImageData"];
+            //product.brand = result[@"productBrand"];
+           // product.supplier = result[@"productSupplier"];
+           // product.category = result[@"productCategory"];
+           // product.colour = result[@"productColour"];
+           // product.material = result[@"productMaterial"];
         }*/
         
     }
