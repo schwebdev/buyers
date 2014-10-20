@@ -74,7 +74,7 @@ static const float kProductColumnSpacer = 14.0;
     [allUsersButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [allUsersButton setSelected:YES];
     [allUsersButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-    [allUsersButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [allUsersButton setImage:[UIImage imageNamed:@"checkbox-checked-search.png"] forState:UIControlStateSelected];
     [allUsersButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
 
     yourOwnButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 0, 100, 24)];
@@ -83,7 +83,7 @@ static const float kProductColumnSpacer = 14.0;
     [yourOwnButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [yourOwnButton setSelected:NO];
     [yourOwnButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [yourOwnButton setImage:[UIImage imageNamed:@"checkbox-checked-search.png"] forState:UIControlStateSelected];
     [yourOwnButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -130,6 +130,11 @@ static const float kProductColumnSpacer = 14.0;
     
 }
 - (void) filter {
+    //dimiss the keyboard
+    if([txtSearch isFirstResponder]) {
+        [txtSearch resignFirstResponder];
+    }
+    
     [numCollections removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {

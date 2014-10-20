@@ -134,6 +134,8 @@
 		0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9566B1990CF3200CD45D5 /* CollectionListViewController.m */; };
 		0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956711990CF3200CD45D5 /* SidebarViewController.m */; };
 		0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956771990F28500CD45D5 /* HomeViewController.m */; };
+		5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */; };
+		5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */; };
 		5B14383519ADE40800A68865 /* CollectionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14383419ADE40800A68865 /* CollectionButton.m */; };
 		5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35503019A49CF40031E33C /* CoreData.framework */; };
 		5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */; };
@@ -359,6 +361,8 @@
 		0BC956711990CF3200CD45D5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
 		0BC956761990F28500CD45D5 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		0BC956771990F28500CD45D5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search.png"; sourceTree = "<group>"; };
+		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
 		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionButton.h; path = Buyers/CollectionButton.h; sourceTree = "<group>"; };
 		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionButton.m; path = Buyers/CollectionButton.m; sourceTree = "<group>"; };
 		5B35503019A49CF40031E33C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -664,6 +668,8 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
+				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
+				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
 				5B9F973819F0156600DCE963 /* Product.h */,
 				5B9F973919F0156600DCE963 /* Product.m */,
 				0B52FC9619ED69C200D1D747 /* check.png */,
@@ -959,6 +965,7 @@
 				0B970B48199376C9006D0358 /* d6.png in Resources */,
 				0B970B53199376C9006D0358 /* h3.png in Resources */,
 				0B970B5B199376C9006D0358 /* s1.png in Resources */,
+				5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */,
 				0B970B5D199376C9006D0358 /* s11.png in Resources */,
 				0B970B4C199376C9006D0358 /* ec.png in Resources */,
 				0B9F71A61994FF53003AE1BE /* homeSyncRed.png in Resources */,
@@ -1000,6 +1007,7 @@
 				C618D3A219DEEC7F005977D6 /* gallery.png in Resources */,
 				5BA0951919B61E5B006C1782 /* 1159074370_main.jpg in Resources */,
 				0B52FC9B19ED69C200D1D747 /* check@2x.png in Resources */,
+				5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */,
 				0B9F71B019951099003AE1BE /* schuhMenuIcon-S.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

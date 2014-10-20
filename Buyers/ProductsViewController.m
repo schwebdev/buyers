@@ -7,6 +7,7 @@
 //
 
 #import "ProductsViewController.h"
+#import "ProductViewController.h"
 #import "AddNewProductViewController.h"
 #import "CollectionListViewController.h"
 #import "SWRevealViewController.h"
@@ -21,11 +22,11 @@
 
 
 static const float kColumnWidth = 200.0;
-static const float kRowHeight = 180.0;
+static const float kRowHeight = 184.0;
 static const float kButtonWidth = 150.0;
 static const float kButtonHeight = 150.0;
 static const float kPageWidth = 680.0;
-static const float kPageHeight = 540.0;
+static const float kPageHeight = 552.0;
 static const float kProductColumnSpacer = 30.0;
 
 static const float sColumnWidth = 150.0;
@@ -176,7 +177,7 @@ static const float sProductColumnSpacer = 5.0;
     [allProductsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [allProductsButton setSelected:YES];
     [allProductsButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-    [allProductsButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [allProductsButton setImage:[UIImage imageNamed:@"checkbox-checked-search.png"] forState:UIControlStateSelected];
     [allProductsButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     customProductsButton = [[UIButton alloc] initWithFrame:CGRectMake(-11, 0, 100, 24)];
@@ -185,7 +186,7 @@ static const float sProductColumnSpacer = 5.0;
     [customProductsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
     [customProductsButton setSelected:NO];
     [customProductsButton setImage:[UIImage imageNamed:@"checkbox.png"] forState:UIControlStateNormal];
-    [customProductsButton setImage:[UIImage imageNamed:@"checkbox-checked.png"] forState:UIControlStateSelected];
+    [customProductsButton setImage:[UIImage imageNamed:@"checkbox-checked-search.png"] forState:UIControlStateSelected];
     [customProductsButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
     
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
@@ -194,7 +195,7 @@ static const float sProductColumnSpacer = 5.0;
     [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
-    
+
     txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
     
     [tools addSubview:allProductsButton];
@@ -266,7 +267,7 @@ static const float sProductColumnSpacer = 5.0;
 - (void)fetchResults
 {
     UIView *productListView;
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(20, 160, kPageWidth, kPageHeight)];
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(20, 140, kPageWidth, kPageHeight)];
     scrollView.pagingEnabled = NO;
     scrollView.tag = 888888888;
     
@@ -343,12 +344,25 @@ static const float sProductColumnSpacer = 5.0;
             productTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
             productTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
             productTitle.textColor = [UIColor colorWithRed:136.0/255.0 green:136.0/255.0 blue:136.0/255.0 alpha:1];
-            productTitle.numberOfLines = 2;
+            productTitle.numberOfLines = 1;
             productTitle.textAlignment = NSTextAlignmentCenter;
-            CGRect frameTitle = CGRectMake(x+((col -1) * kProductColumnSpacer),y+(kButtonHeight+2.0), kButtonWidth, 20.0);
+            CGRect frameTitle = CGRectMake(x+((col -1) * kProductColumnSpacer),y+(kButtonHeight+2.0), kButtonWidth, 18.0);
             productTitle.frame = frameTitle;
             [productListView addSubview:productTitle];
             
+            UIButton *detailsButton = [[UIButton alloc] initWithFrame:CGRectMake(x+((col -1) * kProductColumnSpacer), y+(kButtonHeight+20.0), kButtonWidth, 14.0)];
+            [detailsButton setTitle:@"More details..." forState:UIControlStateNormal];
+            detailsButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 10.0];
+            [detailsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [detailsButton setTag:p];
+            [detailsButton addTarget:self action:@selector(viewProductDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [productListView addSubview:detailsButton];
+
+            
+            if([selectedProducts containsObject:productElement]){
+                //add opacity
+                productButton.layer.opacity = 0.1;
+            }
             col++;
             
             if(col > 3) {
@@ -391,6 +405,11 @@ static const float sProductColumnSpacer = 5.0;
 }
 
 - (void) filter {
+    
+    //dimiss the keyboard
+    if([txtSearch isFirstResponder]) {
+        [txtSearch resignFirstResponder];
+    }
     
     [numProducts removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
@@ -436,6 +455,13 @@ static const float sProductColumnSpacer = 5.0;
         [self constructsProducts]; //call method to redraw
     }
     
+    
+}
+- (void)viewProductDetails:(id)sender {
+    Product *p = [products objectAtIndex:((UIControl*)sender).tag];
+    ProductViewController *detailsView =  [self.storyboard instantiateViewControllerWithIdentifier:@"productDetails"];
+    detailsView.product = p;
+    [self.navigationController pushViewController:detailsView animated:YES];
     
 }
 - (void)removeProductFromSelection:(id)sender {

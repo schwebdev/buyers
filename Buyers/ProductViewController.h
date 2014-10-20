@@ -49,7 +49,6 @@
 
 @property (nonatomic,strong) UIImage *selectedImage;
 
-- (IBAction)editImage:(id)sender;
 - (void)saveCustomProduct:(id)sender;
 - (void)deleteCustomProduct:(id)sender;
 -(IBAction)saveProductNotes:(id)sender;
