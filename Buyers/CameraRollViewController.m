@@ -93,7 +93,7 @@
     }
     
     if([self.sourceController isKindOfClass:[ProductViewController class]]) {
-        AddNewProductViewController *vc = (ProductViewController *)self.sourceController;
+        ProductViewController *vc = (ProductViewController *)self.sourceController;
         vc.selectedImage = image;
     }
     

@@ -19,6 +19,7 @@
 #import "Merch.h"
 
 #import "Report.h"
+#import "ReportFilterSet.h"
 #import "ReportOrderVsIntake.h"
 #import "ReportData.h"
 #import "ProductCategory.h"

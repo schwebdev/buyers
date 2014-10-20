@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="d40-Gm-g4r">
     <dependencies>
-        <deployment defaultVersion="1808" identifier="iOS"/>
+        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -1263,7 +1263,7 @@
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Iee-UA-r4a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-4806" y="953"/>
+            <point key="canvasLocation" x="-4666" y="781"/>
         </scene>
         <!--Camera Roll View Controller-->
         <scene sceneID="o78-PC-Dja">
@@ -1330,8 +1330,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="rP8-em-8Oe">
-                                <rect key="frame" x="150" y="100" width="450" height="450"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="rP8-em-8Oe">
+                                <rect key="frame" x="100" y="130" width="450" height="450"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="product name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="PLk-DM-4R1">
@@ -1432,19 +1432,6 @@
                                 <color key="textColor" red="0.49803921569999998" green="0.68627450980000004" blue="0.086274509799999996" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" id="Eza-Lb-Xbo">
-                                <rect key="frame" x="20" y="100" width="100" height="38"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="18"/>
-                                <inset key="contentEdgeInsets" minX="4" minY="0.0" maxX="4" maxY="0.0"/>
-                                <state key="normal" title="edit image">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="editImage:" destination="sbc-LY-dl6" eventType="touchUpInside" id="Mmi-Iw-2HG"/>
-                                </connections>
-                            </button>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="h1Y-TZ-NKD">
                                 <rect key="frame" x="720" y="587" width="200" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -1502,7 +1489,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" id="dd9-5A-HR2">
-                                <rect key="frame" x="150" y="629" width="157" height="50"/>
+                                <rect key="frame" x="100" y="600" width="157" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
@@ -1510,9 +1497,12 @@
                                 <state key="normal" title=" take photo" image="camera.png">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="useCamera:" destination="sbc-LY-dl6" eventType="touchUpInside" id="VnW-QU-aBV"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" id="z8q-1q-NUp">
-                                <rect key="frame" x="443" y="629" width="157" height="50"/>
+                                <rect key="frame" x="393" y="600" width="157" height="50"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.1305742446" green="0.061196141689999997" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
@@ -1531,7 +1521,6 @@
                     <connections>
                         <outlet property="btnUseCamera" destination="dd9-5A-HR2" id="fhI-vs-Lqa"/>
                         <outlet property="btnUseCameraRoll" destination="z8q-1q-NUp" id="FaY-uz-rKP"/>
-                        <outlet property="editImageButton" destination="Eza-Lb-Xbo" id="GZ2-Yn-ihe"/>
                         <outlet property="productBrand" destination="MVa-a5-MDp" id="vAq-6F-mtr"/>
                         <outlet property="productBrand_edit" destination="XSl-mI-2GQ" id="C48-g1-DGa"/>
                         <outlet property="productCategory" destination="qNR-uG-wPv" id="aea-oI-dYn"/>
@@ -1553,7 +1542,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZVe-LF-I2F" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-5954" y="1023"/>
+            <point key="canvasLocation" x="-6042" y="871"/>
         </scene>
         <!--Add New Product View Controller-->
         <scene sceneID="FdH-VE-JHq">
@@ -1564,7 +1553,7 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="camera_lg.png" id="3qZ-4s-rT8">
-                                <rect key="frame" x="101" y="131" width="450" height="450"/>
+                                <rect key="frame" x="101" y="130" width="450" height="450"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="product name" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="EzZ-qT-0pR">
@@ -2400,10 +2389,10 @@
         <simulatedScreenMetrics key="destination"/>
     </simulatedMetricsContainer>
     <inferredMetricsTieBreakers>
-        <segue reference="7Z4-4L-HFI"/>
-        <segue reference="aGa-ph-cAx"/>
-        <segue reference="GDM-t3-wVL"/>
         <segue reference="xii-QN-o1o"/>
+        <segue reference="GDM-t3-wVL"/>
+        <segue reference="aGa-ph-cAx"/>
+        <segue reference="7Z4-4L-HFI"/>
         <segue reference="8zL-Jv-JNu"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>

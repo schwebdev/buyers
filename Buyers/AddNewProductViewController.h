@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "BaseViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "SchTextField.h"
 #import "SchDropDown.h"
 
-@interface AddNewProductViewController : UIViewController <UIImagePickerControllerDelegate,
+@interface AddNewProductViewController : BaseViewController <UIImagePickerControllerDelegate,
 UINavigationControllerDelegate,UITextFieldDelegate>
 @property BOOL newMedia;
 @property BOOL isValid;

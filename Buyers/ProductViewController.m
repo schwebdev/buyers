@@ -18,11 +18,13 @@
 #import "AppDelegate.h"
 #import "Sync.h"
 #import "CameraRollViewController.h"
+#import "UIImage+Resize.h"
 
 static const float kPageWidth = 680.0;
 
 @interface ProductViewController ()
 
+@property UIImagePickerController *imagePicker;
 @end
 
 @implementation ProductViewController
@@ -31,7 +33,7 @@ static const float kPageWidth = 680.0;
 @synthesize product = _product;
 @synthesize displayNotesPopover = _displayNotesPopover;
 @synthesize productNotes = _productNotes;
-UIImage *image;
+
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -50,7 +52,6 @@ UIImage *image;
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
-    self.editImageButton.hidden = YES;
     self.productName_edit.hidden = YES;
     self.productPrice_edit.hidden=YES;
     
@@ -360,7 +361,7 @@ UIImage *image;
     if(_selectedImage !=nil){
         imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
     }else{
-        imageData = _product.productImageData;
+        imageData = [NSData dataWithData:UIImageJPEGRepresentation(self.productImage.image, 1)];
         
     }
     
@@ -376,13 +377,17 @@ UIImage *image;
 
     if(_isValid){
         if(![managedContext save:&error]) {
-        NSLog(@"Could not save product: %@", [error localizedDescription]);
+            NSLog(@"Could not save product: %@", [error localizedDescription]);
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alert show];
 
-    }else{
-        //alert user that product has been saved
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product" message:@"The product changes have been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alert show];
-    }
+        }else{
+            //alert user that product has been saved
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product" message:@"The product changes have been saved." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+            [alert show];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+        }
     }else{
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
         [alert show];
@@ -433,8 +438,6 @@ UIImage *image;
 
 
 
-- (IBAction)editImage:(id)sender {
-}
 
 
 
@@ -467,4 +470,135 @@ UIImage *image;
     
     [UIView commitAnimations];
 }
+
+
+
+- (IBAction)useCamera:(id)sender
+{
+    if ([UIImagePickerController isSourceTypeAvailable:
+         UIImagePickerControllerSourceTypeCamera])
+    {
+        self.imagePicker = [[UIImagePickerController alloc] init];
+        
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
+        self.imagePicker.allowsEditing = NO;
+        //imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn; //UIImagePickerControllerCameraFlashModeAuto;
+        self.imagePicker.showsCameraControls = NO;
+        
+        //        CGRect f = self.imagePicker.view.bounds;
+        //        f.size.height -= self.imagePicker.navigationBar.bounds.size.height;
+        //        //f.size.width = f.size.height;
+        //        CGFloat barHeight = (f.size.height - f.size.width) / 2;
+        //        UIGraphicsBeginImageContext(f.size);
+        //        [[UIColor colorWithWhite:0 alpha:.5] set];
+        //        UIRectFillUsingBlendMode(CGRectMake(0, 0, f.size.width, barHeight), kCGBlendModeNormal);
+        //        UIRectFillUsingBlendMode(CGRectMake(0, f.size.height - barHeight, f.size.width, barHeight), kCGBlendModeNormal);
+        //        UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
+        //        UIGraphicsEndImageContext();
+        //
+        //        UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:self.imagePicker.view.bounds];
+        //        overlayIV.image = overlayImage;
+        //        [self.imagePicker.cameraOverlayView addSubview:overlayIV];
+        
+        UIView *overlayView = [[UIView alloc] initWithFrame:self.imagePicker.view.frame];
+        [self.imagePicker.cameraOverlayView addSubview:overlayView];
+        
+        CGFloat borderWidth = (self.imagePicker.view.frame.size.width - self.imagePicker.view.frame.size.height)/2;
+        
+        CALayer *leftBorder = [CALayer layer];
+        leftBorder.frame = CGRectMake(0, 0, borderWidth, 768);
+        leftBorder.backgroundColor = [UIColor blackColor].CGColor;
+        [overlayView.layer addSublayer:leftBorder];
+        
+        
+        CALayer *rightBorder = [CALayer layer];
+        rightBorder.frame = CGRectMake(1024 - borderWidth, 0, borderWidth, 768);
+        rightBorder.backgroundColor = [UIColor blackColor].CGColor;
+        [overlayView.layer addSublayer:rightBorder];
+        
+        
+        UIButton *takePhotoButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [takePhotoButton setTitle:@"take photo" forState:UIControlStateNormal];
+        takePhotoButton.frame = CGRectMake(914, 359, 100, 50);
+        [takePhotoButton addTarget:self action:@selector(takePhoto:) forControlEvents:UIControlEventTouchUpInside];
+        takePhotoButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        takePhotoButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+        [overlayView addSubview:takePhotoButton];
+        
+        UIButton *cancelPhotoButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelPhotoButton setTitle:@"cancel" forState:UIControlStateNormal];
+        cancelPhotoButton.frame = CGRectMake(914, 444, 100, 50);
+        [cancelPhotoButton addTarget:self action:@selector(cancelPhoto:) forControlEvents:UIControlEventTouchUpInside];
+        cancelPhotoButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        cancelPhotoButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+        [overlayView addSubview:cancelPhotoButton];
+        
+        
+        self.imagePicker.delegate = self;
+        [self presentViewController:self.imagePicker animated:YES completion:nil];
+        
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeCameraOverlay) name:@"_UIImagePickerControllerUserDidCaptureItem" object:nil];
+    }
+}
+
+- (IBAction)takePhoto:(id)sender {
+    [self.imagePicker takePicture];
+}
+
+- (IBAction)cancelPhoto:(id)sender {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+-(void)imagePickerController:(UIImagePickerController *)picker
+didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    NSString *mediaType = info[UIImagePickerControllerMediaType];
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+    
+    if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
+        //image = info[UIImagePickerControllerOriginalImage];
+        
+        UIImage *originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImage *scaledImage = [originalImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(450.0f, 450.0f) interpolationQuality:kCGInterpolationHigh];
+        
+        UIImage *croppedImage = [scaledImage croppedImage:CGRectMake((scaledImage.size.width - 450.0f)/2, (scaledImage.size.height - 450.0f)/2, 450.0f, 450.0f)];
+        
+        
+        self.productImage.image = croppedImage;
+        
+        //image = croppedImage;
+        
+        UIImageWriteToSavedPhotosAlbum(croppedImage,
+                                           self,
+                                           @selector(image:finishedSavingWithError:contextInfo:),
+                                           nil);
+    }
+    else if ([mediaType isEqualToString:(NSString *)kUTTypeMovie])
+    {
+        // Code here to support video if enabled
+    }
+}
+
+-(void)image:(UIImage *)image
+finishedSavingWithError:(NSError *)error
+ contextInfo:(void *)contextInfo
+{
+    if (error) {
+        UIAlertView *alert = [[UIAlertView alloc]
+                              initWithTitle: @"Save failed"
+                              message: @"Failed to save image"
+                              delegate: nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil];
+        [alert show];
+    }
+}
+-(void)imagePickerControllerDidCancel:(UIImagePickerController *)picker
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 @end

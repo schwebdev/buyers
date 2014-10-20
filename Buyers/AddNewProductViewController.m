@@ -18,6 +18,7 @@
 #import "Sync.h"
 
 #import "CameraRollViewController.h"
+#import "UIImage+Resize.h"
 
 static const float kPageWidth = 680.0;
 
@@ -30,6 +31,7 @@ static const float kPageWidth = 680.0;
     NSArray *material;
 }
 
+@property UIImagePickerController *imagePicker;
 @end
 
 @implementation AddNewProductViewController
@@ -114,36 +116,88 @@ static const float kPageWidth = 680.0;
     if ([UIImagePickerController isSourceTypeAvailable:
          UIImagePickerControllerSourceTypeCamera])
     {
-        UIImagePickerController *imagePicker = [[UIImagePickerController alloc] init];
+        self.imagePicker = [[UIImagePickerController alloc] init];
         
-        imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
-        imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
-        ///imagePicker.allowsEditing = NO;
+        self.imagePicker.sourceType = UIImagePickerControllerSourceTypeCamera;
+        self.imagePicker.mediaTypes = @[(NSString *) kUTTypeImage];
+        self.imagePicker.allowsEditing = NO;
         //imagePicker.cameraFlashMode = UIImagePickerControllerCameraFlashModeOn; //UIImagePickerControllerCameraFlashModeAuto;
-        //imagePicker.showsCameraControls = YES;
+       self.imagePicker.showsCameraControls = NO;
         
-        CGRect f = imagePicker.view.bounds;
-        f.size.height -= imagePicker.navigationBar.bounds.size.height;
-        //f.size.width = f.size.height;
-        CGFloat barHeight = (f.size.height - f.size.width) / 2;
-        UIGraphicsBeginImageContext(f.size);
-        [[UIColor colorWithWhite:0 alpha:.5] set];
-        UIRectFillUsingBlendMode(CGRectMake(0, 0, f.size.width, barHeight), kCGBlendModeNormal);
-        UIRectFillUsingBlendMode(CGRectMake(0, f.size.height - barHeight, f.size.width, barHeight), kCGBlendModeNormal);
-        UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
+//        CGRect f = self.imagePicker.view.bounds;
+//        f.size.height -= self.imagePicker.navigationBar.bounds.size.height;
+//        //f.size.width = f.size.height;
+//        CGFloat barHeight = (f.size.height - f.size.width) / 2;
+//        UIGraphicsBeginImageContext(f.size);
+//        [[UIColor colorWithWhite:0 alpha:.5] set];
+//        UIRectFillUsingBlendMode(CGRectMake(0, 0, f.size.width, barHeight), kCGBlendModeNormal);
+//        UIRectFillUsingBlendMode(CGRectMake(0, f.size.height - barHeight, f.size.width, barHeight), kCGBlendModeNormal);
+//        UIImage *overlayImage = UIGraphicsGetImageFromCurrentImageContext();
+//        UIGraphicsEndImageContext();
+//        
+//        UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:self.imagePicker.view.bounds];
+//        overlayIV.image = overlayImage;
+//        [self.imagePicker.cameraOverlayView addSubview:overlayIV];
         
-        UIImageView *overlayIV = [[UIImageView alloc] initWithFrame:f];
-        overlayIV.image = overlayImage;
-        [imagePicker.cameraOverlayView addSubview:overlayIV];
+        UIView *overlayView = [[UIView alloc] initWithFrame:self.imagePicker.view.frame];
+        [self.imagePicker.cameraOverlayView addSubview:overlayView];
         
-        imagePicker.delegate = self;
-        [self presentViewController:imagePicker animated:YES completion:nil];
+        CGFloat borderWidth = (self.imagePicker.view.frame.size.width - self.imagePicker.view.frame.size.height)/2;
+        
+        CALayer *leftBorder = [CALayer layer];
+        leftBorder.frame = CGRectMake(0, 0, borderWidth, 768);
+        leftBorder.backgroundColor = [UIColor blackColor].CGColor;
+        [overlayView.layer addSublayer:leftBorder];
+        
+        
+        CALayer *rightBorder = [CALayer layer];
+        rightBorder.frame = CGRectMake(1024 - borderWidth, 0, borderWidth, 768);
+        rightBorder.backgroundColor = [UIColor blackColor].CGColor;
+        [overlayView.layer addSublayer:rightBorder];
+        
+        
+        UIButton *takePhotoButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [takePhotoButton setTitle:@"take photo" forState:UIControlStateNormal];
+        takePhotoButton.frame = CGRectMake(914, 359, 100, 50);
+        [takePhotoButton addTarget:self action:@selector(takePhoto:) forControlEvents:UIControlEventTouchUpInside];
+        takePhotoButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        takePhotoButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+        [overlayView addSubview:takePhotoButton];
+        
+        UIButton *cancelPhotoButton=[UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelPhotoButton setTitle:@"cancel" forState:UIControlStateNormal];
+        cancelPhotoButton.frame = CGRectMake(914, 444, 100, 50);
+        [cancelPhotoButton addTarget:self action:@selector(cancelPhoto:) forControlEvents:UIControlEventTouchUpInside];
+        cancelPhotoButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+        cancelPhotoButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+        [overlayView addSubview:cancelPhotoButton];
+        
+        
+        self.imagePicker.delegate = self;
+        [self presentViewController:self.imagePicker animated:YES completion:nil];
         _newMedia = YES;
         _isDirtyImage = YES;
+        
+        //[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(removeCameraOverlay) name:@"_UIImagePickerControllerUserDidCaptureItem" object:nil];
     }
 }
 
+- (IBAction)takePhoto:(id)sender {
+    [self.imagePicker takePicture];
+}
+
+- (IBAction)cancelPhoto:(id)sender {
+    
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+//-(void)removeCameraOverlay {
+//    self.imagePicker.cameraOverlayView = nil;
+//    
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
+//    
+//    [self.imagePicker takePicture];
+//}
 /*- (void) useCameraRoll:(id)sender
 {
     if ([UIImagePickerController isSourceTypeAvailable:
@@ -298,11 +352,13 @@ static const float kPageWidth = 680.0;
                  [errorMsg appendString:@"Product saved successfully\n"];
                  UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"success" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
                  [alert show];
+                 
+                 [self.navigationController popViewControllerAnimated:YES];
              }
          }else{
              UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
              [alert show];
-            }
+        }
     
     
     
@@ -328,6 +384,8 @@ static const float kPageWidth = 680.0;
 #pragma mark -
 #pragma mark UIImagePickerControllerDelegate
 
+
+
 -(void)imagePickerController:(UIImagePickerController *)picker
 didFinishPickingMediaWithInfo:(NSDictionary *)info
 {
@@ -336,11 +394,19 @@ didFinishPickingMediaWithInfo:(NSDictionary *)info
     [self dismissViewControllerAnimated:YES completion:nil];
     
     if ([mediaType isEqualToString:(NSString *)kUTTypeImage]) {
-        image = info[UIImagePickerControllerOriginalImage];
+        //image = info[UIImagePickerControllerOriginalImage];
         
-        _cameraView.image = image;
+        UIImage *originalImage = [info objectForKey:UIImagePickerControllerOriginalImage];
+        UIImage *scaledImage = [originalImage resizedImageWithContentMode:UIViewContentModeScaleAspectFill bounds:CGSizeMake(450.0f, 450.0f) interpolationQuality:kCGInterpolationHigh];
+        
+        UIImage *croppedImage = [scaledImage croppedImage:CGRectMake((scaledImage.size.width - 450.0f)/2, (scaledImage.size.height - 450.0f)/2, 450.0f, 450.0f)];
+        
+        
+        _cameraView.image = croppedImage;
+        
+        image = croppedImage;
         if (_newMedia)
-            UIImageWriteToSavedPhotosAlbum(image,
+            UIImageWriteToSavedPhotosAlbum(croppedImage,
                                            self,
                                            @selector(image:finishedSavingWithError:contextInfo:),
                                            nil);

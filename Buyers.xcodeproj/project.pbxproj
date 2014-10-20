@@ -39,6 +39,9 @@
 		0B7630A3199E0BCD00949155 /* OrderVsIntakeReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630A2199E0BCD00949155 /* OrderVsIntakeReportViewController.m */; };
 		0B7630A619A2121700949155 /* ReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B7630A519A2121700949155 /* ReportViewController.m */; };
 		0B7630A919A247DF00949155 /* OrderVsIntake.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B7630A819A247DF00949155 /* OrderVsIntake.html */; };
+		0B825E6419F5003B00939512 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6319F5003B00939512 /* UIImage+Resize.m */; };
+		0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6619F5034100939512 /* UIImage+Alpha.m */; };
+		0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */; };
 		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
 		0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */; };
 		0B970B32199376C9006D0358 /* c1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF3199376C9006D0358 /* c1.png */; };
@@ -244,6 +247,12 @@
 		0B7630A419A2121700949155 /* ReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ReportViewController.h; sourceTree = "<group>"; };
 		0B7630A519A2121700949155 /* ReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ReportViewController.m; sourceTree = "<group>"; };
 		0B7630A819A247DF00949155 /* OrderVsIntake.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = OrderVsIntake.html; sourceTree = "<group>"; };
+		0B825E6219F5003B00939512 /* UIImage+Resize.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Resize.h"; sourceTree = "<group>"; };
+		0B825E6319F5003B00939512 /* UIImage+Resize.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Resize.m"; sourceTree = "<group>"; };
+		0B825E6519F5034100939512 /* UIImage+Alpha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Alpha.h"; sourceTree = "<group>"; };
+		0B825E6619F5034100939512 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
+		0B825E6719F5034100939512 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
+		0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalYearWeek.h; path = Buyers/CalYearWeek.h; sourceTree = "<group>"; };
 		0B92CDC019D046A6007B7FDB /* CalYearWeek.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalYearWeek.m; path = Buyers/CalYearWeek.m; sourceTree = "<group>"; };
 		0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportOrderVsIntake.h; path = Buyers/ReportOrderVsIntake.h; sourceTree = "<group>"; };
@@ -626,6 +635,12 @@
 		0B970B6F1993770E006D0358 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0B825E6519F5034100939512 /* UIImage+Alpha.h */,
+				0B825E6619F5034100939512 /* UIImage+Alpha.m */,
+				0B825E6719F5034100939512 /* UIImage+RoundedCorner.h */,
+				0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */,
+				0B825E6219F5003B00939512 /* UIImage+Resize.h */,
+				0B825E6319F5003B00939512 /* UIImage+Resize.m */,
 				0B288ABE19BE031400F62B63 /* Reachability.h */,
 				0B288ABF19BE031400F62B63 /* Reachability.m */,
 				0B288A6B19B9C80B00F62B63 /* SchDropDown.h */,
@@ -655,9 +670,7 @@
 				0B52FC9719ED69C200D1D747 /* check@2x.png */,
 				0B52FC9819ED69C200D1D747 /* checkMarked.png */,
 				0B52FC9919ED69C200D1D747 /* checkMarked@2x.png */,
-				C60A7B0519E7FED1000ABE88 /* Colour.h */,
 				C60A7B0619E7FED1000ABE88 /* Colour.m */,
-				C60A7B0219E7FEB0000ABE88 /* ProductCategory.h */,
 				C60A7B0319E7FEB0000ABE88 /* ProductCategory.m */,
 				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
 				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
@@ -1011,6 +1024,7 @@
 				C6B9A7A319DD6A1900C832A1 /* AddNewProductViewController.m in Sources */,
 				C6B9A7A419DD6A1900C832A1 /* ProductNotesViewController.m in Sources */,
 				0BC95642198FDABD00CD45D5 /* AppDelegate.m in Sources */,
+				0B825E6419F5003B00939512 /* UIImage+Resize.m in Sources */,
 				5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */,
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
@@ -1021,8 +1035,10 @@
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
 				0BC9563E198FDABD00CD45D5 /* main.m in Sources */,
 				0B288ABD19BDF06500F62B63 /* Brand.m in Sources */,
+				0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */,
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
+				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,

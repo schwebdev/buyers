@@ -7,17 +7,19 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MobileCoreServices/MobileCoreServices.h>
+#import "BaseViewController.h"
 #import "Product.h"
 #import "Collection.h"
 #import "ProductNotesViewController.h"
 #import "SchDropDown.h"
 #import "SchTextField.h"
 
-@interface ProductViewController : UIViewController <ProductNotesViewControllerDelegate,UITextFieldDelegate> {
+@interface ProductViewController : BaseViewController <ProductNotesViewControllerDelegate,UITextFieldDelegate, UIImagePickerControllerDelegate> {
     UIPopoverController *_displayNotesPopover;
     ProductNotesViewController *_productNotes;
 }
-@property (weak, nonatomic) IBOutlet UIButton *editImageButton;
+
 @property (weak, nonatomic) IBOutlet UIButton *btnUseCamera;
 @property (weak, nonatomic) IBOutlet UIButton *btnUseCameraRoll;
 @property BOOL isValid;
