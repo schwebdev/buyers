@@ -319,8 +319,18 @@ static const float kProductColumnSpacer = 14.0;
              
             /*Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
-             material.materialName = @"man-made";
+             material.materialName = @"man made";
+             material.materialRef = [NSNumber numberWithInt:60];
+                
+                material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
+                
+             material.materialName = @"leather";
              material.materialRef = [NSNumber numberWithInt:20];
+                
+                material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
+                
+                material.materialName = @"fabric";
+                material.materialRef = [NSNumber numberWithInt:70];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save material: %@", [error localizedDescription]);
@@ -329,8 +339,19 @@ static const float kProductColumnSpacer = 14.0;
              
              Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
              
-             colour.colourName = @"multi";
-             colour.colourRef = [NSNumber numberWithInt:10];
+                colour.colourName = @"multi";
+                colour.colourRef = [NSNumber numberWithInt:99];
+                
+                colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
+                
+                colour.colourName = @"clear";
+                colour.colourRef = [NSNumber numberWithInt:0];
+                
+                colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
+                
+             colour.colourName = @"stone";
+             colour.colourRef = [NSNumber numberWithInt:11];
+                
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save colour: %@", [error localizedDescription]);
@@ -340,7 +361,16 @@ static const float kProductColumnSpacer = 14.0;
              ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
              
              category.categoryName = @"high heels";
-             category.category2Ref = [NSNumber numberWithInt:7];
+             category.category2Ref = [NSNumber numberWithInt:110];
+                
+                 category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
+                
+                category.categoryName = @"low heels";
+                category.category2Ref = [NSNumber numberWithInt:120];
+                
+                 category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
+                category.categoryName = @"boots";
+                category.category2Ref = [NSNumber numberWithInt:140];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save category: %@", [error localizedDescription]);
@@ -383,13 +413,13 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"black & white cheeky moose tweed";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.brand = [brands objectAtIndex:0];
-                product.category = [categories objectAtIndex:0];
-                product.colour = [colours objectAtIndex:0];
-                product.material = [materials objectAtIndex:0];
-                product.supplier = [suppliers objectAtIndex:0];
+                product.brand = [brands objectAtIndex:1];
+                product.category = [categories objectAtIndex:1];
+                product.colour = [colours objectAtIndex:1];
+                product.material = [materials objectAtIndex:1];
+                product.supplier = [suppliers objectAtIndex:1];
                 //add image
-                image = [UIImage imageNamed:@"1159167270_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                image = [UIImage imageNamed:@"1159167270_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
                 product.productImageData = imageData;
                 
@@ -398,13 +428,13 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"black cheeky moose glitter";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.brand = [brands objectAtIndex:0];
-                product.category = [categories objectAtIndex:0];
-                product.colour = [colours objectAtIndex:0];
-                product.material = [materials objectAtIndex:0];
-                product.supplier = [suppliers objectAtIndex:0];
+                product.brand = [brands objectAtIndex:2];
+                product.category = [categories objectAtIndex:2];
+                product.colour = [colours objectAtIndex:2];
+                product.material = [materials objectAtIndex:2];
+                product.supplier = [suppliers objectAtIndex:2];
                 //add image
-                image = [UIImage imageNamed:@"1159167060_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                image = [UIImage imageNamed:@"1159167060_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
                 product.productImageData = imageData;
                 
@@ -413,13 +443,13 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"turquoise pinky perky court";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.brand = [brands objectAtIndex:0];
-                product.category = [categories objectAtIndex:0];
-                product.colour = [colours objectAtIndex:0];
-                product.material = [materials objectAtIndex:0];
-                product.supplier = [suppliers objectAtIndex:0];
+                product.brand = [brands objectAtIndex:2];
+                product.category = [categories objectAtIndex:2];
+                product.colour = [colours objectAtIndex:2];
+                product.material = [materials objectAtIndex:2];
+                product.supplier = [suppliers objectAtIndex:2];
                 //add image
-                image = [UIImage imageNamed:@"1159155670_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                image = [UIImage imageNamed:@"1159155670_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
                 product.productImageData = imageData;
                 
@@ -434,7 +464,7 @@ static const float kProductColumnSpacer = 14.0;
                 product.material = [materials objectAtIndex:0];
                 product.supplier = [suppliers objectAtIndex:0];
                 //add image
-                image = [UIImage imageNamed:@"1159053670_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                image = [UIImage imageNamed:@"1159053670_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
                 product.productImageData = imageData;
                 
@@ -443,13 +473,13 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"bloxy simba cat t-bar court";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.brand = [brands objectAtIndex:0];
-                product.category = [categories objectAtIndex:0];
-                product.colour = [colours objectAtIndex:0];
-                product.material = [materials objectAtIndex:0];
-                product.supplier = [suppliers objectAtIndex:0];
+                product.brand = [brands objectAtIndex:1];
+                product.category = [categories objectAtIndex:1];
+                product.colour = [colours objectAtIndex:1];
+                product.material = [materials objectAtIndex:1];
+                product.supplier = [suppliers objectAtIndex:1];
                 //add image
-                image = [UIImage imageNamed:@"1158985860_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
+                image = [UIImage imageNamed:@"1158985860_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
                 product.productImageData = imageData;
              

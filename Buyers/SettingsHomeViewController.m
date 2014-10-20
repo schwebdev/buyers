@@ -199,6 +199,20 @@
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:7/syncCount] waitUntilDone:YES];
         
     }
+    /*if(success) {
+        success = [Sync syncTable:@"ProductCategory"];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:8/syncCount] waitUntilDone:YES];
+    }*/
+    
+    /*if(success) {
+     success = [Sync syncTable:@"Colour"];
+     [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:9/syncCount] waitUntilDone:YES];
+     }*/
+    
+    /*if(success) {
+     success = [Sync syncTable:@"Material"];
+     [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:10/syncCount] waitUntilDone:YES];
+     }*/
     
     if(success) {
         
