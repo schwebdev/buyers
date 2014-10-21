@@ -610,7 +610,7 @@ static const float kProductColumnSpacer = 14.0;
             
             BOOL isLastPage = ((ic % 6 >= 0) && (ic - i == 1));
             
-            NSLog(@"page: %d isLastPage: %hhd modulus: %d ic-i: %d row: %d",page,isLastPage, (ic % 6 ), (ic - i), row );
+            //NSLog(@"page: %d isLastPage: %hhd modulus: %d ic-i: %d row: %d",page,isLastPage, (ic % 6 ), (ic - i), row );
             
             if(row > 2 && !isLastPage) {
                 //increment page number and add view to scroll view
