@@ -223,7 +223,6 @@
 }
 - (NSMutableArray *)constructsProducts {
     
-    [numProducts removeFromSuperview];
     
     NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
     //NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"productName" ascending:YES];
@@ -273,6 +272,7 @@
         productText = @"product";
         
     }
+    [numProducts removeFromSuperview];
     numProducts = [[UILabel alloc] init];
     numProducts.text = [NSString stringWithFormat: @"%d %@", [products count], productText];
     numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];

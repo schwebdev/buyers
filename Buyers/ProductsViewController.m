@@ -108,14 +108,14 @@ static const float sProductColumnSpacer = 5.0;
 //    
 //    [button addTarget:self action:@selector(addNewProduct:) forControlEvents:UIControlEventTouchUpInside];
 //
-    [numProducts removeFromSuperview];
+    /*[numProducts removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {
         if(view.tag == 888888888) {
             [view removeFromSuperview];
         }
         
-    }
+    }*/
     [self fetchResults];
     [self constructsProducts];
     
@@ -285,9 +285,9 @@ static const float sProductColumnSpacer = 5.0;
     
     if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && customProductsButton.selected) {
         //get only custom products
-        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productCode =''"]];
+        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productCode ='0000000000'"]];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && customProductsButton.selected) {
-        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='' %@", txtSearch.text, txtSearch.text]];
+        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='0000000000'", txtSearch.text, txtSearch.text]];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allProductsButton.selected) {
         products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productName CONTAINS[cd] %@ OR productName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
     } else {
@@ -299,6 +299,14 @@ static const float sProductColumnSpacer = 5.0;
     productText = @"products";
     if([products count] ==1) {
         productText = @"product";
+        
+    }
+    [numProducts removeFromSuperview];
+    //clear scroll view so it can be redrawn in case of changes
+    for(UIView *view in self.view.subviews) {
+        if(view.tag == 888888888) {
+            [view removeFromSuperview];
+        }
         
     }
     numProducts = [[UILabel alloc] init];
@@ -411,14 +419,14 @@ static const float sProductColumnSpacer = 5.0;
         [txtSearch resignFirstResponder];
     }
     
-    [numProducts removeFromSuperview];
+    /*[numProducts removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {
         if(view.tag == 888888888) {
             [view removeFromSuperview];
         }
         
-    }
+    }*/
     [self fetchResults];
     [selectedProducts removeAllObjects];
     [self constructsProducts];

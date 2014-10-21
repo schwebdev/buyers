@@ -135,6 +135,7 @@ static const float kProductColumnSpacer = 14.0;
         [txtSearch resignFirstResponder];
     }
     
+    /*
     [numCollections removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {
@@ -142,9 +143,9 @@ static const float kProductColumnSpacer = 14.0;
             [view removeFromSuperview];
         }
         
-    }
+    }*/
     [self fetchResults];
-    //NSLog(@"count %d", [collections count]);
+    NSLog(@"count %d", [collections count]);
     
 }
 
@@ -186,6 +187,16 @@ static const float kProductColumnSpacer = 14.0;
         collectionText = @"collection";
         
     }
+    
+    [numCollections removeFromSuperview];
+    //clear scroll view so it can be redrawn in case of changes
+    for(UIView *view in self.view.subviews) {
+        if(view.tag == 999999999) {
+            [view removeFromSuperview];
+        }
+        
+    }
+ 
     numCollections = [[UILabel alloc] init];
     numCollections.text = [NSString stringWithFormat: @"%d %@", [collections count], collectionText];
     numCollections.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
@@ -593,7 +604,9 @@ static const float kProductColumnSpacer = 14.0;
             
             [collectionListView addSubview:collectionButton];
             
-            BOOL isLastPage = ((ic % 9 > 0) && (ic - i == 1));
+            BOOL isLastPage = ((ic % 6 > 0) && (ic - i == 1));
+            
+            NSLog(@"isLastPage: %hhd modulus: %d ic-i: %d row: %d",isLastPage, (ic % 6 ), (ic - i), row );
             
             if(row > 2 && !isLastPage) {
                 //increment page number and add view to scroll view
@@ -636,6 +649,7 @@ static const float kProductColumnSpacer = 14.0;
             } else {
                 _downArrow.hidden=NO;
             }
+            NSLog(@"page: %d y: %f calc: %f",page,_scrollView.contentOffset.y, (_scrollView.contentSize.height - (kPageHeight*page)));
         }
         
     } else {
@@ -667,7 +681,22 @@ static const float kProductColumnSpacer = 14.0;
     //add notification to listen for the collection being saved and call method to close the pop over and go to collections view
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToNewCollection:) name:@"GoToNewCollection" object:nil];
 }
-
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    if(_scrollView.contentOffset.y == 0) {
+        _upArrow.hidden = YES;
+    } else {
+        
+        _upArrow.hidden=NO;
+    }
+    if(_scrollView.contentOffset.y == (_scrollView.contentSize.height - kPageHeight)) {
+        _downArrow.hidden = YES;
+        // NSLog(@"y: %f height: %f pageheight: %f" ,_scrollView.contentOffset.y, _scrollView.contentSize.height, kPageHeight);
+    } else {
+        _downArrow.hidden=NO;
+        
+    }
+    // NSLog(@"y: %f" ,_scrollView.contentOffset.y);
+}
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if(_scrollView.contentOffset.y == 0) {
         _upArrow.hidden = YES;
@@ -682,6 +711,7 @@ static const float kProductColumnSpacer = 14.0;
         _downArrow.hidden=NO;
        
     }
+    // NSLog(@"y: %f" ,_scrollView.contentOffset.y);
 }
 - (void)goToNewCollection:(NSNotification *)notification
 {
@@ -702,13 +732,13 @@ static const float kProductColumnSpacer = 14.0;
     [self.navigationController pushViewController:collectionViewController animated:YES];
      */
     
-    [numCollections removeFromSuperview];
+    /*[numCollections removeFromSuperview];
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
             [view removeFromSuperview];
         }
         
-    }
+    }*/
     [self fetchResults];
     
 }
@@ -778,7 +808,7 @@ static const float kProductColumnSpacer = 14.0;
             NSLog(@"Could not save deleted collections: %@", [error localizedDescription]);
             
         }
-        
+        /*
         [numCollections removeFromSuperview];
         //clear scroll view so it can be redrawn in case of changes
         for(UIView *view in self.view.subviews) {
@@ -786,8 +816,7 @@ static const float kProductColumnSpacer = 14.0;
                 [view removeFromSuperview];
             }
             
-        }
-    
+        }*/
         [self fetchResults];
         
     } else {
