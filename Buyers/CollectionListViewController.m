@@ -640,7 +640,6 @@ static const float kProductColumnSpacer = 14.0;
         [_downArrow setImage:[UIImage imageNamed:@"arrowDOWN.png"]];
         [self.view addSubview:_downArrow];
 
-        
         if(page > 0) {
             if(_scrollView.contentOffset.y == 0) {
                 _upArrow.hidden = YES;
