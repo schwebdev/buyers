@@ -115,17 +115,19 @@ static const float kProductColumnSpacer = 14.0;
 
     [_menu2 addTarget:self action:@selector(deleteCollections:) forControlEvents:UIControlEventTouchUpInside];
     
-}
-- (void) viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    //clear scroll view so it can be redrawn in case of changes
+    
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
-        [view removeFromSuperview];
+            [view removeFromSuperview];
         }
         
     }
     [self fetchResults];
+    
+}
+- (void) viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    //clear scroll view so it can be redrawn in case of changes
     //NSLog(@"count %d", [collections count]);
     
 }

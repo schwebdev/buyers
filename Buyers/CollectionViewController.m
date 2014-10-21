@@ -37,63 +37,6 @@
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
     
-    self.products = [self constructsProducts];
-    deletions = [[NSMutableArray alloc] initWithCapacity:[self.products count]];
-    
-    //set all the checkbox buttons back to a not selected state
-    if([self.products count] > 0) {
-    NSMutableArray *cells = [[NSMutableArray alloc] init];
-    for (NSInteger j = 0; j < [self.collectionView numberOfSections]; j++)
-    {
-        for (NSInteger i = 0; i < [self.collectionView numberOfItemsInSection:j]; i++)
-        {
-            
-            [cells addObject:[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
-            
-        }
-    }
-    
-    for (ProductCell *cell in cells)
-    {
-        UIButton *productDeleteButton = [cell productDeleteButton];
-        [productDeleteButton setSelected:NO];
-        
-    }
-    }
-    
-    [self.collectionView reloadData];
-    
-    
-    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
-    tools.layer.backgroundColor = [UIColor clearColor].CGColor;
-    self.navigationController.toolbar.clipsToBounds = YES;
-    
-    
-    saveCollectionButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [saveCollectionButton setTitle:@"save collection" forState:UIControlStateNormal];
-    saveCollectionButton.frame = CGRectMake(160, 0, 150, 50);
-    [saveCollectionButton addTarget:self action:@selector(saveCollection:) forControlEvents:UIControlEventTouchUpInside];
-    saveCollectionButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
-    saveCollectionButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
-    
-    
-    _notesButton=[UIButton buttonWithType:UIButtonTypeCustom];
-    [_notesButton setTitle:@"notes" forState:UIControlStateNormal];
-    if([self.products count] > 0 ) {
-        _notesButton.frame = CGRectMake(0, 0, 150, 50);
-    } else {
-        _notesButton.frame = CGRectMake(160, 0, 150, 50);
-    }
-    _notesButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
-    _notesButton.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:133.0/255.0 blue:178.0/255.0 alpha:1];
-    [_notesButton addTarget:self action:@selector(displayNotesPopover:) forControlEvents:UIControlEventTouchUpInside];
-    
-    if([self.products count] > 0 ) {
-        [tools addSubview:saveCollectionButton];
-    }
-    [tools addSubview:_notesButton];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
-    
     
 }
 
@@ -203,6 +146,64 @@
     [button2 addTarget:self action:@selector(deleteProducts:) forControlEvents:UIControlEventTouchUpInside];
     
     
+    self.products = [self constructsProducts];
+    deletions = [[NSMutableArray alloc] initWithCapacity:[self.products count]];
+    
+    //set all the checkbox buttons back to a not selected state
+    if([self.products count] > 0) {
+        NSMutableArray *cells = [[NSMutableArray alloc] init];
+        for (NSInteger j = 0; j < [self.collectionView numberOfSections]; j++)
+        {
+            for (NSInteger i = 0; i < [self.collectionView numberOfItemsInSection:j]; i++)
+            {
+                
+                [cells addObject:[self.collectionView cellForItemAtIndexPath:[NSIndexPath indexPathForRow:i inSection:j]]];
+                
+            }
+        }
+        
+        for (ProductCell *cell in cells)
+        {
+            UIButton *productDeleteButton = [cell productDeleteButton];
+            [productDeleteButton setSelected:NO];
+            
+        }
+    }
+    
+    [self.collectionView reloadData];
+    
+    
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 310, 65)];
+    tools.layer.backgroundColor = [UIColor clearColor].CGColor;
+    self.navigationController.toolbar.clipsToBounds = YES;
+    
+    
+    saveCollectionButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [saveCollectionButton setTitle:@"save collection" forState:UIControlStateNormal];
+    saveCollectionButton.frame = CGRectMake(160, 0, 150, 50);
+    [saveCollectionButton addTarget:self action:@selector(saveCollection:) forControlEvents:UIControlEventTouchUpInside];
+    saveCollectionButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+    saveCollectionButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    
+    
+    _notesButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [_notesButton setTitle:@"notes" forState:UIControlStateNormal];
+    if([self.products count] > 0 ) {
+        _notesButton.frame = CGRectMake(0, 0, 150, 50);
+    } else {
+        _notesButton.frame = CGRectMake(160, 0, 150, 50);
+    }
+    _notesButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+    _notesButton.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:133.0/255.0 blue:178.0/255.0 alpha:1];
+    [_notesButton addTarget:self action:@selector(displayNotesPopover:) forControlEvents:UIControlEventTouchUpInside];
+    
+    if([self.products count] > 0 ) {
+        [tools addSubview:saveCollectionButton];
+    }
+    [tools addSubview:_notesButton];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
+    
+
 }
 
 
