@@ -157,6 +157,10 @@ static const float kProductColumnSpacer = 14.0;
 - (void)fetchResults
 {
   
+    //hide for refresh
+    _upArrow.hidden = YES;
+    _downArrow.hidden = YES;
+    
     //fetch request to retrieve all collections
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
@@ -604,9 +608,9 @@ static const float kProductColumnSpacer = 14.0;
             
             [collectionListView addSubview:collectionButton];
             
-            BOOL isLastPage = ((ic % 6 > 0) && (ic - i == 1));
+            BOOL isLastPage = ((ic % 6 >= 0) && (ic - i == 1));
             
-            NSLog(@"isLastPage: %hhd modulus: %d ic-i: %d row: %d",isLastPage, (ic % 6 ), (ic - i), row );
+            NSLog(@"page: %d isLastPage: %hhd modulus: %d ic-i: %d row: %d",page,isLastPage, (ic % 6 ), (ic - i), row );
             
             if(row > 2 && !isLastPage) {
                 //increment page number and add view to scroll view
@@ -649,7 +653,7 @@ static const float kProductColumnSpacer = 14.0;
             } else {
                 _downArrow.hidden=NO;
             }
-            NSLog(@"page: %d y: %f calc: %f",page,_scrollView.contentOffset.y, (_scrollView.contentSize.height - (kPageHeight*page)));
+            //NSLog(@"page: %d y: %f calc: %f",page,_scrollView.contentOffset.y, (_scrollView.contentSize.height - (kPageHeight*page)));
         }
         
     } else {
@@ -690,12 +694,11 @@ static const float kProductColumnSpacer = 14.0;
     }
     if(_scrollView.contentOffset.y == (_scrollView.contentSize.height - kPageHeight)) {
         _downArrow.hidden = YES;
-        // NSLog(@"y: %f height: %f pageheight: %f" ,_scrollView.contentOffset.y, _scrollView.contentSize.height, kPageHeight);
     } else {
         _downArrow.hidden=NO;
         
     }
-    // NSLog(@"y: %f" ,_scrollView.contentOffset.y);
+ 
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
     if(_scrollView.contentOffset.y == 0) {
