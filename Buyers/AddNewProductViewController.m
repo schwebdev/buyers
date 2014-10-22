@@ -56,7 +56,7 @@ static const float kPageWidth = 680.0;
     
     UIButton *saveProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveProductButton setTitle:@"add product" forState:UIControlStateNormal];
-    saveProductButton.frame = CGRectMake(720, 600, 150, 50);
+    saveProductButton.frame = CGRectMake(720, 640, 150, 50);
     [saveProductButton addTarget:self action:@selector(saveCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     saveProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     saveProductButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
@@ -80,6 +80,9 @@ static const float kPageWidth = 680.0;
     [self.view addSubview:productsInfo];
     
     self.txtProductPrice.delegate = self;
+    self.txtProductNotes.delegate = self;
+    [[self.txtProductNotes layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
+    [[self.txtProductNotes layer] setBorderWidth:2.0];
     
     //categories drop down
     [self.categoryList setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
@@ -247,8 +250,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.categoryList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a category\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a category\n"];
+        pCategory = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.categoryList.getSelectedObject[@"IDURI"]];
         NSManagedObject *categoryElement = [managedContext objectWithID:c];
@@ -256,9 +260,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.brandList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a brand\n"];
-        
+       // _isValid = NO;
+       // [errorMsg appendString:@"please select a brand\n"];
+        pBrand = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.brandList.getSelectedObject[@"IDURI"]];
         NSManagedObject *brandElement = [managedContext objectWithID:c];
@@ -267,8 +271,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.supplierList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a supplier\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a supplier\n"];
+        pSupplier = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.supplierList.getSelectedObject[@"IDURI"]];
@@ -278,9 +283,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a colour\n"];
-        
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a colour\n"];
+        pColour = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.colourList.getSelectedObject[@"IDURI"]];
         NSManagedObject *colourElement = [managedContext objectWithID:c];
@@ -289,8 +294,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.materialList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a material\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a material\n"];
+        pMaterial = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.materialList.getSelectedObject[@"IDURI"]];
@@ -300,8 +306,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.txtProductPrice.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please enter a price\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please enter a price\n"];
+        pPrice = [NSNumber numberWithDouble:0.00];
     } else {
         pPrice = [NSNumber numberWithDouble:[self.txtProductPrice.text doubleValue]];
     }
@@ -313,10 +320,10 @@ static const float kPageWidth = 680.0;
         pCode =self.txtProductCode.text;
     }*/
     
-    if(!_isDirtyImage){
+    /*if(!_isDirtyImage){
         _isValid = NO;
         [errorMsg appendString:@"please take a photo or select an image\n"];
-    }
+    }*/
     
     
          if(_isValid){
@@ -340,7 +347,15 @@ static const float kPageWidth = 680.0;
              }else{
                  imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
              }
+             
+             if([imageData length] ==0){
+             UIImage *defaultImage = [UIImage imageNamed:@"shoeOutline.png"];
+             imageData = [NSData dataWithData:UIImagePNGRepresentation(defaultImage)];
+             }
+
              product.productImageData = imageData;
+             
+             product.productNotes =self.txtProductNotes.text;
              
              
              if(![managedContext save:&error]) {
@@ -442,7 +457,14 @@ finishedSavingWithError:(NSError *)error
 
     //only animate if the view frame's y co-ordinate has been shifted up
     if(CGRectGetMaxY(self.view.frame) < 700) {
-        [self animateTextField:self.txtProductPrice up:NO];
+        
+        if([self.txtProductName isFirstResponder]) {
+            [self animateTextField:self.txtProductPrice up:NO];
+        }
+        if([self.txtProductNotes isFirstResponder]) {
+            [self animateTextView:self.txtProductNotes up:NO];
+        }
+
     }
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
@@ -454,13 +476,30 @@ finishedSavingWithError:(NSError *)error
 -(void)animateTextField:(UITextField *)textField up:(BOOL)up{
     
     
-    
     const int movementDistance = -190;
     const float movementDuration = 0.2f;
     
     int movement = (up ? movementDistance : -movementDistance);
     
     [UIView beginAnimations:@"animateTextField" context:nil];
+    [UIView setAnimationBeginsFromCurrentState:YES];
+    [UIView setAnimationDuration:movementDuration];
+    self.view.frame = CGRectOffset(self.view.frame, 0, movement);
+    
+    [UIView commitAnimations];
+}
+-(void)textViewDidBeginEditing:(UITextView *)textView{
+    [self animateTextView:textView up:YES];
+}
+-(void)animateTextView:(UITextView *)textView up:(BOOL)up{
+    
+    
+    const int movementDistance = -330;
+    const float movementDuration = 0.2f;
+    
+    int movement = (up ? movementDistance : -movementDistance);
+    
+    [UIView beginAnimations:@"animateTextView" context:nil];
     [UIView setAnimationBeginsFromCurrentState:YES];
     [UIView setAnimationDuration:movementDuration];
     self.view.frame = CGRectOffset(self.view.frame, 0, movement);

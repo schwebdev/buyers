@@ -15,6 +15,8 @@
 
 - (void)setProduct:(Product *)product {
     _product = product;
+    self.productNameLabel.text = _product.productName;
+    self.productNameLabel.textAlignment = NSTextAlignmentCenter;
     self.productImageView.image = [UIImage imageWithData:(_product.productImageData)];
 }
 

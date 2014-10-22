@@ -358,13 +358,13 @@ static const float sProductColumnSpacer = 5.0;
             productTitle.frame = frameTitle;
             [productListView addSubview:productTitle];
             
-            UIButton *detailsButton = [[UIButton alloc] initWithFrame:CGRectMake(x+((col -1) * kProductColumnSpacer), y+(kButtonHeight+20.0), kButtonWidth, 14.0)];
-            [detailsButton setTitle:@"More details..." forState:UIControlStateNormal];
-            detailsButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 10.0];
-            [detailsButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [detailsButton setTag:p];
-            [detailsButton addTarget:self action:@selector(viewProductDetails:) forControlEvents:UIControlEventTouchUpInside];
-            [productListView addSubview:detailsButton];
+            
+            UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
+            [infoButton setTag:p];
+            CGRect infoFrame = CGRectMake(x+((col -1) * kProductColumnSpacer)+(kButtonWidth+10.0), y+(kButtonHeight-6.0), 24.0, 24.0);
+            [infoButton addTarget:self action:@selector(viewProductDetails:) forControlEvents:UIControlEventTouchUpInside];
+            [infoButton setFrame:infoFrame];
+            [productListView addSubview:infoButton];
 
             
             if([selectedProducts containsObject:productElement]){

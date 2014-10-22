@@ -13,7 +13,7 @@
 #import "SchDropDown.h"
 
 @interface AddNewProductViewController : BaseViewController <UIImagePickerControllerDelegate,
-UINavigationControllerDelegate,UITextFieldDelegate>
+UINavigationControllerDelegate,UITextFieldDelegate,UITextViewDelegate>
 @property BOOL newMedia;
 @property BOOL isValid;
 @property BOOL isDirtyImage;
@@ -31,5 +31,6 @@ UINavigationControllerDelegate,UITextFieldDelegate>
 @property (weak, nonatomic) IBOutlet SchDropDown *colourList;
 @property (weak, nonatomic) IBOutlet SchDropDown *materialList;
 - (void)saveCustomProduct:(id)sender;
+@property (weak, nonatomic) IBOutlet UITextView *txtProductNotes;
 
 @end
