@@ -17,6 +17,10 @@
 
 @property SchTextField *saveText;
 @property UITextView *notesTextView;
+@property UITextView *rowNotes;
+@property NSString *currentNote;
+@property NSString *notes;
+
 @property UIPopoverController *popover;
 @property NSString *reportName;
 
@@ -100,7 +104,7 @@
             report.reportID = [[NSUUID UUID] UUIDString];
             report.name = fileName;
             report.content = htmlString;
-            report.notes = @"";
+            report.notes = self.notes;
             report.createdBy = [[NSUserDefaults standardUserDefaults] objectForKey:@"username"];
             report.lastModified = [NSDate date];
             report.requiresSync = @YES;
@@ -271,8 +275,7 @@
         self.notesTextView.autoresizingMask = UIViewAutoresizingFlexibleHeight ;
         self.notesTextView.delegate = self;
             
-            
-        if(self.reportName != nil) {
+        
             NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
             [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
@@ -285,7 +288,6 @@
                 
                 self.notesTextView.text = report.notes;
             }
-        }
 
         [popoverView addSubview:self.notesTextView];
         
@@ -473,6 +475,7 @@
     
     NSString *htmlString = [Report generateReport:self.reportType withFilters:reportFilter];
     
+    self.notes = @"";
     [self.webView loadHTMLString:htmlString baseURL:nil];
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@",self.reportTypeName ]]];
     self.webView.hidden = YES;
@@ -512,6 +515,8 @@
     } else {
         ReportData *report = reports[0];
         
+        self.notes = report.notes;
+        
         [self.webView loadHTMLString:report.content baseURL:nil];
         self.webView.hidden = YES;
     }
@@ -523,6 +528,175 @@
     //[self.webView.scrollView zoomToRect:CGRectMake(0, 0, 400, 400) animated:YES];
 }
 
+-(BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
+    NSArray *components = [[[request URL] absoluteString] componentsSeparatedByString:@":"];
+    
+    if([components count] > 1 && [components[0] isEqualToString:@"rowclick"]) {
+//        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"row click" message:[NSString stringWithFormat:@"%@", [components[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+//        [alert show];
+        
+        if(self.reportName != nil) {
+            
+            self.currentNote = [components[1] stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+            UIViewController *popoverContent = [[UIViewController alloc] init];
+            
+            UIView *popoverView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 720, 680)];
+            
+            
+            UILabel *lblHeader = [[UILabel alloc] initWithFrame:CGRectMake(20, 10, 680, 40)];
+            lblHeader.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size:36.0f];
+            lblHeader.textColor = [UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f];
+            [lblHeader setText:[NSString stringWithFormat:@"Report notes: %@", self.currentNote]];
+            
+            [popoverView addSubview:lblHeader];
+            
+            self.rowNotes = [[UITextView alloc] initWithFrame:CGRectMake(20, 65, 680, 530)];
+            self.rowNotes.font = [UIFont fontWithName:@"HelveticaNeue" size:14.0f];
+            self.rowNotes.textColor = [UIColor darkGrayColor];
+            [self.rowNotes.layer setBorderColor:[UIColor lightGrayColor].CGColor];
+            [self.rowNotes.layer setBorderWidth:2];
+            
+            self.rowNotes.autoresizingMask = UIViewAutoresizingFlexibleHeight ;
+            self.rowNotes.delegate = self;
+            [popoverView addSubview:self.rowNotes];
+            
+//            if(self.reportName != nil) {
+//                NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//                NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+//                [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
+//                
+//                NSError *error;
+//                NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+//                
+//                if(reports.count > 0) {
+//                    ReportData *report = reports[0];
+//                    
+//                    self.notesTextView.text = report.notes;
+//                }
+//            }
+            
+            if(self.notes != nil && self.notes.length != 0) {
+                NSMutableDictionary *notesDictionary = [NSJSONSerialization JSONObjectWithData:[self.notes dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
+            
+                self.rowNotes.text = notesDictionary[self.currentNote];
+            }
+            
+            UIButton *saveConfirm = [UIButton buttonWithType:UIButtonTypeSystem];
+            [saveConfirm setTitle:@"save notes" forState:UIControlStateNormal];
+            [saveConfirm setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+            [saveConfirm setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+            
+            //[saveConfirm setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
+            [saveConfirm.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:24.0f]];
+            
+            [saveConfirm setFrame:CGRectMake(550, 615, 150, 50)];
+            [saveConfirm addTarget:self action:@selector(saveRowNotes) forControlEvents:UIControlEventTouchUpInside];
+            saveConfirm.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+            [popoverView addSubview:saveConfirm];
+            
+            popoverContent.view = popoverView;
+            
+            
+            popoverContent.preferredContentSize = popoverContent.view.frame.size;
+            popoverContent.modalPresentationStyle = UIModalPresentationPopover;
+            
+            UIPopoverPresentationController *popoverController = popoverContent.popoverPresentationController;
+            
+            popoverController.sourceView = self.view;
+            popoverController.sourceRect = CGRectMake(0, 10, 1024, 10);
+            popoverController.permittedArrowDirections = 0;
+            
+            [self presentViewController:popoverContent animated:YES completion:nil];
+        } else {
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"report must be saved before notes can be added."] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alert show];
+        }
+        return NO;
+    }
+    
+    return YES;
+}
+
+- (void)saveRowNotes {
+    
+//    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+//    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
+//    
+//    NSError *error;
+//    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+//    
+//    if(reports.count > 0) {
+//        ReportData *report = reports[0];
+//        report.notes = self.notesTextView.text;
+//        report.lastModified = [NSDate date];
+//        
+//        if(![report.createdBy isEqualToString:@"sync"]) report.requiresSync = @YES;
+//        
+//        NSError *saveError;
+//        if(![managedContext save:&saveError]) {
+//            NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+//            
+//            
+//            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"notes save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+//            [alert show];
+//        } else {
+//            NSLog(@"%@ reportdata entry modified", self.reportName);
+//        }
+//    }
+//    
+    //[self.popover dismissPopoverAnimated:YES];
+    
+    if(self.notes == nil || self.notes.length == 0) {
+        
+        NSMutableDictionary *notesDictionary = [[NSMutableDictionary alloc] init];
+        
+        notesDictionary[self.currentNote] = self.rowNotes.text;
+        
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:notesDictionary options:kNilOptions error:nil];
+        self.notes = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+    } else {
+        
+        NSMutableDictionary *notesDictionary = [[NSJSONSerialization JSONObjectWithData:[self.notes dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil] mutableCopy];
+        
+        notesDictionary[self.currentNote] = self.rowNotes.text;
+        
+        
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:notesDictionary options:kNilOptions error:nil];
+        self.notes = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    }
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",self.reportName]];
+    
+    NSError *error;
+    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+    
+    if(reports.count > 0) {
+        ReportData *report = reports[0];
+        report.notes = self.notes;
+        report.lastModified = [NSDate date];
+        
+        if(![report.createdBy isEqualToString:@"sync"]) report.requiresSync = @YES;
+        
+        NSError *saveError;
+        if(![managedContext save:&saveError]) {
+            NSLog(@"Could not save reportdata: %@", [saveError localizedDescription]);
+            
+            
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"notes save failed"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+            [alert show];
+        } else {
+            NSLog(@"%@ reportdata entry modified", self.reportName);
+        }
+    }
+
+    
+    [self.parentViewController dismissViewControllerAnimated:YES completion:nil];
+}
 
 
 @end

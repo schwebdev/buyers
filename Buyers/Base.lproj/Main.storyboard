@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13F34" targetRuntime="iOS.CocoaTouch.iPad" propertyAccessControl="none" initialViewController="d40-Gm-g4r">
     <dependencies>
-        <deployment defaultVersion="1536" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -583,7 +582,7 @@
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="selected" image="checkbox-checked.png"/>
+                                        <state key="selected" image="checkbox-checked-search.png"/>
                                         <connections>
                                             <action selector="reportFilterClicked:" destination="evy-q2-DmH" eventType="touchUpInside" id="1UO-bb-LBu"/>
                                         </connections>
@@ -597,7 +596,7 @@
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
-                                        <state key="selected" image="checkbox-checked.png"/>
+                                        <state key="selected" image="checkbox-checked-search.png"/>
                                         <connections>
                                             <action selector="reportFilterClicked:" destination="evy-q2-DmH" eventType="touchUpInside" id="5mY-h3-Si4"/>
                                         </connections>
@@ -2372,6 +2371,7 @@
         <image name="camera.png" width="32" height="32"/>
         <image name="camera_lg.png" width="450" height="450"/>
         <image name="check.png" width="20" height="20"/>
+        <image name="checkbox-checked-search.png" width="24" height="24"/>
         <image name="checkbox-checked.png" width="24" height="24"/>
         <image name="checkbox.png" width="24" height="24"/>
         <image name="checkmarked.png" width="400" height="120"/>

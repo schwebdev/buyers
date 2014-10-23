@@ -1,0 +1,56 @@
+<html>
+    
+    <head>
+        <style type="text/css">
+            body {margin:0;padding:0;font-family:Arial, sans-serif;min-height:1260px;}
+            body > div {padding:10px;background:#fff;width:2048px;}
+            .tg  {display:block;border-collapse:collapse;border-spacing:0;width:100%;}
+            .tg td {padding:10px 15px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;text-align:right;}
+            .tg td:first-child {text-align:left;}
+            .tg th {padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+            </style>
+        
+    </head>
+    <body>
+        
+        <div >
+            <h1>order vs intake ##TITLE##</h1>
+            <table class="tg">
+                <tr>
+                    <th>Supplier Ref</th>
+                    <th>LY Units Sold</th>
+                    <th>LY Margin Achieved</th>
+                    <th></th>
+                    <th>LY Units Intake</th>
+                    <th>LY Cost Intake</th>
+                    <th>LY Ave Cost Intake</th>
+                    <th>LY New SKUs</th>
+                    <th></th>
+                    <th>TY OnOrder (Units)</th>
+                    <th>Diff On Ord V LY Intake</th>
+                    <th>LY % Diff</th>
+                    <th></th>
+                    <th>TY On Order Cost</th>
+                    <th>Diff On Ord V TY Intake</th>
+                    <th>TY % Diff</th>
+                    <th>TY Ave Cost On Order</th>
+                    <th></th>
+                    <th>TY New SKUs</th>
+                    <th>SKUs Diff</th>
+                </tr>
+                ##ROWS##
+                
+            </table>
+            
+        </div>
+    </body>
+    <script>
+        ##JS##
+        
+        $(function() {
+          $('.row').click(function() {
+                          window.location = 'rowClick:' + $(this).children('td:first-child').html();
+                          });
+          });
+        </script>
+</html>

@@ -117,6 +117,12 @@
     
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##TITLE##" withString:dateTime];
     
+    if([htmlString containsString:@"##JS##"]) {
+        NSString *jsFile = [[NSBundle mainBundle] pathForResource:@"jquery" ofType:@"js"];
+        NSString *jsString = [NSString stringWithContentsOfFile:jsFile encoding:NSUTF8StringEncoding error:nil];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##JS##" withString:jsString];
+    }
+    
     NSMutableString *htmlRows = [NSMutableString new];
     
     
@@ -162,7 +168,7 @@
                 if([row[@"Supplier_Ref"] isEqualToString:@"zzzzzTotal"]) {
                     [htmlRows appendFormat:@"<tr><td colspan=20></td></tr><tr>"];
                 }
-                [htmlRows appendFormat:@"<tr>"];
+                [htmlRows appendFormat:@"<tr class=\"row\">"];
                 [htmlRows appendFormat:@"<td>%@</td>", [row[@"Supplier_Ref"] stringByReplacingOccurrencesOfString:@"zzzzzTotal" withString:@"Total"]];
                 [htmlRows appendFormat:@"<td>%@</td>", row[@"LY_Units_Sold"]];
                 [htmlRows appendFormat:@"<td>%@</td>", row[@"LY_Margin_Acheived"]];

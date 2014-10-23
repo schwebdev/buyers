@@ -42,6 +42,11 @@
 		0B825E6419F5003B00939512 /* UIImage+Resize.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6319F5003B00939512 /* UIImage+Resize.m */; };
 		0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6619F5034100939512 /* UIImage+Alpha.m */; };
 		0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */; };
+		0B825E6E19F79C7600939512 /* checkboxSML-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6B19F79C7600939512 /* checkboxSML-checked.png */; };
+		0B825E6F19F79C7600939512 /* checkboxSML-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */; };
+		0B825E7019F79C7600939512 /* shoeOutline.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6D19F79C7600939512 /* shoeOutline.png */; };
+		0B825E7419F7B87700939512 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7319F7B87700939512 /* jquery.js */; };
+		0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7619F8EB9200939512 /* StockWorksheet.html */; };
 		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
 		0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */; };
 		0B970B32199376C9006D0358 /* c1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF3199376C9006D0358 /* c1.png */; };
@@ -255,6 +260,11 @@
 		0B825E6619F5034100939512 /* UIImage+Alpha.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Alpha.m"; sourceTree = "<group>"; };
 		0B825E6719F5034100939512 /* UIImage+RoundedCorner.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+RoundedCorner.h"; sourceTree = "<group>"; };
 		0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
+		0B825E6B19F79C7600939512 /* checkboxSML-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked.png"; sourceTree = "<group>"; };
+		0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked@2x.png"; sourceTree = "<group>"; };
+		0B825E6D19F79C7600939512 /* shoeOutline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shoeOutline.png; sourceTree = "<group>"; };
+		0B825E7319F7B87700939512 /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
+		0B825E7619F8EB9200939512 /* StockWorksheet.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = StockWorksheet.html; sourceTree = "<group>"; };
 		0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalYearWeek.h; path = Buyers/CalYearWeek.h; sourceTree = "<group>"; };
 		0B92CDC019D046A6007B7FDB /* CalYearWeek.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalYearWeek.m; path = Buyers/CalYearWeek.m; sourceTree = "<group>"; };
 		0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportOrderVsIntake.h; path = Buyers/ReportOrderVsIntake.h; sourceTree = "<group>"; };
@@ -478,9 +488,11 @@
 		0B7630A719A2479B00949155 /* reportTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				0B825E7319F7B87700939512 /* jquery.js */,
 				0B288A7119B9C81200F62B63 /* BusinessReview.html */,
 				0B7630A819A247DF00949155 /* OrderVsIntake.html */,
 				0B52FC9219ED36F600D1D747 /* Bestsellers.html */,
+				0B825E7619F8EB9200939512 /* StockWorksheet.html */,
 			);
 			name = reportTemplate;
 			sourceTree = "<group>";
@@ -668,6 +680,9 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
+				0B825E6B19F79C7600939512 /* checkboxSML-checked.png */,
+				0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */,
+				0B825E6D19F79C7600939512 /* shoeOutline.png */,
 				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
 				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
 				5B9F973819F0156600DCE963 /* Product.h */,
@@ -932,6 +947,7 @@
 				0B970B32199376C9006D0358 /* c1.png in Resources */,
 				5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */,
 				0B970B65199376C9006D0358 /* s7.png in Resources */,
+				0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */,
 				0B970B41199376C9006D0358 /* d11.png in Resources */,
 				0B970B57199376C9006D0358 /* h7.png in Resources */,
 				0B76309F199CB7D200949155 /* leftArrowButtonBG.png in Resources */,
@@ -943,6 +959,7 @@
 				0B9F719E1994FF53003AE1BE /* homeIDLogo.png in Resources */,
 				C6B9A7C219DD6B5600C832A1 /* checkbox-checked@2x.png in Resources */,
 				C6B9A7C319DD6B5600C832A1 /* checkbox.png in Resources */,
+				0B825E7419F7B87700939512 /* jquery.js in Resources */,
 				0BC9563C198FDABD00CD45D5 /* InfoPlist.strings in Resources */,
 				0B9F71A31994FF53003AE1BE /* homeSettingsLogoWhite.png in Resources */,
 				0B9F71A01994FF53003AE1BE /* homeReportsLogo.png in Resources */,
@@ -979,6 +996,7 @@
 				0B9F71A51994FF53003AE1BE /* homeSyncOrange.png in Resources */,
 				0B970B38199376C9006D0358 /* c3.png in Resources */,
 				0B970B50199376C9006D0358 /* h12.png in Resources */,
+				0B825E6E19F79C7600939512 /* checkboxSML-checked.png in Resources */,
 				5BA0951D19B61FBE006C1782 /* 1106011160_main.jpg in Resources */,
 				0B9F71AE19950A5D003AE1BE /* homeRunAndViewReportsButton.png in Resources */,
 				0B970B42199376C9006D0358 /* d12.png in Resources */,
@@ -998,6 +1016,7 @@
 				0B970B5F199376C9006D0358 /* s13.png in Resources */,
 				0B970B51199376C9006D0358 /* h13.png in Resources */,
 				0B970B4D199376C9006D0358 /* h1.png in Resources */,
+				0B825E7019F79C7600939512 /* shoeOutline.png in Resources */,
 				5BB66B0C19DEAC2300422E87 /* checkboxSML@2x.png in Resources */,
 				0B9F719D1994FF53003AE1BE /* homeBarcodeLogo.png in Resources */,
 				0B970B4B199376C9006D0358 /* d9.png in Resources */,
@@ -1007,6 +1026,7 @@
 				C618D3A219DEEC7F005977D6 /* gallery.png in Resources */,
 				5BA0951919B61E5B006C1782 /* 1159074370_main.jpg in Resources */,
 				0B52FC9B19ED69C200D1D747 /* check@2x.png in Resources */,
+				0B825E6F19F79C7600939512 /* checkboxSML-checked@2x.png in Resources */,
 				5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */,
 				0B9F71B019951099003AE1BE /* schuhMenuIcon-S.png in Resources */,
 			);
