@@ -44,7 +44,6 @@
 		0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */; };
 		0B825E6E19F79C7600939512 /* checkboxSML-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6B19F79C7600939512 /* checkboxSML-checked.png */; };
 		0B825E6F19F79C7600939512 /* checkboxSML-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */; };
-		0B825E7019F79C7600939512 /* shoeOutline.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E6D19F79C7600939512 /* shoeOutline.png */; };
 		0B825E7419F7B87700939512 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7319F7B87700939512 /* jquery.js */; };
 		0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7619F8EB9200939512 /* StockWorksheet.html */; };
 		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
@@ -262,7 +261,6 @@
 		0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		0B825E6B19F79C7600939512 /* checkboxSML-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked.png"; sourceTree = "<group>"; };
 		0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked@2x.png"; sourceTree = "<group>"; };
-		0B825E6D19F79C7600939512 /* shoeOutline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shoeOutline.png; sourceTree = "<group>"; };
 		0B825E7319F7B87700939512 /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
 		0B825E7619F8EB9200939512 /* StockWorksheet.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = StockWorksheet.html; sourceTree = "<group>"; };
 		0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalYearWeek.h; path = Buyers/CalYearWeek.h; sourceTree = "<group>"; };
@@ -682,7 +680,6 @@
 			children = (
 				0B825E6B19F79C7600939512 /* checkboxSML-checked.png */,
 				0B825E6C19F79C7600939512 /* checkboxSML-checked@2x.png */,
-				0B825E6D19F79C7600939512 /* shoeOutline.png */,
 				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
 				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
 				5B9F973819F0156600DCE963 /* Product.h */,
@@ -1016,7 +1013,6 @@
 				0B970B5F199376C9006D0358 /* s13.png in Resources */,
 				0B970B51199376C9006D0358 /* h13.png in Resources */,
 				0B970B4D199376C9006D0358 /* h1.png in Resources */,
-				0B825E7019F79C7600939512 /* shoeOutline.png in Resources */,
 				5BB66B0C19DEAC2300422E87 /* checkboxSML@2x.png in Resources */,
 				0B9F719D1994FF53003AE1BE /* homeBarcodeLogo.png in Resources */,
 				0B970B4B199376C9006D0358 /* d9.png in Resources */,
