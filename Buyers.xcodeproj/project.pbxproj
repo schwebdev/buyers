@@ -151,10 +151,6 @@
 		5BA0951D19B61FBE006C1782 /* 1106011160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */; };
 		5BA0951F19B620AB006C1782 /* 1159061320_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */; };
 		5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5BA0952019B6212B006C1782 /* 1461031160_main.jpg */; };
-		5BB66B0B19DEAC2300422E87 /* checkboxSML-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0819DEAC2300422E87 /* checkboxSML-checked@2x.png */; };
-		5BB66B0C19DEAC2300422E87 /* checkboxSML@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0919DEAC2300422E87 /* checkboxSML@2x.png */; };
-		5BB66B1019DEACD500422E87 /* checkboxSML-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0E19DEACD500422E87 /* checkboxSML-checked.png */; };
-		5BB66B1119DEACD500422E87 /* checkboxSML.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BB66B0F19DEACD500422E87 /* checkboxSML.png */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
 		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
@@ -384,10 +380,6 @@
 		5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1106011160_main.jpg; sourceTree = "<group>"; };
 		5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159061320_main.jpg; sourceTree = "<group>"; };
 		5BA0952019B6212B006C1782 /* 1461031160_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1461031160_main.jpg; sourceTree = "<group>"; };
-		5BB66B0819DEAC2300422E87 /* checkboxSML-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked@2x.png"; sourceTree = "<group>"; };
-		5BB66B0919DEAC2300422E87 /* checkboxSML@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML@2x.png"; sourceTree = "<group>"; };
-		5BB66B0E19DEACD500422E87 /* checkboxSML-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked.png"; sourceTree = "<group>"; };
-		5BB66B0F19DEACD500422E87 /* checkboxSML.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxSML.png; sourceTree = "<group>"; };
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
@@ -908,7 +900,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B970B62199376C9006D0358 /* s4.png in Resources */,
-				5BB66B1119DEACD500422E87 /* checkboxSML.png in Resources */,
 				C6B9A7BD19DD6B5600C832A1 /* 1159167270_main.jpg in Resources */,
 				C6B9A7C119DD6B5600C832A1 /* checkbox-checked.png in Resources */,
 				5BA0951B19B61F07006C1782 /* 1159137970_main.jpg in Resources */,
@@ -917,7 +908,6 @@
 				0B970B5E199376C9006D0358 /* s12.png in Resources */,
 				0B970B3B199376C9006D0358 /* c6.png in Resources */,
 				0B970B46199376C9006D0358 /* d4.png in Resources */,
-				5BB66B1019DEACD500422E87 /* checkboxSML-checked.png in Resources */,
 				0B970B44199376C9006D0358 /* d2.png in Resources */,
 				0B970B4E199376C9006D0358 /* h10.png in Resources */,
 				0B52FC9D19ED69C200D1D747 /* checkMarked@2x.png in Resources */,
@@ -937,7 +927,6 @@
 				0B970B60199376C9006D0358 /* s2.png in Resources */,
 				0B970B47199376C9006D0358 /* d5.png in Resources */,
 				0B9F71A11994FF53003AE1BE /* homeSchuhLogo.png in Resources */,
-				5BB66B0B19DEAC2300422E87 /* checkboxSML-checked@2x.png in Resources */,
 				0B970B54199376C9006D0358 /* h4.png in Resources */,
 				0B970B32199376C9006D0358 /* c1.png in Resources */,
 				5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */,
@@ -1010,7 +999,6 @@
 				0B970B5F199376C9006D0358 /* s13.png in Resources */,
 				0B970B51199376C9006D0358 /* h13.png in Resources */,
 				0B970B4D199376C9006D0358 /* h1.png in Resources */,
-				5BB66B0C19DEAC2300422E87 /* checkboxSML@2x.png in Resources */,
 				0B9F719D1994FF53003AE1BE /* homeBarcodeLogo.png in Resources */,
 				0B970B4B199376C9006D0358 /* d9.png in Resources */,
 				0B970B5A199376C9006D0358 /* README.md in Resources */,
