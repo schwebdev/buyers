@@ -138,6 +138,7 @@
 		0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956771990F28500CD45D5 /* HomeViewController.m */; };
 		5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */; };
 		5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */; };
+		5B0E157A19F797A10095DEDA /* shoeOutline.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157919F797A10095DEDA /* shoeOutline.png */; };
 		5B14383519ADE40800A68865 /* CollectionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14383419ADE40800A68865 /* CollectionButton.m */; };
 		5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35503019A49CF40031E33C /* CoreData.framework */; };
 		5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */; };
@@ -367,6 +368,7 @@
 		0BC956771990F28500CD45D5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
 		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search.png"; sourceTree = "<group>"; };
 		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
+		5B0E157919F797A10095DEDA /* shoeOutline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shoeOutline.png; sourceTree = "<group>"; };
 		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionButton.h; path = Buyers/CollectionButton.h; sourceTree = "<group>"; };
 		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionButton.m; path = Buyers/CollectionButton.m; sourceTree = "<group>"; };
 		5B35503019A49CF40031E33C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -674,6 +676,7 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
+				5B0E157919F797A10095DEDA /* shoeOutline.png */,
 				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
 				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
 				5B9F973819F0156600DCE963 /* Product.h */,
@@ -921,6 +924,7 @@
 				0B9F71AC19950A5D003AE1BE /* homeCollectionsButton.png in Resources */,
 				0B970B59199376C9006D0358 /* h9.png in Resources */,
 				C6B9A7B919DD6B5600C832A1 /* 1158985860_main.jpg in Resources */,
+				5B0E157A19F797A10095DEDA /* shoeOutline.png in Resources */,
 				0BC9564A198FDABD00CD45D5 /* Images.xcassets in Resources */,
 				C618D3A419DEF114005977D6 /* camera_lg.png in Resources */,
 				0B970B36199376C9006D0358 /* c13.png in Resources */,

@@ -54,7 +54,6 @@ static const float kPageWidth = 680.0;
     
     self.productName_edit.hidden = YES;
     self.productPrice_edit.hidden=YES;
-    
     self.productCategory_edit.hidden=YES;
     self.productBrand_edit.hidden=YES;
     self.productSupplier_edit.hidden=YES;
@@ -66,7 +65,13 @@ static const float kPageWidth = 680.0;
     
      //if custom product need to hide label content and replace with textfields and dropdown menus.  Also need to allow the image to be changed
     
-     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
+    NSString *pageName = _collection.collectionName;
+    NSString *pageTitle = @"collection";
+    if(_collection == nil) {
+        pageTitle = @"product";
+        pageName = _product.productName;
+    }
+     self.navigationItem.titleView = [BaseViewController genNavWithTitle:pageTitle title2:pageName image:@"homePaperClipLogo.png"];
     
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Product Detail"]];
     
@@ -95,7 +100,7 @@ static const float kPageWidth = 680.0;
     _notesButton.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:133.0/255.0 blue:178.0/255.0 alpha:1];
     [_notesButton addTarget:self action:@selector(displayNotesPopover:) forControlEvents:UIControlEventTouchUpInside];
     
-    //only add save, notes and edit image button to a custom product and don't show product code
+    //only add save and edit image button to a custom product and don't show product code
     if([_product.productCode  isEqual:@""] || [_product.productCode  isEqual:@"0000000000"]) {
     [self.view addSubview:deleteProductButton];
     [self.view addSubview:saveProductButton];
@@ -136,9 +141,11 @@ static const float kPageWidth = 680.0;
         //material drop down
         [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialRef"];
         
+    
+    
+    }
     [tools addSubview:_notesButton];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
-    }
     
     CALayer *separator = [CALayer layer];
     separator.frame = CGRectMake(kPageWidth, 100, 1, 589);
@@ -297,8 +304,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productCategory_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a category\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a category\n"];
+        _product.category = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productCategory_edit.getSelectedObject[@"IDURI"]];
         NSManagedObject *categoryElement = [managedContext objectWithID:c];
@@ -306,9 +314,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productBrand_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a brand\n"];
-        
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a brand\n"];
+         _product.brand = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productBrand_edit.getSelectedObject[@"IDURI"]];
         NSManagedObject *brandElement = [managedContext objectWithID:c];
@@ -317,8 +325,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productSupplier_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a supplier\n"];
+       // _isValid = NO;
+       // [errorMsg appendString:@"please select a supplier\n"];
+         _product.supplier = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productSupplier_edit.getSelectedObject[@"IDURI"]];
@@ -327,8 +336,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productColour_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a colour\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please select a colour\n"];
+         _product.colour = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productColour_edit.getSelectedObject[@"IDURI"]];
@@ -339,8 +349,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productMaterial_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please select a material\n"];
+       // _isValid = NO;
+        //[errorMsg appendString:@"please select a material\n"];
+         _product.material = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productMaterial_edit.getSelectedObject[@"IDURI"]];
@@ -350,8 +361,9 @@ static const float kPageWidth = 680.0;
     }
     
     if([self.productPrice_edit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        _isValid = NO;
-        [errorMsg appendString:@"please enter a price\n"];
+        //_isValid = NO;
+        //[errorMsg appendString:@"please enter a price\n"];
+         _product.productPrice =  [NSNumber numberWithDouble:0.00];
     } else {
         _product.productPrice = [NSNumber numberWithDouble:[self.productPrice_edit.text doubleValue]];
     }
@@ -365,15 +377,13 @@ static const float kPageWidth = 680.0;
         
     }
     
-    if(imageData == nil) {
-        _isValid = NO;
-        [errorMsg appendString:@"please take a photo or select an image\n"];
-    } else {
-         _product.productImageData = imageData;
+    if([imageData length] ==0){
+        UIImage *defaultImage = [UIImage imageNamed:@"shoeOutline.png"];
+        imageData = [NSData dataWithData:UIImagePNGRepresentation(defaultImage)];
     }
+    
+     _product.productImageData = imageData;
 
-    
-    
 
     if(_isValid){
         if(![managedContext save:&error]) {

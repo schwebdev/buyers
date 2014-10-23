@@ -14,5 +14,6 @@
 @property (strong, nonatomic) IBOutlet UIButton *productDeleteButton;
 
 @property (strong, nonatomic) Product *product;
+@property (weak, nonatomic) IBOutlet UILabel *productNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *productImageView;
 @end
