@@ -378,23 +378,28 @@
             NSArray *reports = [managedContext executeFetchRequest:request error:&error];
             ReportData *report;
             
-            if(reports.count > 0) {
-                report = reports[0];
+            if(![jsonReport[@"isActive"] isEqualToString:@"True"] && reports.count > 0) {
+                [managedContext deleteObject:reports[0]];
+                NSLog(@"deleted report %@ - %@", jsonReport[@"name"], reportID);
             } else {
-                report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                if(reports.count > 0) {
+                    report = reports[0];
+                } else {
+                    report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                }
+                report.reportID = reportID;
+                report.name = jsonReport[@"name"];
+                report.createdBy = jsonReport[@"createdBy"];
+                report.content = jsonReport[@"content"];
+                report.notes = jsonReport[@"notes"];
+                report.isActive = ([jsonReport[@"isActive"] isEqualToString:@"True"]) ? @YES : @NO;
+                report.requiresSync = @NO;
+                report.lastModified = [jsonDateFormat dateFromString:jsonReport[@"lastModified"]];
+                report.lastSync = [jsonDateFormat dateFromString:jsonReport[@"lastSync"]];
+                
+                
+                NSLog(@"syncing report %@ - %@", jsonReport[@"name"], reportID);
             }
-            report.reportID = reportID;
-            report.name = jsonReport[@"name"];
-            report.createdBy = jsonReport[@"createdBy"];
-            report.content = jsonReport[@"content"];
-            report.notes = jsonReport[@"notes"];
-            report.isActive = ([jsonReport[@"isActive"] isEqualToString:@"True"]) ? @YES : @NO;
-            report.requiresSync = @NO;
-            report.lastModified = [jsonDateFormat dateFromString:jsonReport[@"lastModified"]];
-            report.lastSync = [jsonDateFormat dateFromString:jsonReport[@"lastSync"]];
-            
-            
-            NSLog(@"syncing report %@ - %@", jsonReport[@"name"], reportID);
         }
         
         

@@ -9,6 +9,9 @@
 
 @interface OrderVsIntakeReportViewController : BaseReportFilterViewController <UITableViewDataSource, UITableViewDelegate,ReportFilterViewDelegate>
 
+
+@property (weak, nonatomic) IBOutlet UIView *dateView;
+@property (weak, nonatomic) IBOutlet SchTextField *CalLastWeeks;
 @property (weak, nonatomic) IBOutlet SchDropDown *CalWeekFrom;
 @property (weak, nonatomic) IBOutlet SchDropDown *CalWeekTo;
 

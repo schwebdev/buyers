@@ -44,6 +44,7 @@
 		0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */; };
 		0B825E7419F7B87700939512 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7319F7B87700939512 /* jquery.js */; };
 		0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7619F8EB9200939512 /* StockWorksheet.html */; };
+		0B8AE92719F90FBB00493BC5 /* StockWorksheetReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8AE92619F90FBB00493BC5 /* StockWorksheetReportViewController.m */; };
 		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
 		0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */; };
 		0B970B32199376C9006D0358 /* c1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF3199376C9006D0358 /* c1.png */; };
@@ -256,6 +257,8 @@
 		0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+RoundedCorner.m"; sourceTree = "<group>"; };
 		0B825E7319F7B87700939512 /* jquery.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; path = jquery.js; sourceTree = "<group>"; };
 		0B825E7619F8EB9200939512 /* StockWorksheet.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = StockWorksheet.html; sourceTree = "<group>"; };
+		0B8AE92519F90FBB00493BC5 /* StockWorksheetReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockWorksheetReportViewController.h; sourceTree = "<group>"; };
+		0B8AE92619F90FBB00493BC5 /* StockWorksheetReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockWorksheetReportViewController.m; sourceTree = "<group>"; };
 		0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CalYearWeek.h; path = Buyers/CalYearWeek.h; sourceTree = "<group>"; };
 		0B92CDC019D046A6007B7FDB /* CalYearWeek.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CalYearWeek.m; path = Buyers/CalYearWeek.m; sourceTree = "<group>"; };
 		0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportOrderVsIntake.h; path = Buyers/ReportOrderVsIntake.h; sourceTree = "<group>"; };
@@ -623,6 +626,8 @@
 				0B52FC8D19E7E28B00D1D747 /* BaseReportFilterViewController.m */,
 				0B52FC8F19ED171100D1D747 /* BestsellersReportViewController.h */,
 				0B52FC9019ED171100D1D747 /* BestsellersReportViewController.m */,
+				0B8AE92519F90FBB00493BC5 /* StockWorksheetReportViewController.h */,
+				0B8AE92619F90FBB00493BC5 /* StockWorksheetReportViewController.m */,
 			);
 			name = Reports;
 			sourceTree = "<group>";
@@ -1080,6 +1085,7 @@
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B288A8419B9EFBF00F62B63 /* Image.m in Sources */,
+				0B8AE92719F90FBB00493BC5 /* StockWorksheetReportViewController.m in Sources */,
 				0B52FC9119ED171100D1D747 /* BestsellersReportViewController.m in Sources */,
 				0B52FC8E19E7E28B00D1D747 /* BaseReportFilterViewController.m in Sources */,
 				0B523EB219DD5EC20079EB25 /* Department.m in Sources */,

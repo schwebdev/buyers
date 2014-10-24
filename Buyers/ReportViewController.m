@@ -436,14 +436,18 @@
     [saveButton addTarget:self action:@selector(saveClick:) forControlEvents:UIControlEventTouchUpInside];
     [barButtons addSubview:saveButton];
     
-    UIButton *notesButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    [notesButton setTitle:@"notes" forState:UIControlStateNormal];
-    [notesButton setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
-    [notesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [notesButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
-    notesButton.frame = CGRectMake(0, 0, 100, 40);
-    [notesButton addTarget:self action:@selector(addNotesClick:) forControlEvents:UIControlEventTouchUpInside];
-    [barButtons addSubview:notesButton];
+    if(![self.reportType isEqualToString:@"StockWorksheet"]) {
+        UIButton *notesButton = [UIButton buttonWithType:UIButtonTypeSystem];
+        [notesButton setTitle:@"notes" forState:UIControlStateNormal];
+        [notesButton setBackgroundColor:[UIColor colorWithRed:127.0f/255.0f green:175.0f/255.0f blue:22.0f/255.0f alpha:1.0f]];
+        [notesButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [notesButton.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
+        notesButton.frame = CGRectMake(0, 0, 100, 40);
+        [notesButton addTarget:self action:@selector(addNotesClick:) forControlEvents:UIControlEventTouchUpInside];
+        [barButtons addSubview:notesButton];
+        
+        self.menuAddNotes = notesButton;
+    }
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:barButtons];
     
@@ -503,7 +507,7 @@
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@)",fileName]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"(name == %@ AND isActive == 1)",fileName]];
     
     NSError *error;
     NSArray *reports = [managedContext executeFetchRequest:request error:&error];
@@ -516,6 +520,12 @@
         ReportData *report = reports[0];
         
         self.notes = report.notes;
+        
+        //identify stock worksheet report?
+        if([self.notes containsString:@"{\""]) {
+            [self.menuAddNotes removeFromSuperview];
+            self.menuAddNotes = nil;
+        }
         
         [self.webView loadHTMLString:report.content baseURL:nil];
         self.webView.hidden = YES;

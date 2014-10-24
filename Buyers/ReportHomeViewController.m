@@ -108,44 +108,44 @@
         self.FilterLabel.text = [NSString stringWithFormat:@"Last sync: %@",dateTime];
     }
 }
-
-- (IBAction)reportFilterChange:(id)sender {
-    
-    UISwitch *currentSwitch = (UISwitch *)sender;
-    [currentSwitch setOn:YES animated:YES];
-    
-    for (UIView *subview in self.ReportFilterView.subviews) {
-        if([subview isKindOfClass:[UISwitch class]]) {
-            if(subview.tag != currentSwitch.tag) {
-                UISwitch *otherSwitch = (UISwitch*)subview;
-                [otherSwitch setOn:NO animated:YES];
-            }
-        }
-    }
-    self.reportList.text = @"";
-    
-    
-    self.reportList.listItems = [NSMutableArray array];
-    
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-    if(currentSwitch.tag == 1) {
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
-        
-    } else {
-        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];
-    }
-        
-    NSError *error;
-    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
-    
-    if(reports.count > 0) {
-        for (ReportData *report in reports) {
-            [self.reportList.listItems addObject:@{report.name:report.name}];
-        }
-    }
-
-}
+//
+//- (IBAction)reportFilterChange:(id)sender {
+//    
+//    UISwitch *currentSwitch = (UISwitch *)sender;
+//    [currentSwitch setOn:YES animated:YES];
+//    
+//    for (UIView *subview in self.ReportFilterView.subviews) {
+//        if([subview isKindOfClass:[UISwitch class]]) {
+//            if(subview.tag != currentSwitch.tag) {
+//                UISwitch *otherSwitch = (UISwitch*)subview;
+//                [otherSwitch setOn:NO animated:YES];
+//            }
+//        }
+//    }
+//    self.reportList.text = @"";
+//    
+//    
+//    self.reportList.listItems = [NSMutableArray array];
+//    
+//    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+//    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+//    if(currentSwitch.tag == 1) {
+//        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy == %@ AND isActive == 1)",[[NSUserDefaults standardUserDefaults] objectForKey:@"username"]]];
+//        
+//    } else {
+//        [request setPredicate:[NSPredicate predicateWithFormat:@"(createdBy != \"sync\" AND isActive == 1)"]];
+//    }
+//        
+//    NSError *error;
+//    NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+//    
+//    if(reports.count > 0) {
+//        for (ReportData *report in reports) {
+//            [self.reportList.listItems addObject:@{report.name:report.name}];
+//        }
+//    }
+//
+//}
 - (IBAction)reportFilterClicked:(id)sender {
     
     UIButton *button = (UIButton*)sender;
@@ -196,6 +196,7 @@
                                  @{@"OrderVsIntake":@"Order vs Intake Report"},
                                  @{@"BusinessReview":@"Business Review Report"},
                                  @{@"Bestsellers":@"Bestsellers Report"},
+                                 @{@"StockWorksheet":@"Stock Work Sheet Report"},
                                  nil];
     
     self.reportType.observerName = @"reportTypeSelect";
