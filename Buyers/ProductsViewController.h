@@ -11,8 +11,14 @@
 #import "SchTextField.h"
 #import "SchDropDown.h"
 #import "BaseViewController.h"
-@interface ProductsViewController : BaseViewController <UIScrollViewDelegate, UITextFieldDelegate>
+#import "AdvancedSearchViewController.h"
 
+@interface ProductsViewController : BaseViewController <AdvancedSearchViewControllerDelegate,UIScrollViewDelegate, UITextFieldDelegate> {
+    UIPopoverController *_displayAdvancedSearchPopover;
+    AdvancedSearchViewController *_productSearch;
+}
+@property (nonatomic, retain) AdvancedSearchViewController *productSearch;
+@property (nonatomic, retain) UIPopoverController *displayAdvancedSearchPopover;
 @property (weak, nonatomic) IBOutlet SchTextField *txtNewCollection;
 @property (weak, nonatomic) Collection *collection;
 @property(nonatomic,retain) IBOutlet UIButton *clearAll;

@@ -109,7 +109,7 @@
     [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@ - %@", formatDate, _collection.collectionCreator]]];
    
     //hack to push content down
-    self.collectionView.contentInset = UIEdgeInsetsMake(60, 0, 0, 0);
+    self.collectionView.contentInset = UIEdgeInsetsMake(74, 0, 0, 0);
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(collectionNotesSaved:) name:@"CollectionNotesSaved" object:nil];

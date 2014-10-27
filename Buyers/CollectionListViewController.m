@@ -316,9 +316,9 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
             products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
             
-           /* if(i==0){
+           /*if(i==0){
              
-             Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
+             /*Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
              brand.brandName = @"irregular choice";
              brand.brandRef = [NSNumber numberWithInt:100];
@@ -336,9 +336,9 @@ static const float kProductColumnSpacer = 14.0;
              if(![managedContext save:&error]) {
              NSLog(@"Could not save supplier: %@", [error localizedDescription]);
              
-             }
+             }*/
              
-            Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
+            /*Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
              material.materialName = @"man made";
              material.materialRef = [NSNumber numberWithInt:60];

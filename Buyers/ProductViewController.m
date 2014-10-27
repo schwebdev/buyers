@@ -196,9 +196,6 @@ static const float kPageWidth = 680.0;
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotesSaved:) name:@"ProductNotesSaved" object:nil];
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
-    
-    
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated {

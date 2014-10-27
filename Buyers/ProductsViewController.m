@@ -49,6 +49,7 @@ static const float sProductColumnSpacer = 5.0;
     UILabel *numProducts;
     NSString *productText;
     UILabel *noResults;
+    UIButton *menu2;
 }
 
 @end
@@ -58,6 +59,8 @@ static const float sProductColumnSpacer = 5.0;
 @synthesize collection = _collection;
 @synthesize clearAll = _clearAll;
 @synthesize saveSelection = _saveSelection;
+@synthesize displayAdvancedSearchPopover = _displayAdvancedSearchPopover;
+@synthesize productSearch = _productSearch;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -123,12 +126,62 @@ static const float sProductColumnSpacer = 5.0;
     
     [menu1 addTarget:self action:@selector(addNewProduct:) forControlEvents:UIControlEventTouchUpInside];
     
+    menu2 = [self setMenuButton:2 title:@"advanced search"];
+    
+    [menu2 addTarget:self action:@selector(displayAdvancedSearchPopover:) forControlEvents:UIControlEventTouchUpInside];
+    
 }
 - (void)addNewProduct:(id)sender {
     
     AddNewProductViewController  *addNewProductVC =  [self.storyboard instantiateViewControllerWithIdentifier:@"addNewProduct"];
     
     [self.navigationController pushViewController:addNewProductVC animated:YES];
+    
+}
+
+- (void)advancedSearch:(NSNotification *)notification
+{
+    [self.displayAdvancedSearchPopover dismissPopoverAnimated:YES];
+    
+    NSDictionary *dict = [notification userInfo];
+    
+    if(dict[@"productName"] != nil) {
+        NSLog(@"userInfo productName: %@", dict[@"productName"]);
+    }
+    if(dict[@"productCategoryRef"] != nil) {
+        NSLog(@"userInfo productCategoryRef: %@", dict[@"productCategoryRef"]);
+    }
+    if(dict[@"productBrandRef"] != nil) {
+        NSLog(@"userInfo productBrandRef: %@", dict[@"productBrandRef"]);
+    }
+    if(dict[@"productSupplierCode"] != nil) {
+        NSLog(@"userInfo productSupplierCode: %@", dict[@"productSupplierCode"]);
+    }
+    if(dict[@"productColourRef"] != nil) {
+        NSLog(@"userInfo productColourRef: %@", dict[@"productColourRef"]);
+    }
+    if(dict[@"productMaterialRef"] != nil) {
+        NSLog(@"userInfo productMaterialRef: %@", dict[@"productMaterialRef"]);
+    }
+    NSLog(@"userInfo productType: %@", dict[@"productType"]);
+    
+    if(dict[@"productPrice"] != nil) {
+        NSLog(@"userInfo productPrice: %@", dict[@"productPrice"]);
+    }
+
+    
+}
+- (IBAction)displayAdvancedSearchPopover:(id)sender {
+    
+    if (_productSearch== nil) {
+        self.productSearch = [self.storyboard instantiateViewControllerWithIdentifier:@"search"];
+        _productSearch.delegate = self;
+        
+        self.displayAdvancedSearchPopover = [[UIPopoverController alloc] initWithContentViewController:_productSearch];
+    }
+    
+    [self.displayAdvancedSearchPopover presentPopoverFromRect:menu2.bounds  inView:menu2 permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    
     
 }
 - (void)viewDidLoad
@@ -261,6 +314,8 @@ static const float sProductColumnSpacer = 5.0;
     [self.view addSubview:productsAddSub];
 
    
+    //add notification to listen for the collection being saved and call method to close the pop over
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(advancedSearch:) name:@"ProductAdvancedSearch" object:nil];
 
 }
 
