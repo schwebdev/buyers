@@ -120,7 +120,6 @@ static const float kPageWidth = 680.0;
         self.productColour_edit.hidden=NO;
         self.productMaterial_edit.hidden=NO;
         
-        
         self.productName.hidden = YES;
         self.productPrice.hidden=YES;
         self.productCategory.hidden=YES;
@@ -130,18 +129,7 @@ static const float kPageWidth = 680.0;
         self.productMaterial.hidden=YES;
         
         
-        //categories drop down
-        [self.productCategory_edit setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"categoryName"];
-        //brand drop down
-        [self.productBrand_edit setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
-        //supplier drop down
-        [self.productSupplier_edit setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
-        //colour drop down
-        [self.productColour_edit setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourRef"];
-        //material drop down
-        [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialRef"];
         
-    
     
     }
     [tools addSubview:_notesButton];
@@ -165,35 +153,44 @@ static const float kPageWidth = 680.0;
     [self.view addSubview:productsInfo];
     
    
+    //categories drop down
+    [self.productCategory_edit setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"category2Ref"];
+    //brand drop down
+    [self.productBrand_edit setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
+    //supplier drop down
+    [self.productSupplier_edit setListItems:(NSMutableArray *)[Sync getTable:@"Supplier" sortWith:@"supplierName"] withName:@"supplierName" withValue:@"supplierCode"];
+    //colour drop down
+    [self.productColour_edit setListItems:(NSMutableArray *)[Sync getTable:@"Colour" sortWith:@"colourName"] withName:@"colourName" withValue:@"colourRef"];
+    //material drop down
+    [self.productMaterial_edit setListItems:(NSMutableArray *)[Sync getTable:@"Material" sortWith:@"materialName"] withName:@"materialName" withValue:@"materialRef"];
+    
     UIImage *image = [UIImage imageWithData:(_product.productImageData)];
     [self.productImage setImage:image];
-    
-    self.productName.text = _product.productName;
-    self.productCode.text = _product.productCode;
-    self.productCategory.text = _product.category.categoryName;
-    self.productBrand.text = _product.brand.brandName;
-    self.productSupplier.text = _product.supplier.supplierName;
-    self.productColour .text = _product.colour.colourName;
-    self.productMaterial.text = _product.material.materialName;
-    
-    
     
     NSNumberFormatter *formatPrice = [[NSNumberFormatter alloc] init];
     [formatPrice setNumberStyle:NSNumberFormatterDecimalStyle];
     [formatPrice setMaximumFractionDigits:2];
     [formatPrice setMinimumFractionDigits:2];
-    self.productPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
-    
     
     self.productName_edit.text=_product.productName;
     self.productPrice_edit.text=[formatPrice stringFromNumber:_product.productPrice];
     
-    [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.category.categoryName]];
-    [self.productBrand_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.brand.brandRef]];
-    [self.productSupplier_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.supplier.supplierCode]];
-    [self.productColour_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.colour.colourRef]];
-    [self.productMaterial_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.material.materialRef]];
+    [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productCategoryRef]];
+    [self.productBrand_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productBrandRef]];
+    [self.productSupplier_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productSupplierCode]];
+    [self.productColour_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productColourRef]];
+    [self.productMaterial_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productMaterialRef]];
     
+    self.productName.text = _product.productName;
+    self.productCode.text = _product.productCode;
+    self.productPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
+
+    //set labels for schuh product to the value of the editable field dropdown value
+    self.productCategory.text = [self.productCategory_edit getSelectedText];
+    self.productBrand.text = [self.productBrand_edit getSelectedText];
+    self.productSupplier.text =  [self.productSupplier_edit getSelectedText];
+    self.productColour .text = [self.productColour_edit getSelectedText];
+    self.productMaterial.text = [self.productMaterial_edit getSelectedText];
     
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productNotesSaved:) name:@"ProductNotesSaved" object:nil];
@@ -239,7 +236,7 @@ static const float kPageWidth = 680.0;
         NSError *error;
         
         //need to remove the object from every relationship prior to deleting otherwise the object is set to nil and causes an error
-        if([_product.brand.productBrand containsObject:_product]) {
+        /*if([_product.brand.productBrand containsObject:_product]) {
             [_product.brand removeProductBrandObject:_product];
         }
         if([_product.category.productCategory containsObject:_product]) {
@@ -253,7 +250,7 @@ static const float kPageWidth = 680.0;
         }
         if([_product.material.productMaterial containsObject:_product]) {
             [_product.material removeProductMaterialObject:_product];
-        }
+        }*/
         
         NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
         NSArray *collections = [managedContext executeFetchRequest:requestCollections error:&error];
@@ -306,44 +303,44 @@ static const float kPageWidth = 680.0;
     if([self.productCategory_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         //_isValid = NO;
         //[errorMsg appendString:@"please select a category\n"];
-        _product.category = nil;
+        _product.productCategoryRef = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productCategory_edit.getSelectedObject[@"IDURI"]];
-        NSManagedObject *categoryElement = [managedContext objectWithID:c];
-        _product.category = (ProductCategory*)categoryElement;
+        ProductCategory *categoryElement = (ProductCategory*)[managedContext objectWithID:c];
+        _product.productCategoryRef =  categoryElement.category2Ref;
     }
     
     if([self.productBrand_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         //_isValid = NO;
         //[errorMsg appendString:@"please select a brand\n"];
-         _product.brand = nil;
+         _product.productBrandRef = nil;
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productBrand_edit.getSelectedObject[@"IDURI"]];
-        NSManagedObject *brandElement = [managedContext objectWithID:c];
-        _product.brand = (Brand*)brandElement;
+        Brand *brandElement = (Brand*)[managedContext objectWithID:c];
+        _product.productBrandRef = brandElement.brandRef;
         
     }
     
     if([self.productSupplier_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
        // _isValid = NO;
        // [errorMsg appendString:@"please select a supplier\n"];
-         _product.supplier = nil;
+         _product.productSupplierCode = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productSupplier_edit.getSelectedObject[@"IDURI"]];
-        NSManagedObject *supplierElement = [managedContext objectWithID:c];
-        _product.supplier = (Supplier*)supplierElement;
+        Supplier *supplierElement = (Supplier*)[managedContext objectWithID:c];
+        _product.productSupplierCode = supplierElement.supplierCode;
     }
     
     if([self.productColour_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         //_isValid = NO;
         //[errorMsg appendString:@"please select a colour\n"];
-         _product.colour = nil;
+         _product.productColourRef = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productColour_edit.getSelectedObject[@"IDURI"]];
-        NSManagedObject *colourElement = [managedContext objectWithID:c];
-        _product.colour = (Colour*)colourElement;
+        Colour *colourElement = (Colour*)[managedContext objectWithID:c];
+        _product.productColourRef = colourElement.colourRef;
         //NSLog(@"colour: %@", _product.colour.colourName);
         //pColour = [self.colourList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
@@ -351,12 +348,12 @@ static const float kPageWidth = 680.0;
     if([self.productMaterial_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
        // _isValid = NO;
         //[errorMsg appendString:@"please select a material\n"];
-         _product.material = nil;
+         _product.productMaterialRef = nil;
         
     } else {
         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.productMaterial_edit.getSelectedObject[@"IDURI"]];
-        NSManagedObject *materialElement = [managedContext objectWithID:c];
-        _product.material = (Material*)materialElement;
+        Material *materialElement = (Material*)[managedContext objectWithID:c];
+        _product.productMaterialRef = materialElement.materialRef;
         //pMaterial = [self.materialList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
     }
     

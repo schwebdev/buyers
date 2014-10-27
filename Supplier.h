@@ -1,5 +1,5 @@
 //
-//  Material.h
+//  Supplier.h
 //  Buyers
 //
 //  Created by Web Development on 22/10/2014.
@@ -10,9 +10,9 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Material : NSManagedObject
+@interface Supplier : NSManagedObject
 
-@property (nonatomic, retain) NSString * materialName;
-@property (nonatomic, retain) NSNumber * materialRef;
+@property (nonatomic, retain) NSString * supplierCode;
+@property (nonatomic, retain) NSString * supplierName;
 
 @end

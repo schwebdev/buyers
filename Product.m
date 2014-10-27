@@ -2,19 +2,13 @@
 //  Product.m
 //  Buyers
 //
-//  Created by Web Development on 16/10/2014.
+//  Created by Web Development on 27/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
 #import "Product.h"
-#import "Brand.h"
 #import "Collection.h"
-#import "Colour.h"
-#import "Image.h"
-#import "Material.h"
-#import "ProductCategory.h"
 #import "ProductOrder.h"
-#import "Supplier.h"
 
 
 @implementation Product
@@ -24,13 +18,12 @@
 @dynamic productName;
 @dynamic productNotes;
 @dynamic productPrice;
-@dynamic brand;
-@dynamic category;
+@dynamic productBrandRef;
+@dynamic productSupplierCode;
+@dynamic productCategoryRef;
+@dynamic productColourRef;
+@dynamic productMaterialRef;
 @dynamic collections;
-@dynamic colour;
-@dynamic images;
-@dynamic material;
 @dynamic productOrder;
-@dynamic supplier;
 
 @end

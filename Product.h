@@ -2,14 +2,14 @@
 //  Product.h
 //  Buyers
 //
-//  Created by Web Development on 16/10/2014.
+//  Created by Web Development on 27/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Brand, Collection, Colour, Image, Material, ProductCategory, ProductOrder, Supplier;
+@class Collection, ProductOrder;
 
 @interface Product : NSManagedObject
 
@@ -18,14 +18,13 @@
 @property (nonatomic, retain) NSString * productName;
 @property (nonatomic, retain) NSString * productNotes;
 @property (nonatomic, retain) NSNumber * productPrice;
-@property (nonatomic, retain) Brand *brand;
-@property (nonatomic, retain) ProductCategory *category;
+@property (nonatomic, retain) NSNumber * productBrandRef;
+@property (nonatomic, retain) NSString * productSupplierCode;
+@property (nonatomic, retain) NSNumber * productCategoryRef;
+@property (nonatomic, retain) NSNumber * productColourRef;
+@property (nonatomic, retain) NSNumber * productMaterialRef;
 @property (nonatomic, retain) NSSet *collections;
-@property (nonatomic, retain) Colour *colour;
-@property (nonatomic, retain) NSSet *images;
-@property (nonatomic, retain) Material *material;
 @property (nonatomic, retain) NSSet *productOrder;
-@property (nonatomic, retain) Supplier *supplier;
 @end
 
 @interface Product (CoreDataGeneratedAccessors)
@@ -34,11 +33,6 @@
 - (void)removeCollectionsObject:(Collection *)value;
 - (void)addCollections:(NSSet *)values;
 - (void)removeCollections:(NSSet *)values;
-
-- (void)addImagesObject:(Image *)value;
-- (void)removeImagesObject:(Image *)value;
-- (void)addImages:(NSSet *)values;
-- (void)removeImages:(NSSet *)values;
 
 - (void)addProductOrderObject:(ProductOrder *)value;
 - (void)removeProductOrderObject:(ProductOrder *)value;

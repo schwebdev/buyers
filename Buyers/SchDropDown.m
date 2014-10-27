@@ -51,6 +51,25 @@
     return returnVal;
 }
 
+- (NSString *)getSelectedText {
+    NSString *returnVal = @"";
+    if(self.listItems!= nil) {
+        for (NSDictionary *item in self.listItems) {
+            
+            if(self.listName != nil) {
+                if([self.text isEqualToString:[NSString stringWithFormat:@"%@",item[self.listName]]]) {
+                    returnVal = [NSString stringWithFormat:@"%@",item[self.listName]];
+                }
+            } else {
+                if([self.text isEqualToString:item[[[item allKeys] objectAtIndex:0]]]) {
+                    returnVal = [[item allKeys] objectAtIndex:0];
+                }
+            }
+        }
+    }
+    return returnVal;
+}
+
 - (NSDictionary *)getSelectedObject {
     NSDictionary *returnVal = nil;
     if(self.listItems!= nil) {

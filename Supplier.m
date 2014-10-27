@@ -2,18 +2,16 @@
 //  Supplier.m
 //  Buyers
 //
-//  Created by webdevelopment on 05/09/2014.
+//  Created by Web Development on 22/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
 #import "Supplier.h"
-#import "Product.h"
 
 
 @implementation Supplier
 
 @dynamic supplierCode;
 @dynamic supplierName;
-@dynamic productSupplier;
 
 @end

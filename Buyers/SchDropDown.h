@@ -16,6 +16,7 @@
 
 - (void)setListItems:(NSMutableArray *)listItems withName:(NSString *)listName withValue:(NSString *)listValue;
 - (NSString *)getSelectedValue;
+- (NSString *)getSelectedText;
 - (NSDictionary *)getSelectedObject;
 - (void)setSelectedValue:(NSString *)value;
 

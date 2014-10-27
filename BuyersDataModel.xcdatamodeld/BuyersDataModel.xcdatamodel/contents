@@ -3,7 +3,6 @@
     <entity name="Brand" representedClassName="Brand" syncable="YES">
         <attribute name="brandName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="brandRef" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="productBrand" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="brand" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="CalYearWeek" representedClassName="CalYearWeek" syncable="YES">
         <attribute name="calYearWeek" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -19,44 +18,36 @@
     <entity name="Colour" representedClassName="Colour" syncable="YES">
         <attribute name="colourName" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="colourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="productColour" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="colour" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Department" representedClassName="Department" syncable="YES">
         <attribute name="depCode" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="depDesc" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
-    <entity name="Image" representedClassName="Image" syncable="YES">
-        <attribute name="imageData" attributeType="Binary" syncable="YES"/>
-        <relationship name="product" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Product" inverseName="images" inverseEntity="Product" syncable="YES"/>
-    </entity>
     <entity name="Material" representedClassName="Material" syncable="YES">
         <attribute name="materialName" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="materialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <relationship name="productMaterial" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="material" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="Merch" representedClassName="Merch" syncable="YES">
         <attribute name="merchName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="merchRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Product" representedClassName="Product" syncable="YES">
+        <attribute name="productBrandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="productCategoryRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productCode" attributeType="String" minValueString="0" maxValueString="10" indexed="YES" syncable="YES"/>
+        <attribute name="productColourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productImageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="productMaterialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productName" attributeType="String" maxValueString="50" indexed="YES" syncable="YES"/>
         <attribute name="productNotes" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productPrice" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <relationship name="brand" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brand" inverseName="productBrand" inverseEntity="Brand" syncable="YES"/>
-        <relationship name="category" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ProductCategory" inverseName="productCategory" inverseEntity="ProductCategory" syncable="YES"/>
+        <attribute name="productSupplierCode" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Collection" inverseName="products" inverseEntity="Collection" syncable="YES"/>
-        <relationship name="colour" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Colour" inverseName="productColour" inverseEntity="Colour" syncable="YES"/>
-        <relationship name="images" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Image" inverseName="product" inverseEntity="Image" syncable="YES"/>
-        <relationship name="material" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Material" inverseName="productMaterial" inverseEntity="Material" syncable="YES"/>
         <relationship name="productOrder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderProduct" inverseEntity="ProductOrder" syncable="YES"/>
-        <relationship name="supplier" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Supplier" inverseName="productSupplier" inverseEntity="Supplier" syncable="YES"/>
     </entity>
     <entity name="ProductCategory" representedClassName="ProductCategory" syncable="YES">
         <attribute name="category2Ref" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="categoryName" optional="YES" attributeType="String" syncable="YES"/>
-        <relationship name="productCategory" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="category" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="ProductOrder" representedClassName="ProductOrder" syncable="YES">
         <attribute name="productOrder" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
@@ -103,28 +94,26 @@
     <entity name="Supplier" representedClassName="Supplier" syncable="YES">
         <attribute name="supplierCode" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="supplierName" attributeType="String" maxValueString="100" syncable="YES"/>
-        <relationship name="productSupplier" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Product" inverseName="supplier" inverseEntity="Product" syncable="YES"/>
     </entity>
     <entity name="SyncStatus" representedClassName="SyncStatus" syncable="YES">
         <attribute name="lastSync" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="type" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Brand" positionX="-27" positionY="126" width="128" height="88"/>
+        <element name="Brand" positionX="-27" positionY="126" width="128" height="73"/>
         <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
         <element name="Collection" positionX="-63" positionY="-18" width="128" height="135"/>
-        <element name="Colour" positionX="18" positionY="153" width="128" height="88"/>
+        <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
-        <element name="Image" positionX="-36" positionY="99" width="128" height="73"/>
-        <element name="Material" positionX="0" positionY="144" width="128" height="88"/>
+        <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
         <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="238"/>
-        <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="88"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="223"/>
+        <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>
         <element name="ReportFilterSet" positionX="-9" positionY="153" width="128" height="133"/>
         <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
-        <element name="Supplier" positionX="-18" positionY="135" width="128" height="88"/>
+        <element name="Supplier" positionX="-18" positionY="135" width="128" height="75"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
     </elements>
 </model>

@@ -13,7 +13,7 @@
 #import "SyncStatus.h"
 #import "Supplier.h"
 #import "Brand.h"
-#import "material.h"
+#import "Material.h"
 #import "CalYearWeek.h"
 #import "Department.h"
 #import "Merch.h"

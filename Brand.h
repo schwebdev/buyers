@@ -1,5 +1,5 @@
 //
-//  Material.h
+//  Brand.h
 //  Buyers
 //
 //  Created by Web Development on 22/10/2014.
@@ -10,9 +10,9 @@
 #import <CoreData/CoreData.h>
 
 
-@interface Material : NSManagedObject
+@interface Brand : NSManagedObject
 
-@property (nonatomic, retain) NSString * materialName;
-@property (nonatomic, retain) NSNumber * materialRef;
+@property (nonatomic, retain) NSString * brandName;
+@property (nonatomic, retain) NSNumber * brandRef;
 
 @end

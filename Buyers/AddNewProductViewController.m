@@ -336,11 +336,11 @@ static const float kPageWidth = 680.0;
              product.productName = pName;
              product.productPrice = pPrice;
              product.productCode = @"0000000000";
-             product.category = pCategory;
-             product.brand = pBrand;
-             product.colour = pColour;
-             product.material = pMaterial;
-             product.supplier = pSupplier;
+             product.productCategoryRef = pCategory.category2Ref;
+             product.productBrandRef = pBrand.brandRef;
+             product.productColourRef = pColour.colourRef;
+             product.productMaterialRef = pMaterial.materialRef;
+             product.productSupplierCode = pSupplier.supplierCode;
              NSData *imageData;
              if(_selectedImage !=nil){
                 imageData  = [NSData dataWithData:UIImageJPEGRepresentation(_selectedImage, 1)];
@@ -459,8 +459,12 @@ finishedSavingWithError:(NSError *)error
     if(CGRectGetMaxY(self.view.frame) < 700) {
         
         if([self.txtProductName isFirstResponder]) {
+            [self animateTextField:self.txtProductName up:NO];
+        }
+        if([self.txtProductPrice isFirstResponder]) {
             [self animateTextField:self.txtProductPrice up:NO];
         }
+
         if([self.txtProductNotes isFirstResponder]) {
             [self animateTextView:self.txtProductNotes up:NO];
         }
