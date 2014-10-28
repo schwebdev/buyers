@@ -14,7 +14,9 @@
 #import "Material.h"
 #import "ProductCategory.h"
 #import "Colour.h"
+#import "Sync.h"
 #import "SchTextField.h"
+#import "SchDropDown.h"
 
 
 #define LX_LIMITED_MOVEMENT 0
@@ -33,13 +35,15 @@ static const float kProductColumnSpacer = 14.0;
 @interface CollectionListViewController () {
     NSArray *collections;
     NSMutableArray *deletions;
-    UIButton *filterButton;
+    UIButton *filterButton, *clearButton;
     UIButton *allUsersButton;
     UIButton *yourOwnButton;
     SchTextField *txtSearch;
+    SchDropDown *brandsList;
     UIView *tools;
-    UILabel *numCollections;
+    UILabel *numCollections, *brandListLabel, *searchTextLabel;
     NSString *collectionText;
+    NSPredicate *predicate;
 }
 @end
 
@@ -62,12 +66,11 @@ static const float kProductColumnSpacer = 14.0;
     
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"List of Collections"]];
     
-    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 610, 100)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.navigationController.toolbar.clipsToBounds = YES;
     
-    
-    allUsersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 100, 24)];
+    allUsersButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 38, 100, 24)];
     [allUsersButton setTitle:@" all users" forState:UIControlStateNormal];
     allUsersButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
     [allUsersButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -76,7 +79,7 @@ static const float kProductColumnSpacer = 14.0;
     [allUsersButton setImage:[UIImage imageNamed:@"checkbox-checked-search.png"] forState:UIControlStateSelected];
     [allUsersButton addTarget:self action:@selector(filterClicked:) forControlEvents:UIControlEventTouchUpInside];
 
-    yourOwnButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 0, 100, 24)];
+    yourOwnButton = [[UIButton alloc] initWithFrame:CGRectMake(3, 3, 100, 24)];
     [yourOwnButton setTitle:@" your own" forState:UIControlStateNormal];
     yourOwnButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
     [yourOwnButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
@@ -87,17 +90,44 @@ static const float kProductColumnSpacer = 14.0;
     
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [filterButton setTitle:@"filter" forState:UIControlStateNormal];
-    filterButton.frame = CGRectMake(320, 0, 100, 50);
+    filterButton.frame = CGRectMake(400, 10, 100, 50);
     [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
-    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
+    clearButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [clearButton setTitle:@"clear" forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(510, 10, 100, 50);
+    [clearButton addTarget:self action:@selector(clearSearch) forControlEvents:UIControlEventTouchUpInside];
+    clearButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+    clearButton.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1];
+    
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(190, 35, 200, 30)];
+    brandsList = [[SchDropDown alloc] initWithFrame:CGRectMake(190, 0, 200, 30)];
+    searchTextLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 35, 80, 30)];
+    brandListLabel = [[UILabel alloc] initWithFrame:CGRectMake(110, 0, 80, 30)];
+    searchTextLabel.text = @"search term";
+    brandListLabel.text = @"select brand";
+    searchTextLabel.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    brandListLabel.font= [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    
+    //brand drop down
+    [brandsList setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
+    
+    
+    CALayer *searchDivider = [CALayer layer];
+    searchDivider.frame = CGRectMake(100, 6, 1, 56);
+    searchDivider.backgroundColor = [UIColor colorWithWhite:0.75 alpha:1].CGColor;
+    [tools.layer addSublayer:searchDivider];
     
     [tools addSubview:allUsersButton];
     [tools addSubview:yourOwnButton];
     [tools addSubview:filterButton];
+    [tools addSubview:clearButton];
     [tools addSubview:txtSearch];
+    [tools addSubview:brandsList];
+    [tools addSubview:searchTextLabel];
+    [tools addSubview:brandListLabel];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
 
@@ -136,20 +166,46 @@ static const float kProductColumnSpacer = 14.0;
         [txtSearch resignFirstResponder];
     }
     
-    /*
-    [numCollections removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 999999999) {
-            [view removeFromSuperview];
-        }
+    NSMutableArray *preds = [[NSMutableArray alloc]initWithCapacity:1];
+
+    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0) {
+        NSPredicate *namePred =[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@",txtSearch.text,txtSearch.text];
+        [preds addObject:namePred];
+    }
+    
+    if(yourOwnButton.selected) {
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+        NSPredicate *creatorPred =[NSPredicate predicateWithFormat:@"collectionCreator =[cd] %@",creatorName];
+        [preds addObject:creatorPred];
         
-    }*/
+    }
+    
+    if([brandsList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0) {
+
+        NSPredicate *brandPred =[NSPredicate predicateWithFormat:@"collectionBrandRef == %d", [brandsList.getSelectedValue integerValue]];
+        [preds addObject:brandPred];
+    }
+    
+    predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
+    
     [self fetchResults];
-    NSLog(@"count %d", [collections count]);
+   // NSLog(@"count %d", [collections count]);
     
 }
-
+- (void) clearSearch {
+    //dimiss the keyboard
+    if([txtSearch isFirstResponder]) {
+        [txtSearch resignFirstResponder];
+    }
+    txtSearch.text = @"";
+    brandsList.text = @"";
+    [yourOwnButton setSelected:NO];
+    [allUsersButton setSelected:YES];
+    
+    
+}
 
 - (void)alert {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"alert" message:[NSString stringWithFormat:@"test"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
@@ -172,16 +228,9 @@ static const float kProductColumnSpacer = 14.0;
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"collectionName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
     
-    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-    NSString *creatorName = [defaults objectForKey:@"username"];
-    
-    if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && yourOwnButton.selected) {
-        //get only user's own collections
-         collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionCreator =[cd] %@", creatorName]];
-    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && yourOwnButton.selected) {
-        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@) AND collectionCreator =[cd] %@", txtSearch.text, txtSearch.text, creatorName]];
-    } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allUsersButton.selected) {
-        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"collectionName CONTAINS[cd] %@ OR collectionName LIKE[cd] %@", txtSearch.text, txtSearch.text]];
+    if(predicate != nil) {
+        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:predicate];
+       
     } else {
     
          collections = [results sortedArrayUsingDescriptors:sortDescriptors];
@@ -316,12 +365,18 @@ static const float kProductColumnSpacer = 14.0;
             NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
             products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
             
+                        
            /*if(i==0){
              
              /*Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
              brand.brandName = @"irregular choice";
              brand.brandRef = [NSNumber numberWithInt:100];
+               
+            brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
+               
+               brand.brandName = @"iron fist";
+               brand.brandRef = [NSNumber numberWithInt:101];
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save brand: %@", [error localizedDescription]);
@@ -332,6 +387,11 @@ static const float kProductColumnSpacer = 14.0;
              
              supplier.supplierName = @"irregular choice";
              supplier.supplierCode = @"SUP001";
+               
+               supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:managedContext];
+               
+               supplier.supplierName = @"iron fist";
+               supplier.supplierCode = @"SUP002";
              
              if(![managedContext save:&error]) {
              NSLog(@"Could not save supplier: %@", [error localizedDescription]);

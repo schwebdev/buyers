@@ -9,6 +9,8 @@
 #import "NewCollectionViewController.h"
 #import "AppDelegate.h"
 #import "Collection.h"
+#import "Brand.h"
+#import "Sync.h"
 
 @interface NewCollectionViewController ()
 
@@ -34,8 +36,11 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     _collectionName.delegate = self;
-    self.preferredContentSize = CGSizeMake(340.0, 250.0);
+    self.preferredContentSize = CGSizeMake(340.0, 380.0);
     _collectionError.hidden = true;
+    
+    //brand drop down
+    [self.collectionBrandRef setListItems:(NSMutableArray *)[Sync getTable:@"Brand" sortWith:@"brandName"] withName:@"brandName" withValue:@"brandRef"];
 
 }
 
@@ -48,27 +53,42 @@
 -(IBAction)saveNewCollection:(id)sender {
     _collectionError.hidden = true;
     [_collectionName resignFirstResponder];
-    if ([self.collectionName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter a name for this collection!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
-        [alert show];
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    NSError *error;
+    Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
+    
+    _isValid = YES;
+    NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    
+    if([creatorName length] ==0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please add your name to app settings\n"];
     } else {
+        collection.collectionCreator= creatorName;
+    }
+    if([self.collectionName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a name for this collection\n"];
+    } else {
+        collection.collectionName = self.collectionName.text;
+    }
+    if([self.collectionBrandRef.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please select a brand\n"];
+    } else {
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.collectionBrandRef.getSelectedObject[@"IDURI"]];
+        Brand *brandElement = (Brand*)[managedContext objectWithID:c];
+        collection.collectionBrandRef  = brandElement.brandRef;
+    }
+    
+    if(_isValid) {
        
-         //get user's full name from app settings
-         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-         NSString *creatorName = [defaults objectForKey:@"username"];
-        
-        if([creatorName length] ==0) {
-            _collectionError.text = @" please add your name to app settings";
-            _collectionError.hidden = false;
-        } else {
-        
         //save the new collection
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        NSError *error;
-        Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
-        
-        collection.collectionName = _collectionName.text;
-        collection.collectionCreator = creatorName;
         collection.collectionCreationDate = [NSDate date];
          
          if(![managedContext save:&error]) {
@@ -80,14 +100,21 @@
         
              //clear text field
              _collectionName.text = @"";
+             _collectionBrandRef.text = @"";
              //go to new collection from parent view by sending a notification
              NSDictionary *collectionData = [NSDictionary dictionaryWithObject:collection.objectID forKey:@"collectionID"];
              [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"GoToNewCollection" object:self userInfo:collectionData]];
              [[NSNotificationCenter defaultCenter] removeObserver:self];
             
          }
-        }
         
+    } else {
+       
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:[NSString stringWithFormat:@"%@",errorMsg] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
+        [alert show];
+
+
     }
     
 }

@@ -2,7 +2,7 @@
 //  Collection.h
 //  Buyers
 //
-//  Created by Schuh Webdev on 02/10/2014.
+//  Created by Web Development on 28/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @property (nonatomic, retain) NSString * collectionCreator;
 @property (nonatomic, retain) NSString * collectionName;
 @property (nonatomic, retain) NSString * collectionNotes;
+@property (nonatomic, retain) NSNumber * collectionBrandRef;
 @property (nonatomic, retain) NSSet *collectionProductOrder;
 @property (nonatomic, retain) NSSet *products;
 @end

@@ -8,6 +8,7 @@
         <attribute name="calYearWeek" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Collection" representedClassName="Collection" syncable="YES">
+        <attribute name="collectionBrandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="collectionCreationDate" attributeType="Date" syncable="YES"/>
         <attribute name="collectionCreator" attributeType="String" minValueString="3" maxValueString="100" syncable="YES"/>
         <attribute name="collectionName" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
@@ -102,7 +103,7 @@
     <elements>
         <element name="Brand" positionX="-27" positionY="126" width="128" height="73"/>
         <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
-        <element name="Collection" positionX="-63" positionY="-18" width="128" height="135"/>
+        <element name="Collection" positionX="-63" positionY="-18" width="128" height="148"/>
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>

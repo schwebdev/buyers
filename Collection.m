@@ -2,7 +2,7 @@
 //  Collection.m
 //  Buyers
 //
-//  Created by Schuh Webdev on 02/10/2014.
+//  Created by Web Development on 28/10/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -17,6 +17,7 @@
 @dynamic collectionCreator;
 @dynamic collectionName;
 @dynamic collectionNotes;
+@dynamic collectionBrandRef;
 @dynamic collectionProductOrder;
 @dynamic products;
 

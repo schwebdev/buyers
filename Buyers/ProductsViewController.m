@@ -41,7 +41,7 @@ static const float sProductColumnSpacer = 5.0;
 @interface ProductsViewController () {
     NSArray *products;
     NSMutableArray *selectedProducts;
-    UIButton *filterButton;
+    UIButton *filterButton, *clearButton;
     UIButton *allProductsButton;
     UIButton *customProductsButton;
     SchTextField *txtSearch;
@@ -232,7 +232,13 @@ static const float sProductColumnSpacer = 5.0;
     NSFetchRequest *pickerRequest = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
     NSArray *collections = [managedContext executeFetchRequest:pickerRequest error:&error];
     
+    
     NSString *title2 = _collection.collectionName;
+    if(title2.length > 15) {
+        NSString *substring = [title2 substringWithRange:NSMakeRange(0,15)];
+        title2 = [NSString stringWithFormat:@"%@...",substring];
+    }
+    
     self.txtNewCollection.hidden = YES;
     self.collectionList.hidden = YES;
     
@@ -256,10 +262,9 @@ static const float sProductColumnSpacer = 5.0;
     
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Add Products To Collection"]];
     
-    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 420, 75)];
+    tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 520, 75)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
     self.navigationController.toolbar.clipsToBounds = YES;
-    
     
     allProductsButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 28, 100, 24)];
     [allProductsButton setTitle:@" all products" forState:UIControlStateNormal];
@@ -281,16 +286,24 @@ static const float sProductColumnSpacer = 5.0;
     
     filterButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [filterButton setTitle:@"filter" forState:UIControlStateNormal];
-    filterButton.frame = CGRectMake(320, 0, 100, 50);
+    filterButton.frame = CGRectMake(310, 0, 100, 50);
     [filterButton addTarget:self action:@selector(filter) forControlEvents:UIControlEventTouchUpInside];
     filterButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     filterButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    
+    clearButton=[UIButton buttonWithType:UIButtonTypeCustom];
+    [clearButton setTitle:@"clear" forState:UIControlStateNormal];
+    clearButton.frame = CGRectMake(420, 0, 100, 50);
+    [clearButton addTarget:self action:@selector(clearSearch) forControlEvents:UIControlEventTouchUpInside];
+    clearButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
+    clearButton.backgroundColor = [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1];
 
-    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(110, 0, 200, 50)];
+    txtSearch = [[SchTextField alloc] initWithFrame:CGRectMake(100, 0, 200, 50)];
     
     [tools addSubview:allProductsButton];
     [tools addSubview:customProductsButton];
     [tools addSubview:filterButton];
+    [tools addSubview:clearButton];
     [tools addSubview:txtSearch];
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
@@ -526,18 +539,20 @@ static const float sProductColumnSpacer = 5.0;
     
     isAdvancedSearch = NO;
     
-    /*[numProducts removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 888888888) {
-            [view removeFromSuperview];
-        }
-        
-    }*/
     [self fetchResults];
     [selectedProducts removeAllObjects];
     [self constructsProducts];
     //NSLog(@"count %d", [products count]);
+    
+}
+- (void) clearSearch {
+    //dimiss the keyboard
+    if([txtSearch isFirstResponder]) {
+        [txtSearch resignFirstResponder];
+    }
+    txtSearch.text = @"";
+    [customProductsButton setSelected:NO];
+    [allProductsButton setSelected:YES];
     
 }
 
@@ -684,7 +699,7 @@ static const float sProductColumnSpacer = 5.0;
         //if no collection then validate for new one or existing one being selected
         if(!_collection){
             //[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0)
-            if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
+            if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
             //alert user that there is no collection to add to
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"There is no collection to add products to!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
