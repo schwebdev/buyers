@@ -19,11 +19,38 @@
 
 - (NSString *)getFilterString {
     NSMutableString *filterString = [NSMutableString new];
-    [filterString appendFormat:@"%@;", [[self.CalWeekFrom getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekFrom getSelectedValue]];
-    [filterString appendFormat:@"%@;", [[self.CalWeekTo getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekTo getSelectedValue]];
+    
+    
+    NSInteger dateType = -1;
+    for (UIView *subview in self.dateView.subviews) {
+        if([subview isKindOfClass:[UIButton class]]) {
+            UIButton *btn = (UIButton*)subview;
+            if(btn.selected){
+                dateType = btn.tag;
+            }
+        }
+    }
+    
+    [filterString appendFormat:@"%d;", dateType];
+    
+    switch (dateType) {
+        case 1:
+            [filterString appendFormat:@"1;-1;"];
+            break;
+        case 2:
+            [filterString appendFormat:@"%@;-1;", [self.CalLastWeeks.text isEqualToString:@""] ? @"-1" : self.CalLastWeeks.text];
+            break;
+        case 3:
+            [filterString appendFormat:@"%@;", [[self.CalWeekFrom getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekFrom getSelectedValue]];
+            [filterString appendFormat:@"%@;", [[self.CalWeekTo getSelectedValue] isEqualToString:@""] ? @"-1" : [self.CalWeekTo getSelectedValue]];
+            break;
+        default:
+            break;
+    }
+    
     [filterString appendFormat:@"%@;", [[self.BrandsList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.BrandsList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [[self.MerchList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.MerchList getSelectedValue]];
-    [filterString appendFormat:@"%@;", [[self.SuppliersList getSelectedValue] isEqualToString:@""] ? @"-1" : [self.SuppliersList getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[[self.MerchList getSelectedValue] stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""] ? @"-1" : [self.MerchList getSelectedValue]];
+    [filterString appendFormat:@"%@;", [[[self.SuppliersList getSelectedValue] stringByReplacingOccurrencesOfString:@" " withString:@""] isEqualToString:@""] ? @"-1" : [self.SuppliersList getSelectedValue]];
     [filterString appendFormat:@"%@;", [self.AnalysisCode.text isEqualToString:@""] ? @"-1" : self.AnalysisCode.text];
     
     if([self.departmentsTable indexPathsForSelectedRows].count == 0) {
@@ -52,15 +79,37 @@
         
         NSLog(@"filterString value, %@",filterSet.filterValues);
         NSArray *filterSetValues = [filterSet.filterValues componentsSeparatedByString:@";"];
-        if(![filterSetValues[0] isEqualToString:@"-1"])[self.CalWeekFrom setSelectedValue:filterSetValues[0]];
-        if(![filterSetValues[1] isEqualToString:@"-1"])[self.CalWeekTo setSelectedValue:filterSetValues[1]];
-        if(![filterSetValues[2] isEqualToString:@"-1"])[self.BrandsList setSelectedValue:filterSetValues[2]];
-        if(![filterSetValues[3] isEqualToString:@"-1"])[self.MerchList setSelectedValue:filterSetValues[3]];
-        if(![filterSetValues[4] isEqualToString:@"-1"])[self.SuppliersList setSelectedValue:filterSetValues[4]];
-        if(![filterSetValues[5] isEqualToString:@"-1"])self.AnalysisCode.text = filterSetValues[5];
         
-        if(![filterSetValues[6] isEqualToString:@"-1"]) {
-        for (NSString *value in [filterSetValues[6] componentsSeparatedByString:@","]) {
+        NSInteger dateType = -1;
+        for (UIView *subview in self.dateView.subviews) {
+            if([subview isKindOfClass:[UIButton class]]) {
+                UIButton *btn = (UIButton*)subview;
+                if(btn.selected){
+                    dateType = btn.tag;
+                }
+            }
+        }
+        
+        //[filterString appendFormat:@"%d;", dateType];
+        
+        
+        [(UIButton*)[self.dateView viewWithTag:[filterSetValues[0] intValue]] setSelected:YES];
+        
+        if([filterSetValues[0] intValue] == 2) {
+            if(![filterSetValues[1] isEqualToString:@"-1"])self.CalLastWeeks.text = filterSetValues[1];
+        } else if([filterSetValues[0] intValue] == 3){
+            if(![filterSetValues[1] isEqualToString:@"-1"])[self.CalWeekFrom setSelectedValue:filterSetValues[1]];
+            if(![filterSetValues[2] isEqualToString:@"-1"])[self.CalWeekTo setSelectedValue:filterSetValues[2]];
+        }
+        
+        
+        if(![filterSetValues[3] isEqualToString:@"-1"])[self.BrandsList setSelectedValue:filterSetValues[3]];
+        if(![filterSetValues[4] isEqualToString:@"-1"])[self.MerchList setSelectedValue:filterSetValues[4]];
+        if(![filterSetValues[5] isEqualToString:@"-1"])[self.SuppliersList setSelectedValue:filterSetValues[5]];
+        if(![filterSetValues[6] isEqualToString:@"-1"])self.AnalysisCode.text = filterSetValues[6];
+        
+        if(![filterSetValues[7] isEqualToString:@"-1"]) {
+        for (NSString *value in [filterSetValues[7] componentsSeparatedByString:@","]) {
             
             for (int i = 0; i < self.departmentsList.count; i++) {
                 if([self.departmentsList[i][@"depCode"] intValue] == [value intValue]) {
@@ -113,6 +162,20 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)dateTypeClick:(id)sender {
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = YES;
+    
+    for (UIView *subview in self.dateView.subviews) {
+        if([subview isKindOfClass:[UIButton class]]) {
+            if(subview.tag != button.tag) {
+                UIButton *other = (UIButton*)subview;
+                other.selected = NO;
+            }
+        }
+    }
+}
 /*
 #pragma mark - Navigation
 

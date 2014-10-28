@@ -145,12 +145,13 @@ static const float kProductColumnSpacer = 14.0;
     [_menu2 addTarget:self action:@selector(deleteCollections:) forControlEvents:UIControlEventTouchUpInside];
     
     
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 999999999) {
-            [view removeFromSuperview];
-        }
-        
-    }
+//    for(UIView *view in self.view.subviews) {
+//        if(view.tag == 999999999) {
+//            [view removeFromSuperview];
+//        }
+//        
+//    }
+    
     [self fetchResults];
     
 }
@@ -236,6 +237,24 @@ static const float kProductColumnSpacer = 14.0;
          collections = [results sortedArrayUsingDescriptors:sortDescriptors];
     }
     
+    NSMutableArray *more = [collections mutableCopy];
+    
+    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+//    [more addObjectsFromArray:collections];
+
+    
+    collections = more;
+    
     collectionText = @"collections";
     if([collections count] ==1) {
         collectionText = @"collection";
@@ -243,14 +262,15 @@ static const float kProductColumnSpacer = 14.0;
     }
     
     [numCollections removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 999999999) {
-            [view removeFromSuperview];
-        }
-        
-    }
- 
+//    //clear scroll view so it can be redrawn in case of changes
+//    for(UIView *view in self.view.subviews) {
+//        if(view.tag == 999999999) {
+//            [view removeFromSuperview];
+//        }
+//        
+//    }
+    [[self.view viewWithTag:999999999] removeFromSuperview];
+    
     numCollections = [[UILabel alloc] init];
     numCollections.text = [NSString stringWithFormat: @"%d %@", [collections count], collectionText];
     numCollections.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];

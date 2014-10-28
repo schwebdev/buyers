@@ -117,6 +117,12 @@
     
     htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##TITLE##" withString:dateTime];
     
+    if([htmlString containsString:@"##JS##"]) {
+        NSString *jsFile = [[NSBundle mainBundle] pathForResource:@"jquery" ofType:@"js"];
+        NSString *jsString = [NSString stringWithContentsOfFile:jsFile encoding:NSUTF8StringEncoding error:nil];
+        htmlString = [htmlString stringByReplacingOccurrencesOfString:@"##JS##" withString:jsString];
+    }
+    
     NSMutableString *htmlRows = [NSMutableString new];
     
     
@@ -128,13 +134,51 @@
         if([reportType isEqualToString:@"OrderVsIntake"]) {
             //NSArray *results = [Sync getTable:@"ReportOrderVsIntake" sortWith:@"supplierref"];
             
-            filters = [filters stringByReplacingOccurrencesOfString:@";" withString:@"/"];
+            NSMutableArray *filterValues = [[filters componentsSeparatedByString:@";"] mutableCopy];
+            
+            if([filterValues[0] intValue] == 1 || [filterValues[0] intValue] == 2) {
+                NSError *error;
+                NSURL *url = [[NSURL alloc] initWithString:@"http://aws.schuhshark.com:3000/BuyingService.svc/GetYearWeek"];
+                
+                NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
+                
+                if(!data) {
+                    NSLog(@"download error:%@", error.localizedDescription);
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"there was problem accessing the report service" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    return @"";
+                }
+                
+                NSArray *results = [NSJSONSerialization JSONObjectWithData:data options:kNilOptions error:&error];
+                if(results == nil ) {
+                    NSLog(@"json error: %@", error);
+                    
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"there was problem generating the report" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+                    [alert show];
+                    return @"";
+                } else {
+                    
+                    filterValues[1] = [NSString stringWithFormat:@"%d",[results[0][@"cal_year_week"] intValue] - [filterValues[1] intValue] ];
+                    filterValues[2] = results[0][@"cal_year_week"];
+                    
+                }
+            }
+            
+            [filterValues removeObjectAtIndex:0];
+            
+            NSMutableString *tempString = [[NSMutableString alloc] initWithString:@""];
+            
+            for (NSString *str in filterValues) {
+                [tempString appendFormat:@"%@;", str];
+            }
+            
+            filters = [[tempString substringToIndex:tempString.length - 1] stringByReplacingOccurrencesOfString:@";" withString:@"/"];
             
             NSError *error;
             NSURL *url = [[NSURL alloc] initWithString:[@"http://aws.schuhshark.com:3000/buyingservice.svc/OnOrderVIntakeByWeek/" stringByAppendingString:filters]];
             
             NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
-            
+            NSLog(@"calling service: %@", url);
             if(!data) {
                 NSLog(@"download error:%@", error.localizedDescription);
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"error" message:@"there was problem accessing the report service" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
@@ -162,7 +206,7 @@
                 if([row[@"Supplier_Ref"] isEqualToString:@"zzzzzTotal"]) {
                     [htmlRows appendFormat:@"<tr><td colspan=20></td></tr><tr>"];
                 }
-                [htmlRows appendFormat:@"<tr>"];
+                [htmlRows appendFormat:@"<tr class=\"row\">"];
                 [htmlRows appendFormat:@"<td>%@</td>", [row[@"Supplier_Ref"] stringByReplacingOccurrencesOfString:@"zzzzzTotal" withString:@"Total"]];
                 [htmlRows appendFormat:@"<td>%@</td>", row[@"LY_Units_Sold"]];
                 [htmlRows appendFormat:@"<td>%@</td>", row[@"LY_Margin_Acheived"]];

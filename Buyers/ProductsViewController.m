@@ -413,6 +413,21 @@ static const float sProductColumnSpacer = 5.0;
     }
     }
     
+    NSMutableArray *more = [products mutableCopy];
+    
+    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    [more addObjectsFromArray:products];
+//    
+    
+    products = more;
+    
     productText = @"products";
     if([products count] ==1) {
         productText = @"product";
