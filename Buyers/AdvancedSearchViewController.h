@@ -25,8 +25,12 @@
 @property (weak, nonatomic) IBOutlet SchDropDown *productColour;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *productType;
 @property (weak, nonatomic) IBOutlet UISlider *productPrice;
+@property (weak, nonatomic) IBOutlet UIButton *clearButton;
+@property (weak, nonatomic) IBOutlet UILabel *sliderLabel;
 
 @property (nonatomic, retain) id<AdvancedSearchViewControllerDelegate> delegate;
 - (IBAction)searchProducts:(id)sender;
+- (IBAction)sliderAction:(id)sender;
+- (IBAction)clearSearchFields:(id)sender;
 
 @end

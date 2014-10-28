@@ -25,7 +25,9 @@
 @property(nonatomic,retain) IBOutlet UIButton *saveSelection;
 @property (weak, nonatomic) IBOutlet SchDropDown *collectionList;
 
+-(IBAction)searchProducts:(id)sender;
 -(IBAction)saveProducts:(id)sender;
 -(IBAction)clearAll:(id)sender;
+
 
 @end

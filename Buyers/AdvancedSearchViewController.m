@@ -20,6 +20,8 @@
     // Do any additional setup after loading the view.
     self.preferredContentSize = CGSizeMake(700.0, 450.0);
     
+    [self.productPrice addTarget:self action:@selector(sliderAction:) forControlEvents:UIControlEventValueChanged];
+    
     //categories drop down
     [self.productCategory setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"category2Ref"];
     //brand drop down
@@ -67,7 +69,7 @@
    
     [searchData setObject:[self.productType titleForSegmentAtIndex:self.productType.selectedSegmentIndex] forKey:@"productType"];
     
-    if(self.productPrice.value > 1) {
+    if(self.productPrice.value > 0) {
         NSString *sliderValue = [NSString stringWithFormat:@"%@",[NSNumber numberWithInt:(int)round(self.productPrice.value)]];
         [searchData setObject:sliderValue forKey:@"productPrice"];
     }
@@ -79,6 +81,30 @@
     
     [[NSNotificationCenter defaultCenter] postNotification:[NSNotification notificationWithName:@"ProductAdvancedSearch" object:self userInfo:searchData]];
     [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (IBAction)sliderAction:(id)sender {
+    UISlider *slider = (UISlider *) sender;
+    
+    int progressAsInt =(int)(slider.value);
+    
+    NSString *newText =[[NSString alloc]
+                        initWithFormat:@"£%d",progressAsInt];
+    
+    self.sliderLabel.text = newText;
+}
+
+- (IBAction)clearSearchFields:(id)sender {
+    self.sliderLabel.text = @"£0";
+    self.productPrice.value =0;
+    self.productType.selectedSegmentIndex=0;
+    self.productName.text = @"";
+    self.productCategory.text = @"";
+    self.productBrand.text = @"";
+    self.productSupplier.text = @"";
+    self.productColour.text = @"";
+    self.productMaterial.text = @"";
+    
 }
 
 /*

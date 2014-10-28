@@ -50,6 +50,8 @@ static const float sProductColumnSpacer = 5.0;
     NSString *productText;
     UILabel *noResults;
     UIButton *menu2;
+    BOOL isAdvancedSearch;
+    NSPredicate *predicate;
 }
 
 @end
@@ -69,6 +71,9 @@ static const float sProductColumnSpacer = 5.0;
         // Custom initialization
     }
     return self;
+}
+-(IBAction)searchProducts:(id)sender {
+    //protocol method callback - empty to avoid warning
 }
 - (void) viewWillAppear:(BOOL)animated {
     
@@ -119,6 +124,7 @@ static const float sProductColumnSpacer = 5.0;
         }
         
     }*/
+    
     [self fetchResults];
     [self constructsProducts];
     
@@ -143,31 +149,60 @@ static const float sProductColumnSpacer = 5.0;
 {
     [self.displayAdvancedSearchPopover dismissPopoverAnimated:YES];
     
+    [self.revealViewController revealToggleAnimated:YES];
+    
     NSDictionary *dict = [notification userInfo];
     
+    isAdvancedSearch = YES;
+    NSMutableArray *preds = [[NSMutableArray alloc]initWithCapacity:1];
+    
+    
     if(dict[@"productName"] != nil) {
-        NSLog(@"userInfo productName: %@", dict[@"productName"]);
+        //NSLog(@"userInfo productName: %@", dict[@"productName"]);
+        NSPredicate *namePred =[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) OR (productCode CONTAINS[cd] %@ OR productCode LIKE[cd] %@)",dict[@"productName"],dict[@"productName"],dict[@"productName"],dict[@"productName"]];
+        [preds addObject:namePred];
     }
     if(dict[@"productCategoryRef"] != nil) {
-        NSLog(@"userInfo productCategoryRef: %@", dict[@"productCategoryRef"]);
+        //NSLog(@"userInfo productCategoryRef: %@", dict[@"productCategoryRef"]);
+        NSPredicate *categoryPred =[NSPredicate predicateWithFormat:@"productCategoryRef == %d", [dict[@"productCategoryRef"] integerValue]];
+        [preds addObject:categoryPred];
     }
     if(dict[@"productBrandRef"] != nil) {
-        NSLog(@"userInfo productBrandRef: %@", dict[@"productBrandRef"]);
+        //NSLog(@"userInfo productBrandRef: %@", dict[@"productBrandRef"]);
+        NSPredicate *brandPred =[NSPredicate predicateWithFormat:@"productBrandRef == %d", [dict[@"productBrandRef"] integerValue]];
+        [preds addObject:brandPred];
     }
     if(dict[@"productSupplierCode"] != nil) {
-        NSLog(@"userInfo productSupplierCode: %@", dict[@"productSupplierCode"]);
+        //NSLog(@"userInfo productSupplierCode: %@", dict[@"productSupplierCode"]);
+        NSPredicate *supplierPred =[NSPredicate predicateWithFormat:@"productSupplierCode == %@", dict[@"productSupplierCode"]];
+        [preds addObject:supplierPred];
     }
     if(dict[@"productColourRef"] != nil) {
-        NSLog(@"userInfo productColourRef: %@", dict[@"productColourRef"]);
+        //NSLog(@"userInfo productColourRef: %@", dict[@"productColourRef"]);
+        NSPredicate *colourPred =[NSPredicate predicateWithFormat:@"productColourRef == %d", [dict[@"productColourRef"] integerValue]];
+        [preds addObject:colourPred];
     }
     if(dict[@"productMaterialRef"] != nil) {
-        NSLog(@"userInfo productMaterialRef: %@", dict[@"productMaterialRef"]);
+        //NSLog(@"userInfo productMaterialRef: %@", dict[@"productMaterialRef"]);
+        NSPredicate *materialPred =[NSPredicate predicateWithFormat:@"productMaterialRef == %d", [dict[@"productMaterialRef"] integerValue]];
+        [preds addObject:materialPred];
     }
-    NSLog(@"userInfo productType: %@", dict[@"productType"]);
+    //NSLog(@"userInfo productType: %@", dict[@"productType"]);
+    
+    if([dict[@"productType"]  isEqual: @"custom"]) {
+        NSPredicate *typePred =[NSPredicate predicateWithFormat:@"productCode ='0000000000'"];
+        [preds addObject:typePred];
+    }
     
     if(dict[@"productPrice"] != nil) {
-        NSLog(@"userInfo productPrice: %@", dict[@"productPrice"]);
+        //NSLog(@"userInfo productPrice: %@", dict[@"productPrice"]);
+        NSPredicate *pricePred =[NSPredicate predicateWithFormat:@"productPrice > 0 and productPrice <= %d", [dict[@"productPrice"] integerValue]];
+        [preds addObject:pricePred];
     }
+    
+    predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
+    
+    [self fetchResults];
 
     
 }
@@ -187,6 +222,8 @@ static const float sProductColumnSpacer = 5.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    isAdvancedSearch = NO;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     
@@ -336,7 +373,18 @@ static const float sProductColumnSpacer = 5.0;
     //NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productCode" ascending:YES];
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"productName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
-    products = [results sortedArrayUsingDescriptors:sortDescriptors];
+    
+    
+    if(isAdvancedSearch) {
+        
+        //use predicates
+        if(predicate != nil) {
+            products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:predicate];
+        } else {
+            products = [results sortedArrayUsingDescriptors:sortDescriptors];
+        }
+        
+    } else {
     
     if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && customProductsButton.selected) {
         //get only custom products
@@ -350,12 +398,14 @@ static const float sProductColumnSpacer = 5.0;
         products = [results sortedArrayUsingDescriptors:sortDescriptors];
 
     }
+    }
     
     productText = @"products";
     if([products count] ==1) {
         productText = @"product";
         
     }
+    [noResults removeFromSuperview];
     [numProducts removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
     for(UIView *view in self.view.subviews) {
@@ -473,6 +523,8 @@ static const float sProductColumnSpacer = 5.0;
     if([txtSearch isFirstResponder]) {
         [txtSearch resignFirstResponder];
     }
+    
+    isAdvancedSearch = NO;
     
     /*[numProducts removeFromSuperview];
     //clear scroll view so it can be redrawn in case of changes
