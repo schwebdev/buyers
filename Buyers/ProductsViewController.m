@@ -444,8 +444,8 @@ static const float sProductColumnSpacer = 5.0;
         int col= 1;
         int row = 1;
         
-        for (int p = 0, pc = [products count]; p < pc; p++) {
-        //for (int p = 0, pc = 20; p < pc; p++) {
+        //for (int p = 0, pc = [products count]; p < pc; p++) {
+        for (int p = 0, pc = 30; p < pc; p++) {
             
             if(productListView == nil)
                 productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
@@ -700,7 +700,7 @@ static const float sProductColumnSpacer = 5.0;
         //if no collection then validate for new one or existing one being selected
         if(!_collection){
             //[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0)
-            if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
+            if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
             //alert user that there is no collection to add to
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"There is no collection to add products to!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
