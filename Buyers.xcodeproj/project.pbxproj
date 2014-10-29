@@ -41,7 +41,6 @@
 		0B825E6A19F5034100939512 /* UIImage+RoundedCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B825E6819F5034100939512 /* UIImage+RoundedCorner.m */; };
 		0B825E7419F7B87700939512 /* jquery.js in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7319F7B87700939512 /* jquery.js */; };
 		0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */ = {isa = PBXBuildFile; fileRef = 0B825E7619F8EB9200939512 /* StockWorksheet.html */; };
-		0B8AE92719F90FBB00493BC5 /* StockWorksheetReportViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B8AE92619F90FBB00493BC5 /* StockWorksheetReportViewController.m */; };
 		0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC019D046A6007B7FDB /* CalYearWeek.m */; };
 		0B92CDCA19D1C569007B7FDB /* ReportOrderVsIntake.m in Sources */ = {isa = PBXBuildFile; fileRef = 0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */; };
 		0B970B32199376C9006D0358 /* c1.png in Resources */ = {isa = PBXBuildFile; fileRef = 0B970AF3199376C9006D0358 /* c1.png */; };
@@ -141,12 +140,19 @@
 		5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35503019A49CF40031E33C /* CoreData.framework */; };
 		5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */; };
 		5B43EDF219FFB71A00730158 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B43EDF119FFB71A00730158 /* Collection.m */; };
+		5B43EDF61A00E03C00730158 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B43EDF51A00E03C00730158 /* Product.m */; };
+		5B43EE021A01067000730158 /* checkbox-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EDFE1A01067000730158 /* checkbox-checked@2x.png */; };
+		5B43EE031A01067000730158 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EDFF1A01067000730158 /* checkbox.png */; };
+		5B43EE041A01067000730158 /* checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE001A01067000730158 /* checkbox@2x.png */; };
+		5B43EE091A01073100730158 /* checkboxSML-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE051A01073100730158 /* checkboxSML-checked.png */; };
+		5B43EE0A1A01073100730158 /* checkboxSML-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE061A01073100730158 /* checkboxSML-checked@2x.png */; };
+		5B43EE0B1A01073100730158 /* checkboxSML.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE071A01073100730158 /* checkboxSML.png */; };
+		5B43EE0C1A01073100730158 /* checkboxSML@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE081A01073100730158 /* checkboxSML@2x.png */; };
 		5B52F81519F80163007D5943 /* Brand.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F81419F80163007D5943 /* Brand.m */; };
 		5B52F81819F80163007D5943 /* Supplier.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F81719F80163007D5943 /* Supplier.m */; };
 		5B52F81B19F80246007D5943 /* Material.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F81A19F80246007D5943 /* Material.m */; };
 		5B52F81E19F804A2007D5943 /* ProductCategory.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F81D19F804A2007D5943 /* ProductCategory.m */; };
 		5B52F82119F80524007D5943 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82019F80524007D5943 /* Colour.m */; };
-		5B52F82419FE3840007D5943 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82319FE3840007D5943 /* Product.m */; };
 		5B52F82719FE7047007D5943 /* AdvancedSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */; };
 		5B65017919B0B518003F03F8 /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B65017819B0B518003F03F8 /* ProductCell.m */; };
 		5B65017B19B60B3E003F03F8 /* 1159147370_main.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5B65017A19B60B3E003F03F8 /* 1159147370_main.jpg */; };
@@ -226,10 +232,10 @@
 		0B52FC8F19ED171100D1D747 /* BestsellersReportViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BestsellersReportViewController.h; sourceTree = "<group>"; };
 		0B52FC9019ED171100D1D747 /* BestsellersReportViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = BestsellersReportViewController.m; sourceTree = "<group>"; };
 		0B52FC9219ED36F600D1D747 /* Bestsellers.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = Bestsellers.html; sourceTree = "<group>"; };
-		0B52FC9619ED69C200D1D747 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = check.png; sourceTree = "<group>"; };
-		0B52FC9719ED69C200D1D747 /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "check@2x.png"; sourceTree = "<group>"; };
-		0B52FC9819ED69C200D1D747 /* checkMarked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkMarked.png; sourceTree = "<group>"; };
-		0B52FC9919ED69C200D1D747 /* checkMarked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkMarked@2x.png"; sourceTree = "<group>"; };
+		0B52FC9619ED69C200D1D747 /* check.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = check.png; path = ../../check.png; sourceTree = "<group>"; };
+		0B52FC9719ED69C200D1D747 /* check@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "check@2x.png"; path = "../../check@2x.png"; sourceTree = "<group>"; };
+		0B52FC9819ED69C200D1D747 /* checkMarked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkMarked.png; path = ../../checkMarked.png; sourceTree = "<group>"; };
+		0B52FC9919ED69C200D1D747 /* checkMarked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkMarked@2x.png"; path = "../../checkMarked@2x.png"; sourceTree = "<group>"; };
 		0B7630941998DDEC00949155 /* CustomHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomHomeViewController.h; sourceTree = "<group>"; };
 		0B7630951998DDEC00949155 /* CustomHomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomHomeViewController.m; sourceTree = "<group>"; };
 		0B7630971998DE0100949155 /* SettingsHomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsHomeViewController.h; sourceTree = "<group>"; };
@@ -359,15 +365,26 @@
 		0BC956711990CF3200CD45D5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
 		0BC956761990F28500CD45D5 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		0BC956771990F28500CD45D5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search.png"; sourceTree = "<group>"; };
-		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
-		5B0E157919F797A10095DEDA /* shoeOutline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shoeOutline.png; sourceTree = "<group>"; };
-		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CollectionButton.h; path = Buyers/CollectionButton.h; sourceTree = "<group>"; };
-		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CollectionButton.m; path = Buyers/CollectionButton.m; sourceTree = "<group>"; };
+		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search.png"; path = "../../checkbox-checked-search.png"; sourceTree = "<group>"; };
+		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search@2x.png"; path = "../../checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
+		5B0E157919F797A10095DEDA /* shoeOutline.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = shoeOutline.png; path = ../../shoeOutline.png; sourceTree = "<group>"; };
+		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionButton.h; sourceTree = "<group>"; };
+		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionButton.m; sourceTree = "<group>"; };
 		5B35503019A49CF40031E33C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5B35503319A49EFE0031E33C /* BuyersDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BuyersDataModel.xcdatamodel; sourceTree = "<group>"; };
 		5B43EDF019FFB71A00730158 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
 		5B43EDF119FFB71A00730158 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
+		5B43EDF41A00E03C00730158 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
+		5B43EDF51A00E03C00730158 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
+		5B43EDFE1A01067000730158 /* checkbox-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked@2x.png"; path = "../../../Buyers Original /checkbox-checked@2x.png"; sourceTree = "<group>"; };
+		5B43EDFF1A01067000730158 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = "../../../Buyers Original /checkbox.png"; sourceTree = "<group>"; };
+		5B43EE001A01067000730158 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox@2x.png"; path = "../../../Buyers Original /checkbox@2x.png"; sourceTree = "<group>"; };
+		5B43EE051A01073100730158 /* checkboxSML-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkboxSML-checked.png"; path = "../../../Buyers Original /Buyers/Images/checkboxSML-checked.png"; sourceTree = "<group>"; };
+		5B43EE061A01073100730158 /* checkboxSML-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkboxSML-checked@2x.png"; path = "../../../Buyers Original /Buyers/Images/checkboxSML-checked@2x.png"; sourceTree = "<group>"; };
+		5B43EE071A01073100730158 /* checkboxSML.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkboxSML.png; path = "../../../Buyers Original /Buyers/Images/checkboxSML.png"; sourceTree = "<group>"; };
+		5B43EE081A01073100730158 /* checkboxSML@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkboxSML@2x.png"; path = "../../../Buyers Original /Buyers/Images/checkboxSML@2x.png"; sourceTree = "<group>"; };
+		5B43EE0D1A01074B00730158 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
+		5B43EE0E1A01074B00730158 /* ReportFilterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportFilterSet.h; path = Buyers/ReportFilterSet.h; sourceTree = "<group>"; };
 		5B52F81319F80163007D5943 /* Brand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Brand.h; sourceTree = "<group>"; };
 		5B52F81419F80163007D5943 /* Brand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Brand.m; sourceTree = "<group>"; };
 		5B52F81619F80163007D5943 /* Supplier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Supplier.h; sourceTree = "<group>"; };
@@ -378,8 +395,6 @@
 		5B52F81D19F804A2007D5943 /* ProductCategory.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCategory.m; sourceTree = "<group>"; };
 		5B52F81F19F80524007D5943 /* Colour.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Colour.h; sourceTree = "<group>"; };
 		5B52F82019F80524007D5943 /* Colour.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Colour.m; sourceTree = "<group>"; };
-		5B52F82219FE3840007D5943 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
-		5B52F82319FE3840007D5943 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		5B52F82519FE7047007D5943 /* AdvancedSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdvancedSearchViewController.h; sourceTree = "<group>"; };
 		5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedSearchViewController.m; sourceTree = "<group>"; };
 		5B65017719B0B518003F03F8 /* ProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
@@ -412,20 +427,20 @@
 		C6B9A7A219DD6A1900C832A1 /* ProductViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductViewController.m; sourceTree = "<group>"; };
 		C6B9A7A719DD6A4C00C832A1 /* CollectionNotesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionNotesViewController.h; sourceTree = "<group>"; };
 		C6B9A7A819DD6A4C00C832A1 /* CollectionNotesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionNotesViewController.m; sourceTree = "<group>"; };
-		C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductButton.h; path = Buyers/ProductButton.h; sourceTree = "<group>"; };
-		C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductButton.m; path = Buyers/ProductButton.m; sourceTree = "<group>"; };
+		C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductButton.h; sourceTree = "<group>"; };
+		C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductButton.m; sourceTree = "<group>"; };
 		C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1158985860_main.jpg; sourceTree = "<group>"; };
 		C6B9A7AE19DD6B5600C832A1 /* 1159053670_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159053670_main.jpg; sourceTree = "<group>"; };
 		C6B9A7AF19DD6B5600C832A1 /* 1159155670_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159155670_main.jpg; sourceTree = "<group>"; };
 		C6B9A7B019DD6B5600C832A1 /* 1159167060_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159167060_main.jpg; sourceTree = "<group>"; };
 		C6B9A7B119DD6B5600C832A1 /* 1159167270_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1159167270_main.jpg; sourceTree = "<group>"; };
 		C6B9A7B219DD6B5600C832A1 /* 1945097370_main.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = 1945097370_main.jpg; sourceTree = "<group>"; };
-		C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowDOWN.png; sourceTree = "<group>"; };
-		C6B9A7B419DD6B5600C832A1 /* arrowUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrowUP.png; sourceTree = "<group>"; };
-		C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked.png"; sourceTree = "<group>"; };
-		C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox-checked@2x.png"; sourceTree = "<group>"; };
-		C6B9A7B719DD6B5600C832A1 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkbox.png; sourceTree = "<group>"; };
-		C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkbox@2x.png"; sourceTree = "<group>"; };
+		C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowDOWN.png; path = ../../arrowDOWN.png; sourceTree = "<group>"; };
+		C6B9A7B419DD6B5600C832A1 /* arrowUP.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = arrowUP.png; path = ../../arrowUP.png; sourceTree = "<group>"; };
+		C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked.png"; path = "../../checkbox-checked.png"; sourceTree = "<group>"; };
+		C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked@2x.png"; path = "../../checkbox-checked@2x.png"; sourceTree = "<group>"; };
+		C6B9A7B719DD6B5600C832A1 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = ../../checkbox.png; sourceTree = "<group>"; };
+		C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox@2x.png"; path = "../../checkbox@2x.png"; sourceTree = "<group>"; };
 		C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ProductOrder.h; path = Buyers/ProductOrder.h; sourceTree = "<group>"; };
 		C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ProductOrder.m; path = Buyers/ProductOrder.m; sourceTree = "<group>"; };
 		C6C3D4C019E3FA9F009E8CAB /* AVCameraViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AVCameraViewController.h; sourceTree = "<group>"; };
@@ -493,6 +508,26 @@
 		0B970AF1199376C9006D0358 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5B43EE051A01073100730158 /* checkboxSML-checked.png */,
+				5B43EE061A01073100730158 /* checkboxSML-checked@2x.png */,
+				5B43EE071A01073100730158 /* checkboxSML.png */,
+				5B43EE081A01073100730158 /* checkboxSML@2x.png */,
+				5B43EDFE1A01067000730158 /* checkbox-checked@2x.png */,
+				5B43EDFF1A01067000730158 /* checkbox.png */,
+				5B43EE001A01067000730158 /* checkbox@2x.png */,
+				5B0E157919F797A10095DEDA /* shoeOutline.png */,
+				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
+				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
+				0B52FC9619ED69C200D1D747 /* check.png */,
+				0B52FC9719ED69C200D1D747 /* check@2x.png */,
+				0B52FC9819ED69C200D1D747 /* checkMarked.png */,
+				0B52FC9919ED69C200D1D747 /* checkMarked@2x.png */,
+				C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */,
+				C6B9A7B419DD6B5600C832A1 /* arrowUP.png */,
+				C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */,
+				C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */,
+				C6B9A7B719DD6B5600C832A1 /* checkbox.png */,
+				C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */,
 				C618D3A319DEF114005977D6 /* camera_lg.png */,
 				C618D3A119DEEC7F005977D6 /* gallery.png */,
 				C618D39F19DEEBC7005977D6 /* camera.png */,
@@ -648,6 +683,10 @@
 		0B970B6F1993770E006D0358 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				5B14383319ADE40800A68865 /* CollectionButton.h */,
+				5B14383419ADE40800A68865 /* CollectionButton.m */,
+				C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */,
+				C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */,
 				0B825E6519F5034100939512 /* UIImage+Alpha.h */,
 				0B825E6619F5034100939512 /* UIImage+Alpha.m */,
 				0B825E6719F5034100939512 /* UIImage+RoundedCorner.h */,
@@ -677,33 +716,12 @@
 		0BC95625198FDABD00CD45D5 = {
 			isa = PBXGroup;
 			children = (
-				5B43EDF019FFB71A00730158 /* Collection.h */,
-				5B43EDF119FFB71A00730158 /* Collection.m */,
-				5B52F82219FE3840007D5943 /* Product.h */,
-				5B52F82319FE3840007D5943 /* Product.m */,
-				5B0E157919F797A10095DEDA /* shoeOutline.png */,
-				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
-				5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */,
-				0B52FC9619ED69C200D1D747 /* check.png */,
-				0B52FC9719ED69C200D1D747 /* check@2x.png */,
-				0B52FC9819ED69C200D1D747 /* checkMarked.png */,
-				0B52FC9919ED69C200D1D747 /* checkMarked@2x.png */,
-				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
-				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
 				C6B9A7AD19DD6B5600C832A1 /* 1158985860_main.jpg */,
 				C6B9A7AE19DD6B5600C832A1 /* 1159053670_main.jpg */,
 				C6B9A7AF19DD6B5600C832A1 /* 1159155670_main.jpg */,
 				C6B9A7B019DD6B5600C832A1 /* 1159167060_main.jpg */,
 				C6B9A7B119DD6B5600C832A1 /* 1159167270_main.jpg */,
 				C6B9A7B219DD6B5600C832A1 /* 1945097370_main.jpg */,
-				C6B9A7B319DD6B5600C832A1 /* arrowDOWN.png */,
-				C6B9A7B419DD6B5600C832A1 /* arrowUP.png */,
-				C6B9A7B519DD6B5600C832A1 /* checkbox-checked.png */,
-				C6B9A7B619DD6B5600C832A1 /* checkbox-checked@2x.png */,
-				C6B9A7B719DD6B5600C832A1 /* checkbox.png */,
-				C6B9A7B819DD6B5600C832A1 /* checkbox@2x.png */,
-				C6B9A7AA19DD6AB800C832A1 /* ProductButton.h */,
-				C6B9A7AB19DD6AB800C832A1 /* ProductButton.m */,
 				5BA0952019B6212B006C1782 /* 1461031160_main.jpg */,
 				5BA0951E19B620AB006C1782 /* 1159061320_main.jpg */,
 				5BA0951C19B61FBE006C1782 /* 1106011160_main.jpg */,
@@ -711,32 +729,8 @@
 				5BA0951819B61E5B006C1782 /* 1159074370_main.jpg */,
 				5B65017A19B60B3E003F03F8 /* 1159147370_main.jpg */,
 				5B9FDD6B19AF55DC00CE75F0 /* 1159140970_main.jpg */,
-				5B14383319ADE40800A68865 /* CollectionButton.h */,
-				5B14383419ADE40800A68865 /* CollectionButton.m */,
 				5BDDAA2C19A5EA7600073B10 /* Settings.bundle */,
-				0B288AA019B9F74700F62B63 /* SyncStatus.h */,
-				0B288AA119B9F74700F62B63 /* SyncStatus.m */,
-				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
-				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
 				5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */,
-				5B52F81F19F80524007D5943 /* Colour.h */,
-				5B52F82019F80524007D5943 /* Colour.m */,
-				5B52F81C19F804A2007D5943 /* ProductCategory.h */,
-				5B52F81D19F804A2007D5943 /* ProductCategory.m */,
-				5B52F81919F80246007D5943 /* Material.h */,
-				5B52F81A19F80246007D5943 /* Material.m */,
-				5B52F81619F80163007D5943 /* Supplier.h */,
-				5B52F81719F80163007D5943 /* Supplier.m */,
-				5B52F81319F80163007D5943 /* Brand.h */,
-				5B52F81419F80163007D5943 /* Brand.m */,
-				C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */,
-				C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */,
-				0B523EB019DD5EC20079EB25 /* Department.h */,
-				0B523EB119DD5EC20079EB25 /* Department.m */,
-				0B523EAD19DD5EC10079EB25 /* Merch.h */,
-				0B523EAE19DD5EC10079EB25 /* Merch.m */,
-				0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */,
-				0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */,
 				0BC95637198FDABD00CD45D5 /* Buyers */,
 				0BC95656198FDABD00CD45D5 /* BuyersTests */,
 				0BC95630198FDABD00CD45D5 /* Frameworks */,
@@ -770,6 +764,7 @@
 		0BC95637198FDABD00CD45D5 /* Buyers */ = {
 			isa = PBXGroup;
 			children = (
+				5B43EDF31A00D88A00730158 /* Data */,
 				0B970B6F1993770E006D0358 /* Classes */,
 				0B7630931998DDC400949155 /* CustomProducts */,
 				0B970B6C199376E3006D0358 /* Collections */,
@@ -827,6 +822,44 @@
 				0BC95668198FDE3E00CD45D5 /* SWRevealViewController.m */,
 			);
 			path = SWRevealViewController;
+			sourceTree = "<group>";
+		};
+		5B43EDF31A00D88A00730158 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				5B43EE0D1A01074B00730158 /* ReportData.h */,
+				5B43EE0E1A01074B00730158 /* ReportFilterSet.h */,
+				5B43EDF41A00E03C00730158 /* Product.h */,
+				5B43EDF51A00E03C00730158 /* Product.m */,
+				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
+				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
+				0B288AA019B9F74700F62B63 /* SyncStatus.h */,
+				0B288AA119B9F74700F62B63 /* SyncStatus.m */,
+				0B92CDBF19D046A6007B7FDB /* CalYearWeek.h */,
+				0B92CDC019D046A6007B7FDB /* CalYearWeek.m */,
+				5B52F81619F80163007D5943 /* Supplier.h */,
+				5B52F81719F80163007D5943 /* Supplier.m */,
+				5B52F81319F80163007D5943 /* Brand.h */,
+				5B52F81419F80163007D5943 /* Brand.m */,
+				C6B9A7C819DD73AC00C832A1 /* ProductOrder.h */,
+				C6B9A7C919DD73AC00C832A1 /* ProductOrder.m */,
+				0B523EB019DD5EC20079EB25 /* Department.h */,
+				0B523EB119DD5EC20079EB25 /* Department.m */,
+				0B523EAD19DD5EC10079EB25 /* Merch.h */,
+				0B523EAE19DD5EC10079EB25 /* Merch.m */,
+				0B92CDC819D1C569007B7FDB /* ReportOrderVsIntake.h */,
+				0B92CDC919D1C569007B7FDB /* ReportOrderVsIntake.m */,
+				5B52F81C19F804A2007D5943 /* ProductCategory.h */,
+				5B52F81D19F804A2007D5943 /* ProductCategory.m */,
+				5B52F81919F80246007D5943 /* Material.h */,
+				5B52F81A19F80246007D5943 /* Material.m */,
+				5B52F81F19F80524007D5943 /* Colour.h */,
+				5B52F82019F80524007D5943 /* Colour.m */,
+				5B43EDF019FFB71A00730158 /* Collection.h */,
+				5B43EDF119FFB71A00730158 /* Collection.m */,
+			);
+			name = Data;
+			path = ..;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -936,12 +969,14 @@
 				0B970B60199376C9006D0358 /* s2.png in Resources */,
 				0B970B47199376C9006D0358 /* d5.png in Resources */,
 				0B9F71A11994FF53003AE1BE /* homeSchuhLogo.png in Resources */,
+				5B43EE0A1A01073100730158 /* checkboxSML-checked@2x.png in Resources */,
 				0B970B54199376C9006D0358 /* h4.png in Resources */,
 				0B970B32199376C9006D0358 /* c1.png in Resources */,
 				5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */,
 				0B970B65199376C9006D0358 /* s7.png in Resources */,
 				0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */,
 				0B970B41199376C9006D0358 /* d11.png in Resources */,
+				5B43EE041A01067000730158 /* checkbox@2x.png in Resources */,
 				0B970B57199376C9006D0358 /* h7.png in Resources */,
 				0B76309F199CB7D200949155 /* leftArrowButtonBG.png in Resources */,
 				0B52FC9A19ED69C200D1D747 /* check.png in Resources */,
@@ -949,6 +984,7 @@
 				C6B9A7BB19DD6B5600C832A1 /* 1159155670_main.jpg in Resources */,
 				0B7630A919A247DF00949155 /* OrderVsIntake.html in Resources */,
 				0B970B58199376C9006D0358 /* h8.png in Resources */,
+				5B43EE031A01067000730158 /* checkbox.png in Resources */,
 				0B9F719E1994FF53003AE1BE /* homeIDLogo.png in Resources */,
 				C6B9A7C219DD6B5600C832A1 /* checkbox-checked@2x.png in Resources */,
 				C6B9A7C319DD6B5600C832A1 /* checkbox.png in Resources */,
@@ -969,6 +1005,7 @@
 				C6B9A7C019DD6B5600C832A1 /* arrowUP.png in Resources */,
 				0B970B35199376C9006D0358 /* c12.png in Resources */,
 				0B970B63199376C9006D0358 /* s5.png in Resources */,
+				5B43EE091A01073100730158 /* checkboxSML-checked.png in Resources */,
 				0B52FC9C19ED69C200D1D747 /* checkMarked.png in Resources */,
 				0B9F71AB19950A5D003AE1BE /* homeChangeSettingsButton.png in Resources */,
 				0B970B49199376C9006D0358 /* d7.png in Resources */,
@@ -980,6 +1017,7 @@
 				0B970B4C199376C9006D0358 /* ec.png in Resources */,
 				0B9F71A61994FF53003AE1BE /* homeSyncRed.png in Resources */,
 				0B970B3A199376C9006D0358 /* c5.png in Resources */,
+				5B43EE0C1A01073100730158 /* checkboxSML@2x.png in Resources */,
 				0B970B3C199376C9006D0358 /* c7.png in Resources */,
 				C618D3A019DEEBC7005977D6 /* camera.png in Resources */,
 				0B970B4A199376C9006D0358 /* d8.png in Resources */,
@@ -1001,6 +1039,7 @@
 				0B970B34199376C9006D0358 /* c11.png in Resources */,
 				C6B9A7BA19DD6B5600C832A1 /* 1159053670_main.jpg in Resources */,
 				0B970B40199376C9006D0358 /* d10.png in Resources */,
+				5B43EE0B1A01073100730158 /* checkboxSML.png in Resources */,
 				5BA0952119B6212B006C1782 /* 1461031160_main.jpg in Resources */,
 				C6B9A7BE19DD6B5600C832A1 /* 1945097370_main.jpg in Resources */,
 				0B970B45199376C9006D0358 /* d3.png in Resources */,
@@ -1016,6 +1055,7 @@
 				C618D3A219DEEC7F005977D6 /* gallery.png in Resources */,
 				5BA0951919B61E5B006C1782 /* 1159074370_main.jpg in Resources */,
 				0B52FC9B19ED69C200D1D747 /* check@2x.png in Resources */,
+				5B43EE021A01067000730158 /* checkbox-checked@2x.png in Resources */,
 				5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */,
 				0B9F71B019951099003AE1BE /* schuhMenuIcon-S.png in Resources */,
 			);
@@ -1057,6 +1097,7 @@
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
 				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
+				5B43EDF61A00E03C00730158 /* Product.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,
@@ -1083,7 +1124,6 @@
 				5B52F82719FE7047007D5943 /* AdvancedSearchViewController.m in Sources */,
 				C6B9A7A619DD6A1900C832A1 /* ProductViewController.m in Sources */,
 				0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */,
-				5B52F82419FE3840007D5943 /* Product.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,

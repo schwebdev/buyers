@@ -123,10 +123,10 @@
     if([type isEqualToString:@"CalYearWeek"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcalyearweeks"];
     if([type isEqualToString:@"Merch"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmerch"];
     if([type isEqualToString:@"Department"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getdepartments"];
-    //if([type isEqualToString:@"ProductCategory"]) url = [NSURL URLWithString:@"http://m.amazingfootwear.com/mstest.asmx/smTestGetCategories"];
-    //if([type isEqualToString:@"Colour"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcolours"];
-    //if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterials"];
-    //if([type isEqualToString:@"Product"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getproducts"];
+    if([type isEqualToString:@"ProductCategory"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcategory"];
+    if([type isEqualToString:@"Colour"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcolour"];
+    if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterial"];
+    if([type isEqualToString:@"Product"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem"];
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -176,34 +176,44 @@
             department.depDesc = result[@"Desc"];
         }
         
-        /*if([type isEqualToString:@"ProductCategory"]) {
+        if([type isEqualToString:@"ProductCategory"]) {
             ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-            category.category2Ref = result[@"C2Ref"];
-            category.categoryName = result[@"C2Name"];
+            category.category2Ref = result[@"c2_ref"];
+            category.categoryName = result[@"CategoryName"];
         }
         if([type isEqualToString:@"Colour"]) {
             Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
-            colour.colourRef= result[@"cRef"];
-            colour.colourName = result[@"cName"];
+            colour.colourRef= result[@"c_ref"];
+            colour.colourName = result[@"c_name"];
         }
         if([type isEqualToString:@"Material"]) {
             Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
-            material.materialRef= result[@"mRef"];
-            material.materialName = result[@"mName"];
+            material.materialRef= result[@"m_ref"];
+            material.materialName = result[@"m_name"];
         }
         if([type isEqualToString:@"Product"]) {
             Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-            product.productCode =result[@"productCode"];
-            product.productName = result[@"productName"];
-            product.productNotes = result[@"productNotes"];
-            product.productPrice = result[@"productPrice"];
-            //product.productImageData = result[@"productImageData"];
-            //product.brand = result[@"productBrand"];
-           // product.supplier = result[@"productSupplier"];
-           // product.category = result[@"productCategory"];
-           // product.colour = result[@"productColour"];
-           // product.material = result[@"productMaterial"];
-        }*/
+            product.productCode =result[@"i_Code"];
+            product.productName = result[@"i_name"];
+            product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+            product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+            product.productSupplierCode = result[@"main_sup_code"];
+            product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
+            product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
+            product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
+            product.productNotes = @"test notes"; //result[@"productNotes"];
+            
+            NSError *error = nil;
+            NSString *strURL = result[@"ImageURL"];
+            NSURL *url = [[NSURL alloc] initWithString:strURL];
+            NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+            if(error) {
+                 product.productImageData = nil; //could have holding image here
+            } else {
+                product.productImageData = imageData;
+                NSLog(@"image: %@",strURL);
+            }
+        }
         
     }
     

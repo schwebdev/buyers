@@ -357,6 +357,7 @@ static const float kPageWidth = 680.0;
              
              product.productNotes =self.txtProductNotes.text;
              
+             NSLog(@"here");
              
              if(![managedContext save:&error]) {
                  NSLog(@"Could not save product: %@", [error localizedDescription]);

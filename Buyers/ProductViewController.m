@@ -91,7 +91,7 @@ static const float kPageWidth = 680.0;
     deleteProductButton.frame = CGRectMake(900, 629, 100, 50);
     [deleteProductButton addTarget:self action:@selector(deleteCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     deleteProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
-    deleteProductButton.backgroundColor = [UIColor redColor]; //[UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    deleteProductButton.backgroundColor = [UIColor redColor];
     
     _notesButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [_notesButton setTitle:@"notes" forState:UIControlStateNormal];

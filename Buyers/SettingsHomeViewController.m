@@ -166,7 +166,7 @@
     
     //internet check
     
-    CGFloat syncCount = 7;
+    CGFloat syncCount = 11;
     
     if(success) {
         success = [Sync syncTable:@"Supplier"];
@@ -199,20 +199,25 @@
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:7/syncCount] waitUntilDone:YES];
         
     }
-    /*if(success) {
+    if(success) {
         success = [Sync syncTable:@"ProductCategory"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:8/syncCount] waitUntilDone:YES];
-    }*/
+    }
     
-    /*if(success) {
+    if(success) {
      success = [Sync syncTable:@"Colour"];
      [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:9/syncCount] waitUntilDone:YES];
-     }*/
+     }
     
-    /*if(success) {
+    if(success) {
      success = [Sync syncTable:@"Material"];
      [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:10/syncCount] waitUntilDone:YES];
-     }*/
+     }
+    
+    if(success) {
+        success = [Sync syncTable:@"Product"];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:11/syncCount] waitUntilDone:YES];
+    }
     
     if(success) {
         

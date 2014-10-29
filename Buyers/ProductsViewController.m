@@ -412,22 +412,7 @@ static const float sProductColumnSpacer = 5.0;
 
     }
     }
-    
-    NSMutableArray *more = [products mutableCopy];
-    
-    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    [more addObjectsFromArray:products];
-//    
-    
-    products = more;
-    
+        
     productText = @"products";
     if([products count] ==1) {
         productText = @"product";
@@ -460,6 +445,7 @@ static const float sProductColumnSpacer = 5.0;
         int row = 1;
         
         for (int p = 0, pc = [products count]; p < pc; p++) {
+        //for (int p = 0, pc = 20; p < pc; p++) {
             
             if(productListView == nil)
                 productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];

@@ -237,24 +237,6 @@ static const float kProductColumnSpacer = 14.0;
          collections = [results sortedArrayUsingDescriptors:sortDescriptors];
     }
     
-    NSMutableArray *more = [collections mutableCopy];
-    
-    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-//    [more addObjectsFromArray:collections];
-
-    
-    collections = more;
-    
     collectionText = @"collections";
     if([collections count] ==1) {
         collectionText = @"collection";
@@ -262,13 +244,13 @@ static const float kProductColumnSpacer = 14.0;
     }
     
     [numCollections removeFromSuperview];
-//    //clear scroll view so it can be redrawn in case of changes
-//    for(UIView *view in self.view.subviews) {
-//        if(view.tag == 999999999) {
-//            [view removeFromSuperview];
-//        }
-//        
-//    }
+    //clear scroll view so it can be redrawn in case of changes
+    for(UIView *view in self.view.subviews) {
+        if(view.tag == 999999999) {
+            [view removeFromSuperview];
+        }
+        
+    }
     [[self.view viewWithTag:999999999] removeFromSuperview];
     
     numCollections = [[UILabel alloc] init];
@@ -388,7 +370,7 @@ static const float kProductColumnSpacer = 14.0;
                         
            /*if(i==0){
              
-             /*Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
+             Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
              
              brand.brandName = @"irregular choice";
              brand.brandRef = [NSNumber numberWithInt:100];
@@ -416,9 +398,9 @@ static const float kProductColumnSpacer = 14.0;
              if(![managedContext save:&error]) {
              NSLog(@"Could not save supplier: %@", [error localizedDescription]);
              
-             }*/
+             }
              
-            /*Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
+            Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
              
              material.materialName = @"man made";
              material.materialRef = [NSNumber numberWithInt:60];
@@ -481,7 +463,7 @@ static const float kProductColumnSpacer = 14.0;
              
              }*/
             
-            /*if(i==0) {
+           /* if(i==0) {
              
              //add dummy product to each collection
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
@@ -489,21 +471,21 @@ static const float kProductColumnSpacer = 14.0;
              product.productName = @"black & red bow to fly";
              product.productPrice = [NSNumber numberWithDouble:125.00];
              product.productNotes = @"This is a test product inserted manually";
-             NSFetchRequest *brandRequest = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
-             NSArray *brands = [managedContext executeFetchRequest:brandRequest error:&error];
-             NSFetchRequest *materialRequest = [[NSFetchRequest alloc] initWithEntityName:@"Material"];
-             NSArray *materials = [managedContext executeFetchRequest:materialRequest error:&error];
-             NSFetchRequest *colourRequest = [[NSFetchRequest alloc] initWithEntityName:@"Colour"];
-             NSArray *colours = [managedContext executeFetchRequest:colourRequest error:&error];
-             NSFetchRequest *supplierRequest = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
-             NSArray *suppliers = [managedContext executeFetchRequest:supplierRequest error:&error];
-             NSFetchRequest *catRequest = [[NSFetchRequest alloc] initWithEntityName:@"ProductCategory"];
-             NSArray *categories = [managedContext executeFetchRequest:catRequest error:&error];
-             product.productBrandRef = [NSNumber numberWithInt:100];
+             //NSFetchRequest *brandRequest = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
+             //NSArray *brands = [managedContext executeFetchRequest:brandRequest error:&error];
+             //NSFetchRequest *materialRequest = [[NSFetchRequest alloc] initWithEntityName:@"Material"];
+             //NSArray *materials = [managedContext executeFetchRequest:materialRequest error:&error];
+             //NSFetchRequest *colourRequest = [[NSFetchRequest alloc] initWithEntityName:@"Colour"];
+             //NSArray *colours = [managedContext executeFetchRequest:colourRequest error:&error];
+             //NSFetchRequest *supplierRequest = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
+             //NSArray *suppliers = [managedContext executeFetchRequest:supplierRequest error:&error];
+             //NSFetchRequest *catRequest = [[NSFetchRequest alloc] initWithEntityName:@"ProductCategory"];
+             //NSArray *categories = [managedContext executeFetchRequest:catRequest error:&error];
+             product.productBrandRef = [NSNumber numberWithInt:386];
              product.productCategoryRef = [NSNumber numberWithInt:110];
              product.productColourRef = [NSNumber numberWithInt:11];
              product.productMaterialRef= [NSNumber numberWithInt:20];
-             product.productSupplierCode = @"SUP001";
+             product.productSupplierCode = @"A12";
              //add image
              UIImage *image = [UIImage imageNamed:@"1945097370_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
              NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
@@ -514,11 +496,11 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"black & white cheeky moose tweed";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:100];
+                product.productBrandRef = [NSNumber numberWithInt:71];
                 product.productCategoryRef = [NSNumber numberWithInt:110];
                 product.productColourRef = [NSNumber numberWithInt:11];
                 product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"SUP001";
+                product.productSupplierCode = @"A16";
                 //add image
                 image = [UIImage imageNamed:@"1159167270_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
@@ -529,11 +511,11 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"black cheeky moose glitter";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:100];
+                product.productBrandRef = [NSNumber numberWithInt:71];
                 product.productCategoryRef = [NSNumber numberWithInt:110];
                 product.productColourRef = [NSNumber numberWithInt:11];
                 product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"SUP001";
+                product.productSupplierCode = @"A12";
                 //add image
                 image = [UIImage imageNamed:@"1159167060_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
@@ -544,11 +526,11 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"turquoise pinky perky court";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:100];
+                product.productBrandRef = [NSNumber numberWithInt:386];
                 product.productCategoryRef = [NSNumber numberWithInt:110];
                 product.productColourRef = [NSNumber numberWithInt:11];
                 product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"SUP001";
+                product.productSupplierCode = @"A16";
                 //add image
                 image = [UIImage imageNamed:@"1159155670_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
@@ -559,11 +541,11 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"purple oz naughty smile";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:100];
+                product.productBrandRef = [NSNumber numberWithInt:71];
                 product.productCategoryRef = [NSNumber numberWithInt:110];
                 product.productColourRef = [NSNumber numberWithInt:11];
                 product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"SUP001";
+                product.productSupplierCode = @"A16";
                 //add image
                 image = [UIImage imageNamed:@"1159053670_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
@@ -574,11 +556,11 @@ static const float kProductColumnSpacer = 14.0;
                 product.productName = @"bloxy simba cat t-bar court";
                 product.productPrice = [NSNumber numberWithDouble:125.00];
                 product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:100];
+                product.productBrandRef = [NSNumber numberWithInt:386];
                 product.productCategoryRef = [NSNumber numberWithInt:110];
                 product.productColourRef = [NSNumber numberWithInt:11];
                 product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"SUP001";
+                product.productSupplierCode = @"A12";
                 //add image
                 image = [UIImage imageNamed:@"1158985860_main.jpg"];
                 imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
