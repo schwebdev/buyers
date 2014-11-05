@@ -62,6 +62,7 @@ static const float kPageHeight = 576.0;
     UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
     [flowLayout setItemSize:CGSizeMake(341.5, 288.0)];
     
+    
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"List of Collections"]];

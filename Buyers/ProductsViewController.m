@@ -22,20 +22,15 @@
 #import "CollectionViewController.h"
 
 
-static const float kColumnWidth = 200.0;
-static const float kRowHeight = 184.0;
-static const float kButtonWidth = 150.0;
-static const float kButtonHeight = 150.0;
+
 static const float kPageWidth = 680.0;
-static const float kPageHeight = 552.0;
-static const float kProductColumnSpacer = 30.0;
 
 static const float sColumnWidth = 150.0;
 static const float sRowHeight = 130.0;
 static const float sButtonWidth = 100.0;
 static const float sButtonHeight = 100.0;
 static const float sPageWidth = 310.0;
-static const float sPageHeight = 390.0;
+static const float sPageHeight = 400.0;
 static const float sProductColumnSpacer = 5.0;
 
 
@@ -523,7 +518,7 @@ static const float sProductColumnSpacer = 5.0;
      }
     
     UIView *selectedProductsListView;
-    UIScrollView *selectedProductsScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake((kPageWidth+20.0), 150, sPageWidth, sPageHeight)];
+    UIScrollView *selectedProductsScrollView = [[UIScrollView alloc] initWithFrame: CGRectMake((kPageWidth+20.0), 140, sPageWidth, sPageHeight)];
     selectedProductsScrollView.pagingEnabled = NO;
     selectedProductsScrollView.tag=999999999;
     
