@@ -118,6 +118,8 @@
     //type = @"Supplier"
     NSError *error;
     NSURL *url;
+    UIImage *defaultImage = [UIImage imageNamed:@"shoeOutlineNoImage.png"];
+    NSData *defaultImageData = [NSData dataWithData:UIImagePNGRepresentation(defaultImage)];
     if([type isEqualToString:@"Supplier"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getsuppliers"];
     if([type isEqualToString:@"Brand"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getbrands"];
     if([type isEqualToString:@"CalYearWeek"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcalyearweeks"];
@@ -208,7 +210,7 @@
             NSURL *url = [[NSURL alloc] initWithString:strURL];
             NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
             if(error) {
-                 product.productImageData = nil; //could have holding image here
+                product.productImageData = defaultImageData;
             } else {
                 product.productImageData = imageData;
                 NSLog(@"image: %@",strURL);

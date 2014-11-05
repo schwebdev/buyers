@@ -13,10 +13,13 @@
 #import "BaseViewController.h"
 #import "AdvancedSearchViewController.h"
 
-@interface ProductsViewController : BaseViewController <AdvancedSearchViewControllerDelegate,UIScrollViewDelegate, UITextFieldDelegate> {
+@interface ProductsViewController : BaseViewController <UICollectionViewDataSource,UICollectionViewDelegateFlowLayout, AdvancedSearchViewControllerDelegate,UIScrollViewDelegate, UITextFieldDelegate,NSFetchedResultsControllerDelegate> {
     UIPopoverController *_displayAdvancedSearchPopover;
     AdvancedSearchViewController *_productSearch;
 }
+@property (weak, nonatomic) IBOutlet UICollectionView *scrollView;
+@property (strong, nonatomic) NSFetchedResultsController *fetchedResultsController;
+@property (strong, nonatomic) NSManagedObjectContext *managedContext;
 @property (nonatomic, retain) AdvancedSearchViewController *productSearch;
 @property (nonatomic, retain) UIPopoverController *displayAdvancedSearchPopover;
 @property (weak, nonatomic) IBOutlet SchTextField *txtNewCollection;

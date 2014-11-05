@@ -84,14 +84,6 @@
 {
     [self.displayNotesPopover dismissPopoverAnimated:YES];
     
-    /*NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSError *error;
-    
-    NSManagedObjectID *collectionID = [[notification userInfo] valueForKey:@"collectionID"];
-    Collection *collection = (Collection *) [managedContext existingObjectWithID:collectionID error:&error];
-    NSLog(@"notes *: %@", collection.collectionNotes);*/
-    
-    
 }
 - (IBAction)displayNotesPopover:(id)sender {
     

@@ -12,7 +12,7 @@
 
 @interface ProductCell : UICollectionViewCell
 @property (strong, nonatomic) IBOutlet UIButton *productDeleteButton;
-
+@property (weak, nonatomic) IBOutlet UIButton *productInfoButton;
 @property (strong, nonatomic) Product *product;
 @property (weak, nonatomic) IBOutlet UILabel *productNameLabel;
 @property (strong, nonatomic) IBOutlet UIImageView *productImageView;

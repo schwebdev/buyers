@@ -18,6 +18,7 @@
     self.productNameLabel.text = _product.productName;
     self.productNameLabel.textAlignment = NSTextAlignmentCenter;
     self.productImageView.image = [UIImage imageWithData:(_product.productImageData)];
+
 }
 
 - (void)setHighlighted:(BOOL)highlighted {

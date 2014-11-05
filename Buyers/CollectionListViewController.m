@@ -3,6 +3,7 @@
 #import "SWRevealViewController.h"
 #import "AppDelegate.h"
 #import "Collection.h"
+#import "CollectionCell.h"
 #import "NewCollectionViewController.h"
 #import "CollectionViewController.h"
 #import "CollectionButton.h"
@@ -21,19 +22,9 @@
 
 #define LX_LIMITED_MOVEMENT 0
 
-static const float kColumnWidth = 341.5;
-static const float kRowHeight = 289.0;
-static const float kButtonWidth = 341.5;
-static const float kButtonHeight = 288.0;
-static const float kPageWidth = 1024.0;
-static const float kPageHeight = 579.0;
-static const float kNavBarHeight = 85.0;
-static const float kProductWidth = 68.0;
-static const float kProductHeight = 68.0;
-static const float kProductColumnSpacer = 14.0;
+static const float kPageHeight = 576.0;
 
 @interface CollectionListViewController () {
-    NSArray *collections;
     NSMutableArray *deletions;
     UIButton *filterButton, *clearButton;
     UIButton *allUsersButton;
@@ -44,10 +35,13 @@ static const float kProductColumnSpacer = 14.0;
     UILabel *numCollections, *brandListLabel, *searchTextLabel;
     NSString *collectionText;
     NSPredicate *predicate;
+    NSMutableArray *_itemChanges;
+    NSMutableArray *_sectionChanges;
 }
 @end
 
 @implementation CollectionListViewController
+
 
 @synthesize addCollectionPopover = _addCollectionPopover;
 @synthesize addCollection = _addCollection;
@@ -61,6 +55,12 @@ static const float kProductColumnSpacer = 14.0;
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _itemChanges = [NSMutableArray array];
+    _sectionChanges = [NSMutableArray array];
+    
+    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
+    [flowLayout setItemSize:CGSizeMake(341.5, 288.0)];
     
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
@@ -132,10 +132,24 @@ static const float kProductColumnSpacer = 14.0;
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:tools];
 
     
+    //show or hide next and previous arrows
+    _upArrow = [[UIImageView alloc] initWithFrame:CGRectMake(20, (kPageHeight+90), 35.5, 27)];
+    _upArrow.hidden = YES;
+    [_upArrow setImage:[UIImage imageNamed:@"arrowUP.png"]];
+    [self.view addSubview:_upArrow];
+    
+    _downArrow = [[UIImageView alloc] initWithFrame:CGRectMake(968.5, (kPageHeight+90), 35.5, 27)];
+    _downArrow.hidden = YES;
+    [_downArrow setImage:[UIImage imageNamed:@"arrowDOWN.png"]];
+    [self.view addSubview:_downArrow];
+    
+    //add notification to listen for the collection being saved and call method to close the pop over and go to collections view
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToNewCollection:) name:@"GoToNewCollection" object:nil];
+    
 }
 - (void) viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+       
     _menu1 = [self setMenuButton:1 title:@"+ new collection(s)"];
     
     [_menu1 addTarget:self action:@selector(displayNewCollectionPopover:) forControlEvents:UIControlEventTouchUpInside];
@@ -144,22 +158,17 @@ static const float kProductColumnSpacer = 14.0;
 
     [_menu2 addTarget:self action:@selector(deleteCollections:) forControlEvents:UIControlEventTouchUpInside];
     
+    self.fetchedResultsController = nil;
     
-//    for(UIView *view in self.view.subviews) {
-//        if(view.tag == 999999999) {
-//            [view removeFromSuperview];
-//        }
-//        
-//    }
+    self.fetchedResultsController = [self constructsCollections];
     
-    [self fetchResults];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
     
 }
 - (void) viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    //clear scroll view so it can be redrawn in case of changes
-    //NSLog(@"count %d", [collections count]);
-    
 }
 - (void) filter {
     //dimiss the keyboard
@@ -191,9 +200,12 @@ static const float kProductColumnSpacer = 14.0;
     
     predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
     
-    [self fetchResults];
-   // NSLog(@"count %d", [collections count]);
-    
+    self.fetchedResultsController = nil;
+    self.fetchedResultsController = [self constructsCollections];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
+
 }
 - (void) clearSearch {
     //dimiss the keyboard
@@ -207,54 +219,68 @@ static const float kProductColumnSpacer = 14.0;
     
     
 }
-
-- (void)alert {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"alert" message:[NSString stringWithFormat:@"test"] delegate:nil cancelButtonTitle:@"ok" otherButtonTitles:nil];
-    [alert show];
+- (void)viewDidUnload {
+    self.fetchedResultsController = nil;
 }
-- (void)fetchResults
+
+- (NSFetchedResultsController*)constructsCollections
 {
-  
+    
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
+    
     //hide for refresh
     _upArrow.hidden = YES;
     _downArrow.hidden = YES;
     
     //fetch request to retrieve all collections
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
     NSError *error;
-    NSArray *results = [managedContext executeFetchRequest:request error:&error];
     
     //NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"collectionID" ascending:YES];
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"collectionName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
     
-    if(predicate != nil) {
-        collections = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:predicate];
-       
-    } else {
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Collection" inManagedObjectContext:self.managedContext];
+    [request setEntity:entity];
     
-         collections = [results sortedArrayUsingDescriptors:sortDescriptors];
+    // Set batch size
+    [request setFetchBatchSize:6];
+    
+    [request setSortDescriptors:sortDescriptors];
+    
+    
+    if(predicate != nil) {
+        
+        [request setPredicate:predicate];
+        
     }
     
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:self.managedContext sectionNameKeyPath:nil cacheName:nil];
+    aFetchedResultsController.delegate = self;
+    _fetchedResultsController = aFetchedResultsController;
+
+    [_fetchedResultsController performFetch:&error];
+    if (error) {
+        NSLog(@"Unable to perform fetch.");
+        NSLog(@"%@, %@", error, error.localizedDescription);
+    }
+    
+    //NSLog(@"insertion count %d",[self.fetchedResultsController.fetchedObjects count]);
+   
     collectionText = @"collections";
-    if([collections count] ==1) {
+    if([self.fetchedResultsController.fetchedObjects count] ==1) {
         collectionText = @"collection";
         
     }
-    
+
     [numCollections removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 999999999) {
-            [view removeFromSuperview];
-        }
-        
-    }
-    [[self.view viewWithTag:999999999] removeFromSuperview];
-    
     numCollections = [[UILabel alloc] init];
-    numCollections.text = [NSString stringWithFormat: @"%d %@", [collections count], collectionText];
+    numCollections.text = [NSString stringWithFormat: @"%d %@", [_fetchedResultsController.fetchedObjects count], collectionText];
     numCollections.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
     numCollections.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     numCollections.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
@@ -264,465 +290,14 @@ static const float kProductColumnSpacer = 14.0;
     
     [self.view addSubview:numCollections];
     
-    deletions = [[NSMutableArray alloc] initWithCapacity:[collections count]];
+    deletions = [[NSMutableArray alloc] initWithCapacity:[_fetchedResultsController.fetchedObjects count]];
     
-    txtSearch.text = @"";
-    
-    _scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(0, kNavBarHeight, kPageWidth, kPageHeight)];
-    _scrollView.pagingEnabled = NO;
-    _scrollView.tag = 999999999;
-    _scrollView.delegate = self;
-    
-    if ([collections count] > 0 ) {
-        
-        int page = 1;
-        int col = 1;
-        int row = 1;
-        
-        UIView *collectionListView;
-
-        
-        for (int i = 0, ic = [collections count]; i < ic; i++) {
-            
-            if(collectionListView == nil)
-                //collectionListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * kPageWidth), kNavBarHeight, kPageWidth, kPageHeight)];
-                collectionListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
-            
-            int x = (col -1) * kColumnWidth;
-            int y = (row - 1) * kRowHeight;
-            if(row >1) {
-                y=y+1;
-            }
-            
-            Collection *collectionElement = [collections objectAtIndex:i];
-            CollectionButton *collectionButton = [[CollectionButton alloc] initWithFrame:CGRectMake(x, y, kButtonWidth, kButtonHeight)];
-            
-            //[collectionButton setTitle:collectionElement.collectionName forState:UIControlStateNormal];
-            [collectionButton setTag:i];
-            collectionButton.collection = collectionElement;
-            [collectionButton addTarget:self action:@selector(collectionButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            
-            CALayer *layer = [collectionButton layer];
-            
-            //add bottom border to all buttons
-            CALayer *bottomBorder = [CALayer layer];
-            bottomBorder.borderColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
-            bottomBorder.borderWidth = 1;
-            bottomBorder.frame = CGRectMake(0, layer.frame.size.height, layer.frame.size.width, 1);
-            [layer addSublayer:bottomBorder];
-            
-            
-            //add right border for column 1 and column 2 only
-            if (col < 3) {
-                CALayer *rightBorder = [CALayer layer];
-                rightBorder.borderColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
-                rightBorder.borderWidth = 1;
-                rightBorder.frame = CGRectMake(layer.frame.size.width, 0, 1, layer.frame.size.height+1); //+1 on height as there is a slight white square on 2nd column???
-                [layer addSublayer:rightBorder];
-            }
-            
-            // NSLog(@"layer width: %f",layer.frame.size.width);
-            
-            
-            //set title
-            UILabel *collectionTitle = [[UILabel alloc] init];
-            collectionTitle.text = [NSString stringWithFormat: @" %@", collectionElement.collectionName];
-            collectionTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 14.0];
-            collectionTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-            collectionTitle.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
-            collectionTitle.textColor = [UIColor blackColor];
-            collectionTitle.numberOfLines = 1;
-            //CGSize sizeTitle = [collectionTitle.text sizeWithAttributes:@{NSFontAttributeName:collectionTitle.font}];
-            CGRect frameCTitle;
-            if(col == 2) {
-                frameCTitle = CGRectMake(2.0, 0.0, (kButtonWidth-2.0), 30.0);
-            } else {
-                frameCTitle = CGRectMake(1.0, 0.0, kButtonWidth-1.0, 30.0);
-            }
-            collectionTitle.frame = frameCTitle;
-            
-            [collectionButton addSubview:collectionTitle];
-            
-            
-            //set date and author
-            UILabel *collectionDetails = [[UILabel alloc] init];
-            NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-            [dateFormat setDateFormat:@"dd MMM yyyy"];
-            NSDate *creationDate = collectionElement.collectionCreationDate;
-            NSString *formatDate = [dateFormat stringFromDate:creationDate];
-            collectionDetails.text = [NSString stringWithFormat: @" %@ - %@", formatDate, collectionElement.collectionCreator];
-            collectionDetails.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-            collectionDetails.backgroundColor = [UIColor clearColor];
-            collectionDetails.textColor = [UIColor colorWithRed:136.0/255.0 green:136.0/255.0 blue:136.0/255.0 alpha:1];
-            collectionDetails.numberOfLines = 1;
-            //CGSize sizeDetails = [collectionTitle.text sizeWithAttributes:@{NSFontAttributeName:collectionDetails.font}];
-            CGRect frameDTitle = CGRectMake(0.0, 30.0, kButtonWidth, 20.0);
-            collectionDetails.frame = frameDTitle;
-            
-            [collectionButton addSubview:collectionDetails];
-            
-            NSArray *products;
-            
-            NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
-            NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
-            products = [collectionElement.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
-            
-                        
-           /*if(i==0){
-             
-             Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
-             
-             brand.brandName = @"irregular choice";
-             brand.brandRef = [NSNumber numberWithInt:100];
-               
-            brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
-               
-               brand.brandName = @"iron fist";
-               brand.brandRef = [NSNumber numberWithInt:101];
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save brand: %@", [error localizedDescription]);
-             
-             }
-             
-             Supplier *supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:managedContext];
-             
-             supplier.supplierName = @"irregular choice";
-             supplier.supplierCode = @"SUP001";
-               
-               supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:managedContext];
-               
-               supplier.supplierName = @"iron fist";
-               supplier.supplierCode = @"SUP002";
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save supplier: %@", [error localizedDescription]);
-             
-             }
-             
-            Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
-             
-             material.materialName = @"man made";
-             material.materialRef = [NSNumber numberWithInt:60];
-                
-                material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
-                
-             material.materialName = @"leather";
-             material.materialRef = [NSNumber numberWithInt:20];
-                
-                material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
-                
-                material.materialName = @"fabric";
-                material.materialRef = [NSNumber numberWithInt:70];
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save material: %@", [error localizedDescription]);
-             
-             }
-             
-             Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
-             
-                colour.colourName = @"multi";
-                colour.colourRef = [NSNumber numberWithInt:99];
-                
-                colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
-                
-                colour.colourName = @"clear";
-                colour.colourRef = [NSNumber numberWithInt:0];
-                
-                colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
-                
-             colour.colourName = @"stone";
-             colour.colourRef = [NSNumber numberWithInt:11];
-                
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save colour: %@", [error localizedDescription]);
-             
-             }
-             
-             ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-             
-             category.categoryName = @"high heels";
-             category.category2Ref = [NSNumber numberWithInt:110];
-                
-                 category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-                
-                category.categoryName = @"low heels";
-                category.category2Ref = [NSNumber numberWithInt:120];
-                
-                 category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-                category.categoryName = @"boots";
-                category.category2Ref = [NSNumber numberWithInt:140];
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save category: %@", [error localizedDescription]);
-             
-             }
-            
-             
-             }*/
-            
-           /* if(i==0) {
-             
-             //add dummy product to each collection
-             Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-             product.productCode = @"1945097370";
-             product.productName = @"black & red bow to fly";
-             product.productPrice = [NSNumber numberWithDouble:125.00];
-             product.productNotes = @"This is a test product inserted manually";
-             //NSFetchRequest *brandRequest = [[NSFetchRequest alloc] initWithEntityName:@"Brand"];
-             //NSArray *brands = [managedContext executeFetchRequest:brandRequest error:&error];
-             //NSFetchRequest *materialRequest = [[NSFetchRequest alloc] initWithEntityName:@"Material"];
-             //NSArray *materials = [managedContext executeFetchRequest:materialRequest error:&error];
-             //NSFetchRequest *colourRequest = [[NSFetchRequest alloc] initWithEntityName:@"Colour"];
-             //NSArray *colours = [managedContext executeFetchRequest:colourRequest error:&error];
-             //NSFetchRequest *supplierRequest = [[NSFetchRequest alloc] initWithEntityName:@"Supplier"];
-             //NSArray *suppliers = [managedContext executeFetchRequest:supplierRequest error:&error];
-             //NSFetchRequest *catRequest = [[NSFetchRequest alloc] initWithEntityName:@"ProductCategory"];
-             //NSArray *categories = [managedContext executeFetchRequest:catRequest error:&error];
-             product.productBrandRef = [NSNumber numberWithInt:386];
-             product.productCategoryRef = [NSNumber numberWithInt:110];
-             product.productColourRef = [NSNumber numberWithInt:11];
-             product.productMaterialRef= [NSNumber numberWithInt:20];
-             product.productSupplierCode = @"A12";
-             //add image
-             UIImage *image = [UIImage imageNamed:@"1945097370_main.jpg"];//[UIImage imageWithBase64Data:brand.brandHeaderLogo];
-             NSData *imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-             product.productImageData = imageData;
-                
-                product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode = @"1159167270";
-                product.productName = @"black & white cheeky moose tweed";
-                product.productPrice = [NSNumber numberWithDouble:125.00];
-                product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:71];
-                product.productCategoryRef = [NSNumber numberWithInt:110];
-                product.productColourRef = [NSNumber numberWithInt:11];
-                product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"A16";
-                //add image
-                image = [UIImage imageNamed:@"1159167270_main.jpg"];
-                imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-                product.productImageData = imageData;
-                
-                product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode = @"1159167060";
-                product.productName = @"black cheeky moose glitter";
-                product.productPrice = [NSNumber numberWithDouble:125.00];
-                product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:71];
-                product.productCategoryRef = [NSNumber numberWithInt:110];
-                product.productColourRef = [NSNumber numberWithInt:11];
-                product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"A12";
-                //add image
-                image = [UIImage imageNamed:@"1159167060_main.jpg"];
-                imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-                product.productImageData = imageData;
-                
-                product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode = @"1159155670";
-                product.productName = @"turquoise pinky perky court";
-                product.productPrice = [NSNumber numberWithDouble:125.00];
-                product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:386];
-                product.productCategoryRef = [NSNumber numberWithInt:110];
-                product.productColourRef = [NSNumber numberWithInt:11];
-                product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"A16";
-                //add image
-                image = [UIImage imageNamed:@"1159155670_main.jpg"];
-                imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-                product.productImageData = imageData;
-                
-                product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode = @"1159053670";
-                product.productName = @"purple oz naughty smile";
-                product.productPrice = [NSNumber numberWithDouble:125.00];
-                product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:71];
-                product.productCategoryRef = [NSNumber numberWithInt:110];
-                product.productColourRef = [NSNumber numberWithInt:11];
-                product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"A16";
-                //add image
-                image = [UIImage imageNamed:@"1159053670_main.jpg"];
-                imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-                product.productImageData = imageData;
-                
-                product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode = @"1158985860";
-                product.productName = @"bloxy simba cat t-bar court";
-                product.productPrice = [NSNumber numberWithDouble:125.00];
-                product.productNotes = @"This is a test product inserted manually";
-                product.productBrandRef = [NSNumber numberWithInt:386];
-                product.productCategoryRef = [NSNumber numberWithInt:110];
-                product.productColourRef = [NSNumber numberWithInt:11];
-                product.productMaterialRef= [NSNumber numberWithInt:20];
-                product.productSupplierCode = @"A12";
-                //add image
-                image = [UIImage imageNamed:@"1158985860_main.jpg"];
-                imageData = [NSData dataWithData:UIImageJPEGRepresentation(image, 1)];
-                product.productImageData = imageData;
-             
-             //add additional images
-             //Image *productImage = [NSEntityDescription insertNewObjectForEntityForName:@"Image" inManagedObjectContext:managedContext];
-             //productImage.imageData = imageData;
-             
-             //[product addImagesObject:productImage];
-             
-             if(![managedContext save:&error]) {
-             NSLog(@"Could not save product: %@", [error localizedDescription]);
-             
-             }
-             
-             }*/
-            
-            //if there are products get first 12 product images
-            if ([products count] > 0) {
-                
-                UIView *productsView = [[UIView alloc] initWithFrame:CGRectMake(2.0, 51.0, kButtonWidth-4, 213.0)];
-                productsView.userInteractionEnabled = false; //switch off so the view area is clickable
-                
-                int pCol =1;
-                int pRow = 1;
-                
-                for (int p = 0, pc = [products count]; p < pc; p++) {
-                    
-                    if(p==12) {
-                        break;
-                    }
-                    ProductOrder *productOrder = [products objectAtIndex:p];
-                    Product *productElement = productOrder.orderProduct;
-                    
-                    int px = (pCol -1) * kProductWidth;
-                    int py = (pRow - 1) * kProductHeight;
-                    if(pRow >1) {
-                        py=py+1;
-                    }
-                    UIImage *image = [UIImage imageWithData:(productElement.productImageData)];
-                    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-                    imageView.frame = CGRectMake(px+((pCol -1) * kProductColumnSpacer), py, kProductWidth, kProductHeight);
-                    [productsView addSubview:imageView];
-                    pCol++;
-                    
-                    if(pCol > 4) {
-                        pRow++;
-                        pCol= 1;
-                    }
-                }
-                
-                CALayer *productsLayer = [productsView layer];
-                CALayer *pTopBorder = [CALayer layer];
-                pTopBorder.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
-                pTopBorder.borderWidth = 1;
-                pTopBorder.frame = CGRectMake(0, 0, productsLayer.frame.size.width, 1);
-                [productsLayer addSublayer:pTopBorder];
-                
-                
-                CALayer *pBottomBorder = [CALayer layer];
-                pBottomBorder.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
-                pBottomBorder.borderWidth = 1;
-                pBottomBorder.frame = CGRectMake(0, productsLayer.frame.size.height, productsLayer.frame.size.width, 1);
-                [productsLayer addSublayer:pBottomBorder];
-                
-                [collectionButton addSubview:productsView];
-            }
-            
-            
-            //set number of products within collection
-            UILabel *collectionNumProducts = [[UILabel alloc] init];
-            NSString *productText = @"products";
-            if([products count] ==1) {
-                productText = @"product";
-                
-            }
-            collectionNumProducts.text = [NSString stringWithFormat: @" %d %@", [products count], productText];
-            collectionNumProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-            collectionNumProducts.backgroundColor = [UIColor clearColor];
-            collectionNumProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
-            collectionNumProducts.numberOfLines = 1;
-            //CGSize sizeProducts = [collectionTitle.text sizeWithAttributes:@{NSFontAttributeName:collectionProducts.font}];
-            CGRect framePNumTitle = CGRectMake(0.0, (kButtonHeight-20.0), (kButtonWidth/2), 20.0);
-            collectionNumProducts.frame = framePNumTitle;
-            
-            [collectionButton addSubview:collectionNumProducts];
-            
-            
-            UIButton *deleteButton = [[UIButton alloc] initWithFrame:CGRectMake((kButtonWidth-115.0), (kButtonHeight-20.0), (kButtonWidth/2), 20.0)];
-            [deleteButton setTitle:@" delete" forState:UIControlStateNormal];
-            deleteButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-            [deleteButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-            [deleteButton setSelected:NO];
-            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML.png"] forState:UIControlStateNormal];
-            [deleteButton setImage:[UIImage imageNamed:@"checkboxSML-checked.png"] forState:UIControlStateSelected];
-            [deleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            [deleteButton setTag:i];
-            [collectionButton addSubview:deleteButton];
-            
-            
-            col++;
-            
-            if(col > 3) {
-                row++;
-                col= 1;
-            }
-            
-            [collectionListView addSubview:collectionButton];
-            
-            BOOL isLastPage = ((ic % 6 >= 0) && (ic - i == 1));
-            
-            //NSLog(@"page: %d isLastPage: %hhd modulus: %d ic-i: %d row: %d",page,isLastPage, (ic % 6 ), (ic - i), row );
-            
-            if(row > 2 && !isLastPage) {
-                //increment page number and add view to scroll view
-                [_scrollView addSubview:collectionListView];
-                page++;
-                row = 1;
-                //collectionListView = [[UIView alloc] initWithFrame:CGRectMake(((page - 1) * kPageWidth), kNavBarHeight, kPageWidth, kPageHeight)];
-                collectionListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
-            } else if(isLastPage) {
-                [_scrollView addSubview:collectionListView];
-            }
-            
-            
-            _scrollView.contentSize = CGSizeMake(kPageWidth,(kPageHeight * page));
-            //NSLog(@"x: %f",((page - 1) * kPageWidth));
-        }
-        [self.view addSubview:_scrollView];
-        
-        //show or hide next and previous arrows
-        _upArrow = [[UIImageView alloc] initWithFrame:CGRectMake(20, (kPageHeight+90), 35.5, 27)];
-        _upArrow.hidden = YES;
-        [_upArrow setImage:[UIImage imageNamed:@"arrowUP.png"]];
-        [self.view addSubview:_upArrow];
-        
-        _downArrow = [[UIImageView alloc] initWithFrame:CGRectMake(968.5, (kPageHeight+90), 35.5, 27)];
-        _downArrow.hidden = YES;
-        [_downArrow setImage:[UIImage imageNamed:@"arrowDOWN.png"]];
-        [self.view addSubview:_downArrow];
-
-        if(page > 0) {
-            if(_scrollView.contentOffset.y == 0) {
-                _upArrow.hidden = YES;
-            } else {
-                
-                _upArrow.hidden=NO;
-            }
-            if(_scrollView.contentOffset.y == (_scrollView.contentSize.height - kPageHeight)) {
-                _downArrow.hidden = YES;
-            } else {
-                _downArrow.hidden=NO;
-            }
-            //NSLog(@"page: %d y: %f calc: %f",page,_scrollView.contentOffset.y, (_scrollView.contentSize.height - (kPageHeight*page)));
-        }
-        
-    } else {
+   
+    if ([_fetchedResultsController.fetchedObjects count] == 0 ) {
         
         //display message
-        UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 300, 50))];
-        label.text = @"no collections have been returned";
+        UILabel *label = [[UILabel alloc] initWithFrame:(CGRectMake(210, 60, 500, 50))];
+        label.text = @"no collections returned, please search again or add a new collection";
         label.font = [UIFont fontWithName:@"HelveticaNeue" size:30.0];
         label.textColor = [UIColor colorWithRed:217.0/255.0 green:54.0/255.0 blue:0 alpha:1];
         label.numberOfLines = 1;
@@ -740,14 +315,21 @@ static const float kProductColumnSpacer = 14.0;
         [_addCollectionButton setTag:1];
         [_scrollView addSubview:_addCollectionButton];
         
-        [self.view addSubview:_scrollView];
-        
+    } else {
+            for(UIView *view in _scrollView.subviews) {
+                [view removeFromSuperview];
+            }
     }
     
-    //add notification to listen for the collection being saved and call method to close the pop over and go to collections view
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(goToNewCollection:) name:@"GoToNewCollection" object:nil];
+    if ([_fetchedResultsController.fetchedObjects count] > 6 ) {
+        _downArrow.hidden = NO;
+    }
+    return _fetchedResultsController;
+   
 }
+
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    
     if(_scrollView.contentOffset.y == 0) {
         _upArrow.hidden = YES;
     } else {
@@ -758,11 +340,11 @@ static const float kProductColumnSpacer = 14.0;
         _downArrow.hidden = YES;
     } else {
         _downArrow.hidden=NO;
-        
     }
  
 }
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView {
+    //NSLog(@"y: %f height: %f pageheight: %f" ,_scrollView.contentOffset.y, _scrollView.contentSize.height, kPageHeight);
     if(_scrollView.contentOffset.y == 0) {
         _upArrow.hidden = YES;
     } else {
@@ -771,58 +353,52 @@ static const float kProductColumnSpacer = 14.0;
     }
     if(_scrollView.contentOffset.y == (_scrollView.contentSize.height - kPageHeight)) {
         _downArrow.hidden = YES;
-        // NSLog(@"y: %f height: %f pageheight: %f" ,_scrollView.contentOffset.y, _scrollView.contentSize.height, kPageHeight);
     } else {
         _downArrow.hidden=NO;
-       
     }
-    // NSLog(@"y: %f" ,_scrollView.contentOffset.y);
 }
 - (void)goToNewCollection:(NSNotification *)notification
 {
     [self.addCollectionPopover dismissPopoverAnimated:YES];
+
+    predicate=nil;
+    txtSearch.text=@"";
+    brandsList.text=@"";
     
+    self.fetchedResultsController = nil;
+    self.fetchedResultsController = [self constructsCollections];
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
+    
+    if(self.revealViewController.frontViewPosition ==4) {
+        [self.revealViewController revealToggleAnimated:YES];
+    }
+
     //calling pushViewController before viewDidAppear is unsafe and is causing the subview tree to get corrupted on occasion - this is resulting in the collection object not being available in the collection view controller after viewDidLoad so aborting this stage and refreshing results instead
     
     /*go to new collection view so user can add products
     CollectionViewController  *collectionViewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"collectionView"];
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
     
     NSManagedObjectID *collectionID = [[notification userInfo] valueForKey:@"collectionID"];
-    Collection *collection = (Collection *) [managedContext existingObjectWithID:collectionID error:&error];
+    Collection *collection = (Collection *) [self.managedContext existingObjectWithID:collectionID error:&error];
     
     collectionViewController.collection = collection;
     [self.navigationController pushViewController:collectionViewController animated:YES];
-     */
+    */
     
-    /*[numCollections removeFromSuperview];
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 999999999) {
-            [view removeFromSuperview];
-        }
-        
-    }*/
-    [self fetchResults];
-    
-}
-- (void)collectionButtonClicked:(id)sender {
-    Collection *collection = [(CollectionButton *)sender collection];
-
-    CollectionViewController  *collectionViewController =  [self.storyboard instantiateViewControllerWithIdentifier:@"collectionView"];
-    
-    collectionViewController.collection = collection;
-    [self.navigationController pushViewController:collectionViewController animated:YES];
     
 }
 
 - (void)deleteButtonClicked:(id)sender {
-   
     UIButton *button = (UIButton*)sender;
     button.selected = !button.selected;
     
-    Collection *collection = [collections objectAtIndex:[sender tag]];
+
+    Collection *collection = (Collection*)[[_fetchedResultsController fetchedObjects] objectAtIndex:[sender tag]];
     
     if(button.selected ==YES) {
         //add collection to array for deletion
@@ -873,16 +449,14 @@ static const float kProductColumnSpacer = 14.0;
             NSLog(@"Could not save deleted collections: %@", [error localizedDescription]);
             
         }
-        /*
-        [numCollections removeFromSuperview];
-        //clear scroll view so it can be redrawn in case of changes
-        for(UIView *view in self.view.subviews) {
-            if(view.tag == 999999999) {
-                [view removeFromSuperview];
-            }
-            
-        }*/
-        [self fetchResults];
+       
+        self.fetchedResultsController = nil;
+        self.fetchedResultsController = [self constructsCollections];
+        dispatch_async(dispatch_get_main_queue(),^{
+            [_scrollView reloadData];
+        });
+        
+        [self.revealViewController revealToggleAnimated:YES];
         
     } else {
         //alert user that there are no collections to delete
@@ -917,89 +491,213 @@ static const float kProductColumnSpacer = 14.0;
     // Dispose of any resources that can be recreated.
 }
 
-/*
+
 #pragma mark - UICollectionViewDataSource methods
 
-- (NSInteger)collectionView:(UICollectionView *)theCollectionView numberOfItemsInSection:(NSInteger)theSectionIndex {
-    return collections.count;
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    //NSLog(@"number of sections: %d",[[self.fetchedResultsController sections] count]);
+    return [[self.fetchedResultsController sections] count];
+
 }
 
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    //NSLog(@"number of items in section %d",[sectionInfo numberOfObjects]);
+    return [sectionInfo numberOfObjects];
+   
+}
+-(void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+
+    Collection *collection = (Collection*)object; //self.collections[indexPath.item];
+    CollectionViewController  *collectionVC =  [self.storyboard instantiateViewControllerWithIdentifier:@"collectionView"];
+    
+    collectionVC.collection = collection;
+    [self.navigationController pushViewController:collectionVC animated:YES];
+
+    
+}
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    Collection *collection = collections[indexPath.item];
+     
+    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    Collection *collection = (Collection*)object; //self.collections[indexPath.item];
     CollectionCell *collectionCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionCell" forIndexPath:indexPath];
     collectionCell.collection = collection;
-    //playingCardCell.backgroundColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
     
+    collectionCell.layer.borderWidth =1.0f;
+    collectionCell.layer.borderColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
+    collectionCell.collectionNameLabel.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
+    
+    collectionCell.productsView.layer.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
+    collectionCell.productsView.layer.borderWidth=1.0f;
+    
+    [collectionCell.collectionDeleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [collectionCell.collectionDeleteButton setTag:indexPath.item];
+            
     return collectionCell;
 }
 
 
-#pragma mark - LXReorderableCollectionViewDataSource methods
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    _sectionChanges = [[NSMutableArray alloc] init];
+    _itemChanges = [[NSMutableArray alloc] init];
 
-- (void)collectionView:(UICollectionView *)collectionView itemAtIndexPath:(NSIndexPath *)fromIndexPath willMoveToIndexPath:(NSIndexPath *)toIndexPath {
-    Collection *collection = collections[fromIndexPath.item];
-    
-    [collections removeObjectAtIndex:fromIndexPath.item];
-    [collections insertObject:collection atIndex:toIndexPath.item];
 }
 
-- (BOOL)collectionView:(UICollectionView *)collectionView canMoveItemAtIndexPath:(NSIndexPath *)indexPath {
-#if LX_LIMITED_MOVEMENT == 1
-    Collection *collection = collections[indexPath.item];
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
     
-    switch (playingCard.suit) {
-        case PlayingCardSuitSpade:
-        case PlayingCardSuitClub: {
-            return YES;
-        } break;
-        default: {
-            return NO;
-        } break;
+    NSMutableDictionary *change = [NSMutableDictionary new];
+    
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            change[@(type)] = @(sectionIndex);
+            break;
+        case NSFetchedResultsChangeDelete:
+            change[@(type)] = @(sectionIndex);
+            break;
     }
-#else
-    return YES;
-#endif
-}
-
-- (BOOL)collectionView:(UICollectionView *)collectionView itemAtIndexPath:(NSIndexPath *)fromIndexPath canMoveToIndexPath:(NSIndexPath *)toIndexPath {
-#if LX_LIMITED_MOVEMENT == 1
-    Collection *fromPCollection = collections[fromIndexPath.item];
-    Collection *toCollection = collections[toIndexPath.item];
     
-    //switch order here
-    switch (toCollection.collection) {
-        case PlayingCardSuitSpade:
-        case PlayingCardSuitClub: {
-            return fromPlayingCard.rank == toPlayingCard.rank;
-        } break;
-        default: {
-            return NO;
-        } break;
+    [_sectionChanges addObject:change];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    
+    NSMutableDictionary *change = [NSMutableDictionary new];
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            change[@(type)] = newIndexPath;
+            break;
+        case NSFetchedResultsChangeDelete:
+            change[@(type)] = indexPath;
+            break;
+        case NSFetchedResultsChangeUpdate:
+            change[@(type)] = indexPath;
+            break;
+        case NSFetchedResultsChangeMove:
+            change[@(type)] = @[indexPath, newIndexPath];
+            break;
     }
-#else
+    [_itemChanges addObject:change];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+
+    if ([_sectionChanges count] > 0)
+    {
+        [_scrollView performBatchUpdates:^{
+            
+            for (NSDictionary *change in _sectionChanges)
+            {
+                [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
+                    
+                    NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                    switch (type)
+                    {
+                        case NSFetchedResultsChangeInsert:
+                            [_scrollView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        case NSFetchedResultsChangeDelete:
+                            [_scrollView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        case NSFetchedResultsChangeUpdate:
+                            [_scrollView reloadSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                           break;
+                    }
+                }];
+            }
+        } completion:nil];
+    }
+    
+    if ([_itemChanges count] > 0 && [_sectionChanges count] == 0)
+    {
+
+        
+        if ([self shouldReloadCollectionViewToPreventKnownIssue] || _scrollView.window == nil) {
+            // This is to prevent a bug in UICollectionView from occurring.
+            // The bug presents itself when inserting the first object or deleting the last object in a collection view.
+            // http://stackoverflow.com/questions/12611292/uicollectionview-assertion-failure
+            // This code should be removed once the bug has been fixed, it is tracked in OpenRadar
+            // http://openradar.appspot.com/12954582
+            [_scrollView reloadData];
+
+        } else {
+            
+            [_scrollView performBatchUpdates:^{
+                
+                for (NSDictionary *change in _itemChanges)
+                {
+                    [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
+                        
+                        NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                        switch (type)
+                        {
+                            case NSFetchedResultsChangeInsert:
+                                [_scrollView insertItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeDelete:
+                                [_scrollView deleteItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeUpdate:
+                                [_scrollView reloadItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeMove:
+                                [_scrollView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];
+                                break;
+                        }
+                    }];
+                }
+            } completion:nil];
+        }
+    }
+    
+    [_sectionChanges removeAllObjects];
+    [_itemChanges removeAllObjects];
+}
+
+- (BOOL)shouldReloadCollectionViewToPreventKnownIssue {
+    __block BOOL shouldReload = NO;
+    
+    for (NSDictionary *change in _itemChanges) {
+        [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+            NSIndexPath *indexPath = obj;
+            switch (type) {
+                case NSFetchedResultsChangeInsert:
+                    if ([_scrollView numberOfItemsInSection:indexPath.section] == 0) {
+                        shouldReload = YES;
+                    } else {
+                        shouldReload = NO;
+                    }
+                    break;
+                case NSFetchedResultsChangeDelete:
+                    if ([_scrollView numberOfItemsInSection:indexPath.section] == 1) {
+                        shouldReload = YES;
+                    } else {
+                        shouldReload = NO;
+                    }
+                    break;
+                case NSFetchedResultsChangeUpdate:
+                    shouldReload = NO;
+                    break;
+                case NSFetchedResultsChangeMove:
+                    shouldReload = NO;
+                    break;
+            }
+        }];
+    }
+    
+    //return shouldReload;
     return YES;
-#endif
 }
-
-
-#pragma mark - LXReorderableCollectionViewDelegateFlowLayout methods
-
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout willBeginDraggingItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"will begin drag");
-}
-
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout didBeginDraggingItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"did begin drag");
-}
-
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout willEndDraggingItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"will end drag");
-}
-
-- (void)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout didEndDraggingItemAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"did end drag");
-}*/
-
-
-
 @end

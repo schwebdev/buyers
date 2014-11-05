@@ -15,6 +15,7 @@
 #import "BaseViewController.h"
 #import "AppDelegate.h"
 #import "Product.h"
+#import "ProductCell.h"
 #import "ProductButton.h"
 #import "ProductOrder.h"
 #import <QuartzCore/QuartzCore.h>
@@ -39,7 +40,6 @@ static const float sProductColumnSpacer = 5.0;
 
 
 @interface ProductsViewController () {
-    NSArray *products;
     NSMutableArray *selectedProducts;
     UIButton *filterButton, *clearButton;
     UIButton *allProductsButton;
@@ -52,6 +52,8 @@ static const float sProductColumnSpacer = 5.0;
     UIButton *menu2;
     BOOL isAdvancedSearch;
     NSPredicate *predicate;
+    NSMutableArray *_itemChanges;
+    NSMutableArray *_sectionChanges;
 }
 
 @end
@@ -79,54 +81,16 @@ static const float sProductColumnSpacer = 5.0;
     
     [super viewWillAppear:animated];
     
-//    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
-//    
-//    
-//    //clear menu buttons
-//    SidebarViewController *sidebar = (SidebarViewController*)self.revealViewController.rearViewController;
-//    
-//    if(sidebar.menuItem1 != nil) {
-//        [sidebar.menuItem1 removeFromSuperview];
-//    }
-//    sidebar.menuItem1 = nil;
-//    if(sidebar.menuItem2 != nil) {
-//        [sidebar.menuItem2 removeFromSuperview];
-//    }
-//    sidebar.menuItem2 = nil;
-//    if(sidebar.menuItem3 != nil) {
-//        [sidebar.menuItem3 removeFromSuperview];
-//    }
-//    sidebar.menuItem3 = nil;
-//    
-//    
-//    UIButton *button = [UIButton buttonWithType:UIButtonTypeSystem];
-//    
-//
-//    [button setTitle:@"add new product" forState:UIControlStateNormal];
-//    [button setBackgroundColor:[UIColor whiteColor]];
-//    [button setBackgroundImage:[UIImage imageNamed:@"rightArrowButtonBG.png"] forState:UIControlStateNormal];
-//    [button setTitleColor:[UIColor darkGrayColor] forState:UIControlStateNormal];
-//    [button setTitleEdgeInsets: UIEdgeInsetsMake(0, 20, 0, 0)];
-//    [button.titleLabel setFont:[UIFont fontWithName:@"HelveticaNeue-Thin" size:20.0f]];
-//    [button setContentHorizontalAlignment:UIControlContentHorizontalAlignmentLeft];
-//    
-//    button.frame = CGRectMake(20, 40, 200, 60);
-//    sidebar.menuItem1 = button;
-//    [sidebar.view addSubview:button];
-//    
-//    [button addTarget:self action:@selector(addNewProduct:) forControlEvents:UIControlEventTouchUpInside];
-//
-    /*[numProducts removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 888888888) {
-            [view removeFromSuperview];
-        }
-        
-    }*/
+    //self.products = [self constructsProducts];
+    self.fetchedResultsController = nil;
     
-    [self fetchResults];
-    [self constructsProducts];
+    self.fetchedResultsController = [self constructsProducts];
+    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
+
+    [self constructsSelectedProducts];
     
     UIButton *menu1 = [self setMenuButton:1 title:@"add new product"];
     
@@ -136,6 +100,9 @@ static const float sProductColumnSpacer = 5.0;
     
     [menu2 addTarget:self action:@selector(displayAdvancedSearchPopover:) forControlEvents:UIControlEventTouchUpInside];
     
+}
+- (void)viewDidUnload {
+    self.fetchedResultsController = nil;
 }
 - (void)addNewProduct:(id)sender {
     
@@ -202,8 +169,18 @@ static const float sProductColumnSpacer = 5.0;
     
     predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
     
-    [self fetchResults];
+    [selectedProducts removeAllObjects];
+    //self.products = [self constructsProducts];
+    
+    self.fetchedResultsController = nil;
+    
+    self.fetchedResultsController = [self constructsProducts];
+    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
 
+    //NSLog(@"filter count: %d",[self.fetchedResultsController.fetchedObjects count]);
     
 }
 - (IBAction)displayAdvancedSearchPopover:(id)sender {
@@ -219,9 +196,13 @@ static const float sProductColumnSpacer = 5.0;
     
     
 }
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _itemChanges = [NSMutableArray array];
+    _sectionChanges = [NSMutableArray array];
     
     isAdvancedSearch = NO;
     
@@ -363,72 +344,81 @@ static const float sProductColumnSpacer = 5.0;
     
     [self.view addSubview:productsAddSub];
 
-   
     //add notification to listen for the collection being saved and call method to close the pop over
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(advancedSearch:) name:@"ProductAdvancedSearch" object:nil];
 
 }
-
-- (void)fetchResults
+- (NSFetchedResultsController*)constructsProducts
 {
-    UIView *productListView;
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame: CGRectMake(20, 140, kPageWidth, kPageHeight)];
-    scrollView.pagingEnabled = NO;
-    scrollView.tag = 888888888;
+    if (_fetchedResultsController != nil) {
+        return _fetchedResultsController;
+    }
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
 
     //fetch request to retrieve all products
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
-    NSArray *results = [managedContext executeFetchRequest:request error:&error];
     
     //NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productCode" ascending:YES];
     NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"productName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Product" inManagedObjectContext:self.managedContext];
+    [request setEntity:entity];
+    
+    // Set batch size
+    [request setFetchBatchSize:9];
+    
+    [request setSortDescriptors:sortDescriptors];
     
     
     if(isAdvancedSearch) {
         
         //use predicates
         if(predicate != nil) {
-            products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:predicate];
-        } else {
-            products = [results sortedArrayUsingDescriptors:sortDescriptors];
+             [request setPredicate:predicate];
         }
         
     } else {
     
     if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && customProductsButton.selected) {
         //get only custom products
-        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"productCode ='0000000000'"]];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"productCode ='0000000000'"];
+        [request setPredicate:pred];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && customProductsButton.selected) {
-        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='0000000000'", txtSearch.text, txtSearch.text]];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='0000000000'", txtSearch.text, txtSearch.text];
+        [request setPredicate:pred];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allProductsButton.selected) {
-        products = [[results sortedArrayUsingDescriptors:sortDescriptors]filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) OR (productCode CONTAINS[cd] %@ OR productCode LIKE[cd] %@)", txtSearch.text, txtSearch.text, txtSearch.text, txtSearch.text]];
-    } else {
-        
-        products = [results sortedArrayUsingDescriptors:sortDescriptors];
-
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) OR (productCode CONTAINS[cd] %@ OR productCode LIKE[cd] %@)", txtSearch.text, txtSearch.text, txtSearch.text, txtSearch.text];
+        [request setPredicate:pred];
     }
     }
-        
+    
+    // Edit the section name key path and cache name if appropriate.
+    // nil for section name key path means "no sections".
+    NSFetchedResultsController *aFetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:request managedObjectContext:self.managedContext sectionNameKeyPath:nil cacheName:nil];
+    aFetchedResultsController.delegate = self;
+    _fetchedResultsController = aFetchedResultsController;
+    
+    [_fetchedResultsController performFetch:&error];
+    if (error) {
+        NSLog(@"Unable to perform fetch.");
+        NSLog(@"%@, %@", error, error.localizedDescription);
+    }
+    
+    
+    NSLog(@"count: %d",[_fetchedResultsController.fetchedObjects count]);
+    
     productText = @"products";
-    if([products count] ==1) {
+    if([_fetchedResultsController.fetchedObjects count] ==1) {
         productText = @"product";
         
     }
     [noResults removeFromSuperview];
     [numProducts removeFromSuperview];
-    //clear scroll view so it can be redrawn in case of changes
-    for(UIView *view in self.view.subviews) {
-        if(view.tag == 888888888) {
-            [view removeFromSuperview];
-        }
-        
-    }
     numProducts = [[UILabel alloc] init];
-    numProducts.text = [NSString stringWithFormat: @"%d %@", [products count], productText];
+    numProducts.text = [NSString stringWithFormat: @"%d %@", [_fetchedResultsController.fetchedObjects count], productText];
     numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
     numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
@@ -438,85 +428,7 @@ static const float sProductColumnSpacer = 5.0;
     
     [self.view addSubview:numProducts];
     
-    if ([products count] > 0) {
-        [noResults removeFromSuperview];
-        int page =1;
-        int col= 1;
-        int row = 1;
-        
-        //for (int p = 0, pc = [products count]; p < pc; p++) {
-        for (int p = 0, pc = 30; p < pc; p++) {
-            
-            if(productListView == nil)
-                productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
-            
-            int x = (col -1) * kColumnWidth;
-            int y = (row - 1) * kRowHeight;
-            if(row >1) {
-                y=y+1;
-            }
-            
-            Product *productElement = [products objectAtIndex:p];
-            
-            UIImage *image = [UIImage imageWithData:(productElement.productImageData)];
-            ProductButton *productButton = [[ProductButton alloc] initWithFrame:CGRectMake(x+((col -1) * kProductColumnSpacer), y, kButtonWidth, kButtonHeight)];
-            [productButton setBackgroundImage:image forState:UIControlStateNormal];
-            productButton.product = productElement;
-            [productButton setTag:p+1]; //add 1 so that the tags start at 1 and not 0 so viewwithtag works
-            [productButton addTarget:self action:@selector(addProductToSelection:) forControlEvents:UIControlEventTouchUpInside];
-            [productListView addSubview:productButton];
-            
-            UILabel *productTitle = [[UILabel alloc] init];
-            [productTitle setText:[productElement.productName capitalizedString]];
-            productTitle.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0];
-            productTitle.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
-            productTitle.textColor = [UIColor colorWithRed:136.0/255.0 green:136.0/255.0 blue:136.0/255.0 alpha:1];
-            productTitle.numberOfLines = 1;
-            productTitle.textAlignment = NSTextAlignmentCenter;
-            CGRect frameTitle = CGRectMake(x+((col -1) * kProductColumnSpacer),y+(kButtonHeight+2.0), kButtonWidth, 18.0);
-            productTitle.frame = frameTitle;
-            [productListView addSubview:productTitle];
-            
-            
-            UIButton *infoButton = [UIButton buttonWithType:UIButtonTypeInfoLight];
-            [infoButton setTag:p];
-            CGRect infoFrame = CGRectMake(x+((col -1) * kProductColumnSpacer)+(kButtonWidth+10.0), y+(kButtonHeight-6.0), 24.0, 24.0);
-            [infoButton addTarget:self action:@selector(viewProductDetails:) forControlEvents:UIControlEventTouchUpInside];
-            [infoButton setFrame:infoFrame];
-            [productListView addSubview:infoButton];
-
-            
-            if([selectedProducts containsObject:productElement]){
-                //add opacity
-                productButton.layer.opacity = 0.1;
-            }
-            col++;
-            
-            if(col > 3) {
-                row++;
-                col= 1;
-            }
-            
-            
-            BOOL isLastPage = ((pc % 9 > 0) && (pc - p == 1));
-            
-            if(row > 3 && !isLastPage) {
-                //increment page number and add view to scroll view
-                [scrollView addSubview:productListView];
-                page++;
-                row = 1;
-                productListView = [[UIView alloc] initWithFrame:CGRectMake(0, ((page - 1) * kPageHeight), kPageWidth, kPageHeight)];
-            } else if(isLastPage) {
-                [scrollView addSubview:productListView];
-            }
-            
-            
-            scrollView.contentSize = CGSizeMake(kPageWidth,(kPageHeight * page));
-            // NSLog(@"height: %f",(kPageHeight * page));
-        }
-        [self.view addSubview:scrollView];
-        
-    } else {
+    if ([_fetchedResultsController.fetchedObjects count] == 0) {
         noResults = [[UILabel alloc] init];
         noResults.text = @"no products returned, please search again or sync data";
         noResults.font = [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
@@ -528,6 +440,8 @@ static const float sProductColumnSpacer = 5.0;
         
         [self.view addSubview:noResults];
     }
+   
+    return _fetchedResultsController;
 
 }
 
@@ -540,10 +454,14 @@ static const float sProductColumnSpacer = 5.0;
     
     isAdvancedSearch = NO;
     
-    [self fetchResults];
     [selectedProducts removeAllObjects];
-    [self constructsProducts];
-    //NSLog(@"count %d", [products count]);
+    self.fetchedResultsController = nil;
+    
+    self.fetchedResultsController = [self constructsProducts];
+    
+    dispatch_async(dispatch_get_main_queue(),^{
+        [_scrollView reloadData];
+    });
     
 }
 - (void) clearSearch {
@@ -573,23 +491,9 @@ static const float sProductColumnSpacer = 5.0;
     }
     
 }
-- (void)addProductToSelection:(id)sender {
-    Product *product = [(ProductButton *)sender product];
-    UIButton *button = (UIButton *)sender;
-    //add product to mutable array for displaying on the right
-    //check whether the product already exists and if so don't add it
-    
-    if(![selectedProducts containsObject:product]){
-        //add opacity
-        button.layer.opacity = 0.1;
-        [selectedProducts addObject:product];
-        [self constructsProducts]; //call method to redraw
-    }
-    
-    
-}
+
 - (void)viewProductDetails:(id)sender {
-    Product *p = [products objectAtIndex:((UIControl*)sender).tag];
+    Product *p = (Product*)[[_fetchedResultsController fetchedObjects] objectAtIndex:((UIControl*)sender).tag];
     ProductViewController *detailsView =  [self.storyboard instantiateViewControllerWithIdentifier:@"productDetails"];
     detailsView.product = p;
     [self.navigationController pushViewController:detailsView animated:YES];
@@ -598,17 +502,19 @@ static const float sProductColumnSpacer = 5.0;
 - (void)removeProductFromSelection:(id)sender {
     Product *product = [(ProductButton *)sender product];
     
-    int index = [products indexOfObject:product]+1; //add one as products array tag adds 1 to index for viewWithTag to work (doesn't work with 0)
-    UIButton *button = (UIButton *)[self.view viewWithTag:index];
+    int index = [[_fetchedResultsController fetchedObjects] indexOfObject:product];
     
-    //remove product from array
-    //add full opacity
-    button.layer.opacity = 1;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
+    [indexPaths addObject:indexPath];
+
     [selectedProducts removeObject:product];
-    [self constructsProducts]; //call method to redraw
+    [self constructsSelectedProducts]; //call method to redraw
+    [_scrollView reloadItemsAtIndexPaths:indexPaths];
+    
 
 }
-- (void)constructsProducts {
+- (void)constructsSelectedProducts {
     
     for(UIView *view in self.view.subviews) {
         if(view.tag == 999999999) {
@@ -693,13 +599,12 @@ static const float sProductColumnSpacer = 5.0;
     
     if([selectedProducts count] > 0) {
     
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
         NSError *error;
         
         //if no collection then validate for new one or existing one being selected
         if(!_collection){
-            //[self.reportType.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0)
             if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
             //alert user that there is no collection to add to
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"There is no collection to add products to!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -719,13 +624,13 @@ static const float sProductColumnSpacer = 5.0;
                     if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 ) {
                         
                     //save the new collection
-                    Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
+                    Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:self.managedContext];
                         
                     collection.collectionName = self.txtNewCollection.text;
                     collection.collectionCreator = creatorName;
                     collection.collectionCreationDate = [NSDate date];
                 
-                        if(![managedContext save:&error]) {
+                        if(![self.managedContext save:&error]) {
                             NSLog(@"Could not save collection: %@", [error localizedDescription]);
                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"Sorry an error occurred" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                             [alert show];
@@ -740,7 +645,7 @@ static const float sProductColumnSpacer = 5.0;
                         //set collection from picker
                         isNewCollection = YES;
                         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.collectionList.getSelectedValue];
-                        NSManagedObject *collectionElement = [managedContext objectWithID:c];
+                        NSManagedObject *collectionElement = [self.managedContext objectWithID:c];
                         _collection = (Collection*)collectionElement;
                         //NSLog(@"existing collection: %@",_collection.collectionName);
                     }
@@ -762,7 +667,7 @@ static const float sProductColumnSpacer = 5.0;
                         [product addCollectionsObject:_collection];
          
                         //add product order
-                        ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:managedContext];
+                        ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:self.managedContext];
          
                         int number = [_collection.products count];
          
@@ -772,7 +677,7 @@ static const float sProductColumnSpacer = 5.0;
                         productOrder.orderCollection = _collection;
                         productOrder.orderProduct = product;
         
-                        if(![managedContext save:&error]) {
+                        if(![self.managedContext save:&error]) {
                            // NSLog(@"Error saving product to collection: %@",[error localizedDescription]);
                             NSLog(@"Failed to save to data store: %@", [error localizedDescription]);
                             NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
@@ -794,7 +699,6 @@ static const float sProductColumnSpacer = 5.0;
             
         if(isNewCollection) {
             //going back to home view - where should this go?
-            //CollectionListViewController  *collectionListVC =  [self.storyboard instantiateViewControllerWithIdentifier:@"collectionListView"];
              [self dismissViewControllerAnimated:YES completion:nil];
         } else {
             //pop to root view controller to get back to categories
@@ -813,18 +717,19 @@ static const float sProductColumnSpacer = 5.0;
 -(IBAction)clearAll:(id)sender{
     //loop through selected products array and reset the opacity on products on the left
     
+     NSMutableArray *indexPaths = [[NSMutableArray alloc] init];
     
     for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
-        NSLog(@"selected list p: %d",p);
+        //NSLog(@"selected list p: %d",p);
         Product *product = [selectedProducts objectAtIndex:p];
-        int index = [products indexOfObject:product]+1; //add one as products array tag adds 1 to index for viewWithTag to work (doesn't work with 0)
-        UIButton *button = (UIButton *)[self.view viewWithTag:index];
-        //add full opacity
-        button.layer.opacity = 1;
+        int index = [[_fetchedResultsController fetchedObjects] indexOfObject:product];
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+        [indexPaths addObject:indexPath];
     }
-    
+   
     [selectedProducts removeAllObjects];
-    [self constructsProducts];
+    [self constructsSelectedProducts];
+    [_scrollView reloadItemsAtIndexPaths:indexPaths];
 }
 
 -(void)onKeyboardHide:(NSNotification *)notification {
@@ -858,6 +763,210 @@ static const float sProductColumnSpacer = 5.0;
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+#pragma mark - UICollectionViewDataSource methods
+
+
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+      return [[self.fetchedResultsController sections] count];
+    
+}
+- (NSInteger)collectionView:(UICollectionView *)theCollectionView numberOfItemsInSection:(NSInteger)section {
+    id <NSFetchedResultsSectionInfo> sectionInfo = [self.fetchedResultsController sections][section];
+    //NSLog(@"number of items in section %d",[sectionInfo numberOfObjects]);
+    return [sectionInfo numberOfObjects];
+    
+}
+
+-(void)collectionView:(UICollectionView*)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    Product *product = (Product*)object;
+    if(![selectedProducts containsObject:product]){
+        [selectedProducts addObject:product];
+        [self constructsSelectedProducts]; //call method to redraw
+        [_scrollView reloadItemsAtIndexPaths:[_scrollView indexPathsForVisibleItems]];
+    }
+    
+}
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    NSManagedObject *object = [self.fetchedResultsController objectAtIndexPath:indexPath];
+    
+    Product *product = (Product*)object; 
+    ProductCell *productCell = (ProductCell*)[collectionView dequeueReusableCellWithReuseIdentifier:@"ProductCell" forIndexPath:indexPath];
+    productCell.product = product;
+
+    if([selectedProducts containsObject:product]){
+        //add opacity
+         productCell.productImageView.layer.opacity  = 0.1;
+    } else {
+         productCell.productImageView.layer.opacity  = 1.0;
+    }
+    
+    [productCell.productInfoButton addTarget:self action:@selector(viewProductDetails:) forControlEvents:UIControlEventTouchUpInside];
+    [productCell.productInfoButton setTag:indexPath.item];
+    
+    return productCell;
+}
+
+- (void)controllerWillChangeContent:(NSFetchedResultsController *)controller {
+    _sectionChanges = [[NSMutableArray alloc] init];
+    _itemChanges = [[NSMutableArray alloc] init];
+    
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeSection:(id <NSFetchedResultsSectionInfo>)sectionInfo
+           atIndex:(NSUInteger)sectionIndex forChangeType:(NSFetchedResultsChangeType)type
+{
+    
+    NSMutableDictionary *change = [NSMutableDictionary new];
+    
+    switch(type) {
+        case NSFetchedResultsChangeInsert:
+            change[@(type)] = @(sectionIndex);
+            break;
+        case NSFetchedResultsChangeDelete:
+            change[@(type)] = @(sectionIndex);
+            break;
+    }
+    
+    [_sectionChanges addObject:change];
+}
+
+- (void)controller:(NSFetchedResultsController *)controller didChangeObject:(id)anObject
+       atIndexPath:(NSIndexPath *)indexPath forChangeType:(NSFetchedResultsChangeType)type
+      newIndexPath:(NSIndexPath *)newIndexPath
+{
+    
+    NSMutableDictionary *change = [NSMutableDictionary new];
+    switch(type)
+    {
+        case NSFetchedResultsChangeInsert:
+            change[@(type)] = newIndexPath;
+            break;
+        case NSFetchedResultsChangeDelete:
+            change[@(type)] = indexPath;
+            break;
+        case NSFetchedResultsChangeUpdate:
+            change[@(type)] = indexPath;
+            break;
+        case NSFetchedResultsChangeMove:
+            change[@(type)] = @[indexPath, newIndexPath];
+            break;
+    }
+    [_itemChanges addObject:change];
+}
+
+- (void)controllerDidChangeContent:(NSFetchedResultsController *)controller
+{
+    
+    if ([_sectionChanges count] > 0)
+    {
+        [_scrollView performBatchUpdates:^{
+            
+            for (NSDictionary *change in _sectionChanges)
+            {
+                [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
+                    
+                    NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                    switch (type)
+                    {
+                        case NSFetchedResultsChangeInsert:
+                            [_scrollView insertSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        case NSFetchedResultsChangeDelete:
+                            [_scrollView deleteSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                        case NSFetchedResultsChangeUpdate:
+                            [_scrollView reloadSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
+                            break;
+                    }
+                }];
+            }
+        } completion:nil];
+    }
+    
+    if ([_itemChanges count] > 0 && [_sectionChanges count] == 0)
+    {
+        
+        
+        if ([self shouldReloadCollectionViewToPreventKnownIssue] || _scrollView.window == nil) {
+            // This is to prevent a bug in UICollectionView from occurring.
+            // The bug presents itself when inserting the first object or deleting the last object in a collection view.
+            // http://stackoverflow.com/questions/12611292/uicollectionview-assertion-failure
+            // This code should be removed once the bug has been fixed, it is tracked in OpenRadar
+            // http://openradar.appspot.com/12954582
+            [_scrollView reloadData];
+            
+        } else {
+            
+            [_scrollView performBatchUpdates:^{
+                
+                for (NSDictionary *change in _itemChanges)
+                {
+                    [change enumerateKeysAndObjectsUsingBlock:^(NSNumber *key, id obj, BOOL *stop) {
+                        
+                        NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+                        switch (type)
+                        {
+                            case NSFetchedResultsChangeInsert:
+                                [_scrollView insertItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeDelete:
+                                [_scrollView deleteItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeUpdate:
+                                [_scrollView reloadItemsAtIndexPaths:@[obj]];
+                                break;
+                            case NSFetchedResultsChangeMove:
+                                [_scrollView moveItemAtIndexPath:obj[0] toIndexPath:obj[1]];
+                                break;
+                        }
+                    }];
+                }
+            } completion:nil];
+        }
+    }
+    
+    [_sectionChanges removeAllObjects];
+    [_itemChanges removeAllObjects];
+}
+
+- (BOOL)shouldReloadCollectionViewToPreventKnownIssue {
+    __block BOOL shouldReload = NO;
+    
+    for (NSDictionary *change in _itemChanges) {
+        [change enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+            NSFetchedResultsChangeType type = [key unsignedIntegerValue];
+            NSIndexPath *indexPath = obj;
+            switch (type) {
+                case NSFetchedResultsChangeInsert:
+                    if ([_scrollView numberOfItemsInSection:indexPath.section] == 0) {
+                        shouldReload = YES;
+                    } else {
+                        shouldReload = NO;
+                    }
+                    break;
+                case NSFetchedResultsChangeDelete:
+                    if ([_scrollView numberOfItemsInSection:indexPath.section] == 1) {
+                        shouldReload = YES;
+                    } else {
+                        shouldReload = NO;
+                    }
+                    break;
+                case NSFetchedResultsChangeUpdate:
+                    shouldReload = NO;
+                    break;
+                case NSFetchedResultsChangeMove:
+                    shouldReload = NO;
+                    break;
+            }
+        }];
+    }
+    
+    //return shouldReload;
+    return YES;
+}
+
 /*
 #pragma mark - Navigation
 
