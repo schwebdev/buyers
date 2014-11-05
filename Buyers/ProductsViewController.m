@@ -165,10 +165,9 @@ static const float sProductColumnSpacer = 5.0;
     predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
     
     [selectedProducts removeAllObjects];
-    //self.products = [self constructsProducts];
+    [self constructsSelectedProducts];
     
     self.fetchedResultsController = nil;
-    
     self.fetchedResultsController = [self constructsProducts];
     
     dispatch_async(dispatch_get_main_queue(),^{
@@ -450,8 +449,9 @@ static const float sProductColumnSpacer = 5.0;
     isAdvancedSearch = NO;
     
     [selectedProducts removeAllObjects];
-    self.fetchedResultsController = nil;
+    [self constructsSelectedProducts];
     
+    self.fetchedResultsController = nil;
     self.fetchedResultsController = [self constructsProducts];
     
     dispatch_async(dispatch_get_main_queue(),^{
