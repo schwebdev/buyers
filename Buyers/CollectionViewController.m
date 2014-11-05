@@ -425,7 +425,7 @@
     Product *toProduct = self.products[toIndexPath.item];
     
     
-    NSLog(@"product: %@", fromProduct.productName);
+    //NSLog(@"product: %@", fromProduct.productName);
     /*switch (toPlayingCard.suit) {
         case PlayingCardSuitSpade:
         case PlayingCardSuitClub: {
