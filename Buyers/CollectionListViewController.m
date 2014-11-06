@@ -527,7 +527,7 @@ static const float kPageHeight = 576.0;
 
     [collectionCell.collectionDeleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [collectionCell.collectionDeleteButton setTag:indexPath.item];
-            
+    
     return collectionCell;
 }
 
