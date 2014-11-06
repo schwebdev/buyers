@@ -46,18 +46,26 @@
 -(IBAction)saveProductNotes:(id)sender {
     _productError.hidden = true;
     [_productNotes resignFirstResponder];
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    
     if ([_productNotes.text isEqualToString:(@"")]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter some notes for this product!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
+    } else  if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"Please add your name to app settings." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+        [alert show];
+        
     } else {
         
-        
-        
-        //save the new collection
+        //save the product notes
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSError *error;
         
         _product.productNotes = _productNotes.text;
+        _product.productLastUpdateDate = [NSDate date];
+        _product.productLastUpdatedBy = creatorName;
         
         if(![managedContext save:&error]) {
             NSLog(@"Could not save collection notes: %@", [error localizedDescription]);

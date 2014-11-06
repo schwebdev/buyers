@@ -597,19 +597,19 @@ static const float sProductColumnSpacer = 5.0;
         self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
         NSError *error;
+        //get user's full name from app settings
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *creatorName = [defaults objectForKey:@"username"];
         
         //if no collection then validate for new one or existing one being selected
         if(!_collection){
-            if([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && [self.collectionList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 ) {
+            if(([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && self.collectionList.isHidden) || ([self.txtNewCollection.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0  && [self.collectionList.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) ) {
             //alert user that there is no collection to add to
             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"There is no collection to add products to!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
             [alert show];
             } else {
-            //get user's full name from app settings
-            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-            NSString *creatorName = [defaults objectForKey:@"username"];
             
-                if([creatorName length] ==0) {
+                if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"Please add your name to app settings." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
                     [alert show];
                 
@@ -624,7 +624,13 @@ static const float sProductColumnSpacer = 5.0;
                     collection.collectionName = self.txtNewCollection.text;
                     collection.collectionCreator = creatorName;
                     collection.collectionCreationDate = [NSDate date];
-                
+                    collection.collectionLastUpdatedBy = creatorName;
+                    collection.collectionLastUpdateDate = [NSDate date];
+                        
+                    //add unique identifier for custom product syncing
+                    NSString *UUID = [[NSUUID UUID] UUIDString];
+                    collection.collectionGUID = UUID;
+
                         if(![self.managedContext save:&error]) {
                             NSLog(@"Could not save collection: %@", [error localizedDescription]);
                             UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"Sorry an error occurred" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
@@ -651,6 +657,13 @@ static const float sProductColumnSpacer = 5.0;
             if(_collection){
                 //loop through selectedProducts array and each object to the collection
                 //also count the number of products already in the collection and increment this to get the order number
+                
+                _collection.collectionLastUpdateDate = [NSDate date];
+                _collection.collectionLastUpdatedBy = creatorName;
+                
+                if(![self.managedContext save:&error]) {
+                    //NSLog(@"Could not update collection: %@", [error localizedDescription]);
+                }
                 
                 for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
                     Product *product = [selectedProducts objectAtIndex:p];

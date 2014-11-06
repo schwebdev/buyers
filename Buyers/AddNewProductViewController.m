@@ -226,7 +226,7 @@ static const float kPageWidth = 680.0;
 
 - (void)saveCustomProduct:(id)sender {
     
-    NSString *pName;
+    NSString *pName, *pCreatorName;
     ProductCategory *pCategory;
     Brand *pBrand;
     Supplier *pSupplier;
@@ -242,6 +242,16 @@ static const float kPageWidth = 680.0;
     
     
     //validation
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+   
+    if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
+        _isValid = NO;
+        [errorMsg appendString:@"please add your name to app settings\n"];
+    } else {
+         pCreatorName = creatorName;
+    }
     if([self.txtProductName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please enter a product name\n"];
@@ -332,7 +342,10 @@ static const float kPageWidth = 680.0;
              
              Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
              
-             
+             product.productCreator = pCreatorName;
+             product.productCreationDate = [NSDate date];
+             product.productLastUpdatedBy = pCreatorName;
+             product.productLastUpdateDate = [NSDate date];
              product.productName = pName;
              product.productPrice = pPrice;
              product.productCode = @"0000000000";
@@ -356,6 +369,11 @@ static const float kPageWidth = 680.0;
              product.productImageData = imageData;
              
              product.productNotes =self.txtProductNotes.text;
+             
+             
+             //add unique identifier for custom product syncing
+             NSString *UUID = [[NSUUID UUID] UUIDString];
+             product.productGUID = UUID;
              
              if(![managedContext save:&error]) {
                  NSLog(@"Could not save product: %@", [error localizedDescription]);

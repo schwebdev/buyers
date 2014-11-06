@@ -22,7 +22,9 @@
 
 static const float kPageWidth = 680.0;
 
-@interface ProductViewController ()
+@interface ProductViewController () {
+    UILabel *updateInfo;
+}
 
 @property UIImagePickerController *imagePicker;
 @end
@@ -73,7 +75,11 @@ static const float kPageWidth = 680.0;
     }
      self.navigationItem.titleView = [BaseViewController genNavWithTitle:pageTitle title2:pageName image:@"homePaperClipLogo.png"];
     
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:@"Product Detail"]];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy HH:mm"];
+    NSDate *creationDate = _product.productCreationDate;
+    NSString *formatCreationDate = [dateFormat stringFromDate:creationDate];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"Created on %@ by %@", formatCreationDate, _product.productCreator]]];
     
     UIView *tools=[[UIView alloc]initWithFrame:CGRectMake(0, 0, 150, 65)];
     tools.layer.backgroundColor = [UIColor clearColor].CGColor;
@@ -152,7 +158,21 @@ static const float kPageWidth = 680.0;
     
     [self.view addSubview:productsInfo];
     
-   
+    updateInfo = [[UILabel alloc] init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy HH:mm"];
+    NSDate *updateDate = _product.productLastUpdateDate;
+    NSString *formatDate = [dateFormat stringFromDate:updateDate];
+    updateInfo.text = [NSString stringWithFormat: @"Last updated on %@ by %@",formatDate, _product.productLastUpdatedBy];
+    updateInfo.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
+    updateInfo.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
+    updateInfo.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
+    updateInfo.numberOfLines = 1;
+    CGRect updateInfoTitle = CGRectMake(210.0, 58.0, 500, 30.0);
+    updateInfo.frame = updateInfoTitle;
+    
+    [self.view addSubview:updateInfo];
+
+    
     //categories drop down
     [self.productCategory_edit setListItems:(NSMutableArray *)[Sync getTable:@"ProductCategory" sortWith:@"categoryName"] withName:@"categoryName" withValue:@"category2Ref"];
     //brand drop down
@@ -255,6 +275,11 @@ static const float kPageWidth = 680.0;
             Collection *collection = [collections objectAtIndex:i];
             if([collection.products containsObject:_product]) {
                 [collection removeProductsObject:_product];
+                collection.collectionLastUpdateDate = [NSDate date];
+                //get user's full name from app settings
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                NSString *creatorName = [defaults objectForKey:@"username"];
+                collection.collectionLastUpdatedBy = creatorName;
             }
         }
         
@@ -289,6 +314,19 @@ static const float kPageWidth = 680.0;
     
     _isValid = YES;
     NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
+    
+    
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+  
+     if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
+         _isValid = NO;
+         [errorMsg appendString:@"please add your name to app settings\n"];
+
+     } else {
+         _product.productLastUpdatedBy = creatorName;
+     }
     
     if([self.productName_edit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
@@ -377,6 +415,8 @@ static const float kPageWidth = 680.0;
     }
     
      _product.productImageData = imageData;
+   
+    _product.productLastUpdateDate = [NSDate date];
 
 
     if(_isValid){
@@ -405,6 +445,12 @@ static const float kPageWidth = 680.0;
 - (void)productNotesSaved:(NSNotification *)notification
 {
     [self.displayNotesPopover dismissPopoverAnimated:YES];
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMM yyyy HH:mm"];
+    NSDate *updateDate = _product.productLastUpdateDate;
+    NSString *formatDate = [dateFormat stringFromDate:updateDate];
+    updateInfo.text = [NSString stringWithFormat: @"Last updated on %@ by %@",formatDate, _product.productLastUpdatedBy];
     
     //NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     //NSError *error;

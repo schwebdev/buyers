@@ -204,6 +204,11 @@
             product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
             product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
             product.productNotes = @"test notes"; //result[@"productNotes"];
+            product.productCreator = @"SHARK";
+            product.productCreationDate = [NSDate date];
+            product.productLastUpdatedBy = @"SHARK"; //result[@"lastUpdatedBy"];
+            product.productLastUpdateDate = [NSDate date]; //result[@"lastUpdateDate"];
+            product.productGUID = @""; //result[@"customProductGUID"];
             
             NSError *error = nil;
             NSString *strURL = result[@"ImageURL"];

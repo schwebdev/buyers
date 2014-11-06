@@ -2,7 +2,7 @@
 //  Collection.h
 //  Buyers
 //
-//  Created by Web Development on 28/10/2014.
+//  Created by Web Development on 06/11/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -13,11 +13,14 @@
 
 @interface Collection : NSManagedObject
 
+@property (nonatomic, retain) NSNumber * collectionBrandRef;
 @property (nonatomic, retain) NSDate * collectionCreationDate;
 @property (nonatomic, retain) NSString * collectionCreator;
 @property (nonatomic, retain) NSString * collectionName;
 @property (nonatomic, retain) NSString * collectionNotes;
-@property (nonatomic, retain) NSNumber * collectionBrandRef;
+@property (nonatomic, retain) NSString * collectionGUID;
+@property (nonatomic, retain) NSString * collectionLastUpdatedBy;
+@property (nonatomic, retain) NSDate * collectionLastUpdateDate;
 @property (nonatomic, retain) NSSet *collectionProductOrder;
 @property (nonatomic, retain) NSSet *products;
 @end

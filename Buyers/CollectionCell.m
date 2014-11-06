@@ -32,7 +32,7 @@
     self.collectionNameLabel.text = [NSString stringWithFormat: @" %@", _collection.collectionName];
     self.collectionNameLabel.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-    [dateFormat setDateFormat:@"dd MMM yyyy"];
+    [dateFormat setDateFormat:@"dd MMMM yyyy"];
     NSDate *creationDate = _collection.collectionCreationDate;
     NSString *formatDate = [dateFormat stringFromDate:creationDate];
     self.collectionDetailsLabel.text = [NSString stringWithFormat: @" %@ - %@", formatDate, _collection.collectionCreator];

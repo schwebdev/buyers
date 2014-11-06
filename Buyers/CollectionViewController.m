@@ -67,10 +67,10 @@
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"collection" title2:_collection.collectionName image:@"homePaperClipLogo.png"];
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
-    [dateFormat setDateFormat:@"dd MMMM yyyy"];
+    [dateFormat setDateFormat:@"dd MMMM yyyy HH:mm"];
     NSDate *creationDate = _collection.collectionCreationDate;
     NSString *formatDate = [dateFormat stringFromDate:creationDate];
-    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"%@ - %@", formatDate, _collection.collectionCreator]]];
+    [self.view addSubview:[BaseViewController genTopBarWithTitle:[NSString stringWithFormat:@"Created on %@ by %@", formatDate, _collection.collectionCreator]]];
    
     //hack to push content down
     self.collectionView.contentInset = UIEdgeInsetsMake(74, 0, 0, 0);
@@ -83,6 +83,12 @@
 - (void)collectionNotesSaved:(NSNotification *)notification
 {
     [self.displayNotesPopover dismissPopoverAnimated:YES];
+    
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy HH:mm"];
+    NSDate *updateDate = _collection.collectionLastUpdateDate;
+    NSString *formatDate = [dateFormat stringFromDate:updateDate];
+    numProducts.text = [NSString stringWithFormat: @"%d %@ - Last updated on %@ by %@", [self.products count], productText, formatDate, _collection.collectionLastUpdatedBy];
     
 }
 - (IBAction)displayNotesPopover:(id)sender {
@@ -266,7 +272,11 @@
     }
     [numProducts removeFromSuperview];
     numProducts = [[UILabel alloc] init];
-    numProducts.text = [NSString stringWithFormat: @"%d %@", [products count], productText];
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMMM yyyy HH:mm"];
+    NSDate *updateDate = _collection.collectionLastUpdateDate;
+    NSString *formatDate = [dateFormat stringFromDate:updateDate];
+    numProducts.text = [NSString stringWithFormat: @"%d %@ - Last updated on %@ by %@", [products count], productText, formatDate, _collection.collectionLastUpdatedBy];
     numProducts.font = [UIFont fontWithName:@"HelveticaNeue" size: 12.0f];
     numProducts.backgroundColor = [UIColor clearColor]; //gets rid of right border on uilabel
     numProducts.textColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
@@ -344,6 +354,10 @@
         //remove set of products and ordering from collection - had to do this as object is not removed from relationship by calling the accessor methods above
         [_collection removeProducts:_collection.products];
         [_collection removeCollectionProductOrder:_collection.collectionProductOrder];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *creatorName = [defaults objectForKey:@"username"];
+        _collection.collectionLastUpdateDate = [NSDate date];
+        _collection.collectionLastUpdatedBy = creatorName;
         if(![managedContext save:&error]) {
             NSLog(@"Error removing products and product ordering from collection: %@",[error localizedDescription]);
             
@@ -385,7 +399,7 @@
         
         
     } else {
-        //alert user that there are no collections to delete
+        //alert user that there are no products to delete
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product Error" message:@"There are no products to delete!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }
@@ -480,8 +494,26 @@
          NSLog(@"Error removing product ordering from collection: %@",[error localizedDescription]);
          
      }
-     
-     
+    
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    _collection.collectionLastUpdatedBy = creatorName;
+    _collection.collectionLastUpdateDate = [NSDate date];
+    
+    if(![managedContext save:&error]) {
+        NSLog(@"Error updating collection: %@",[error localizedDescription]);
+        
+    }
+
+    //change update info
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd MMM yyyy HH:mm"];
+    NSDate *updateDate = _collection.collectionLastUpdateDate;
+    NSString *formatDate = [dateFormat stringFromDate:updateDate];
+    numProducts.text = [NSString stringWithFormat: @"%d %@ - Last updated on %@ by %@", [self.products count], productText, formatDate, _collection.collectionLastUpdatedBy];
+    
+    
      for (int p = 0, pc = [self.products count]; p < pc; p++) {
          
          Product *product = [self.products objectAtIndex:p];

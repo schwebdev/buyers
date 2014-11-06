@@ -65,11 +65,12 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *creatorName = [defaults objectForKey:@"username"];
     
-    if([creatorName length] ==0) {
+    if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
         _isValid = NO;
         [errorMsg appendString:@"please add your name to app settings\n"];
     } else {
         collection.collectionCreator= creatorName;
+        collection.collectionLastUpdatedBy = creatorName;
     }
     if([self.collectionName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
@@ -90,7 +91,12 @@
        
         //save the new collection
         collection.collectionCreationDate = [NSDate date];
-         
+        collection.collectionLastUpdateDate = [NSDate date];
+        
+        //add unique identifier for custom product syncing
+        NSString *UUID = [[NSUUID UUID] UUIDString];
+        collection.collectionGUID = UUID;
+        
          if(![managedContext save:&error]) {
              NSLog(@"Could not save collection: %@", [error localizedDescription]);
              //display this in uilabel in red as per mocks

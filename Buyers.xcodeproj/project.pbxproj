@@ -133,13 +133,13 @@
 		0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9566B1990CF3200CD45D5 /* CollectionListViewController.m */; };
 		0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956711990CF3200CD45D5 /* SidebarViewController.m */; };
 		0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956771990F28500CD45D5 /* HomeViewController.m */; };
+		5B072F8D1A0B92B8007E41E1 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B072F8C1A0B92B8007E41E1 /* Collection.m */; };
+		5B072F901A0BBC3A007E41E1 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B072F8F1A0BBC3A007E41E1 /* Product.m */; };
 		5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */; };
 		5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */; };
 		5B14383519ADE40800A68865 /* CollectionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14383419ADE40800A68865 /* CollectionButton.m */; };
 		5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35503019A49CF40031E33C /* CoreData.framework */; };
 		5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */; };
-		5B43EDF219FFB71A00730158 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B43EDF119FFB71A00730158 /* Collection.m */; };
-		5B43EDF61A00E03C00730158 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B43EDF51A00E03C00730158 /* Product.m */; };
 		5B43EE021A01067000730158 /* checkbox-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EDFE1A01067000730158 /* checkbox-checked@2x.png */; };
 		5B43EE031A01067000730158 /* checkbox.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EDFF1A01067000730158 /* checkbox.png */; };
 		5B43EE041A01067000730158 /* checkbox@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE001A01067000730158 /* checkbox@2x.png */; };
@@ -354,16 +354,16 @@
 		0BC956711990CF3200CD45D5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
 		0BC956761990F28500CD45D5 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		0BC956771990F28500CD45D5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
+		5B072F8B1A0B92B8007E41E1 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
+		5B072F8C1A0B92B8007E41E1 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
+		5B072F8E1A0BBC3A007E41E1 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		5B072F8F1A0BBC3A007E41E1 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search.png"; path = "../../checkbox-checked-search.png"; sourceTree = "<group>"; };
 		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search@2x.png"; path = "../../checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
 		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionButton.h; sourceTree = "<group>"; };
 		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionButton.m; sourceTree = "<group>"; };
 		5B35503019A49CF40031E33C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5B35503319A49EFE0031E33C /* BuyersDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BuyersDataModel.xcdatamodel; sourceTree = "<group>"; };
-		5B43EDF019FFB71A00730158 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
-		5B43EDF119FFB71A00730158 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
-		5B43EDF41A00E03C00730158 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
-		5B43EDF51A00E03C00730158 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
 		5B43EDFE1A01067000730158 /* checkbox-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked@2x.png"; path = "../../../Buyers Original /checkbox-checked@2x.png"; sourceTree = "<group>"; };
 		5B43EDFF1A01067000730158 /* checkbox.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = checkbox.png; path = "../../../Buyers Original /checkbox.png"; sourceTree = "<group>"; };
 		5B43EE001A01067000730158 /* checkbox@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox@2x.png"; path = "../../../Buyers Original /checkbox@2x.png"; sourceTree = "<group>"; };
@@ -796,10 +796,12 @@
 		5B43EDF31A00D88A00730158 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				5B072F8E1A0BBC3A007E41E1 /* Product.h */,
+				5B072F8F1A0BBC3A007E41E1 /* Product.m */,
+				5B072F8B1A0B92B8007E41E1 /* Collection.h */,
+				5B072F8C1A0B92B8007E41E1 /* Collection.m */,
 				5B43EE0D1A01074B00730158 /* ReportData.h */,
 				5B43EE0E1A01074B00730158 /* ReportFilterSet.h */,
-				5B43EDF41A00E03C00730158 /* Product.h */,
-				5B43EDF51A00E03C00730158 /* Product.m */,
 				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
 				0B523EBA19E280FA0079EB25 /* ReportFilterSet.m */,
 				0B288AA019B9F74700F62B63 /* SyncStatus.h */,
@@ -824,8 +826,6 @@
 				5B52F81A19F80246007D5943 /* Material.m */,
 				5B52F81F19F80524007D5943 /* Colour.h */,
 				5B52F82019F80524007D5943 /* Colour.m */,
-				5B43EDF019FFB71A00730158 /* Collection.h */,
-				5B43EDF119FFB71A00730158 /* Collection.m */,
 			);
 			name = Data;
 			path = ..;
@@ -1044,7 +1044,6 @@
 				0B288AC019BE031400F62B63 /* Reachability.m in Sources */,
 				0B523EB519DEB32A0079EB25 /* BaseNavigationController.m in Sources */,
 				0B92CDC119D046A6007B7FDB /* CalYearWeek.m in Sources */,
-				5B43EDF219FFB71A00730158 /* Collection.m in Sources */,
 				C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */,
 				0B523EBB19E280FA0079EB25 /* ReportFilterSet.m in Sources */,
 				0B9F71B319951730003AE1BE /* BaseViewController.m in Sources */,
@@ -1054,7 +1053,8 @@
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
 				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
-				5B43EDF61A00E03C00730158 /* Product.m in Sources */,
+				5B072F8D1A0B92B8007E41E1 /* Collection.m in Sources */,
+				5B072F901A0BBC3A007E41E1 /* Product.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,

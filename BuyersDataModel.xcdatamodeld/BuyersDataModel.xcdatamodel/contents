@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="13F34" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Brand" representedClassName="Brand" syncable="YES">
         <attribute name="brandName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="brandRef" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
@@ -11,6 +11,9 @@
         <attribute name="collectionBrandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="collectionCreationDate" attributeType="Date" syncable="YES"/>
         <attribute name="collectionCreator" attributeType="String" minValueString="3" maxValueString="100" syncable="YES"/>
+        <attribute name="collectionGUID" attributeType="String" syncable="YES"/>
+        <attribute name="collectionLastUpdateDate" attributeType="Date" syncable="YES"/>
+        <attribute name="collectionLastUpdatedBy" attributeType="String" syncable="YES"/>
         <attribute name="collectionName" attributeType="String" minValueString="1" indexed="YES" syncable="YES"/>
         <attribute name="collectionNotes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="collectionProductOrder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderCollection" inverseEntity="ProductOrder" syncable="YES"/>
@@ -37,7 +40,12 @@
         <attribute name="productCategoryRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productCode" attributeType="String" minValueString="0" maxValueString="10" indexed="YES" syncable="YES"/>
         <attribute name="productColourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="productCreationDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="productCreator" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productGUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productImageData" optional="YES" attributeType="Binary" syncable="YES"/>
+        <attribute name="productLastUpdateDate" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="productLastUpdatedBy" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productMaterialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productName" attributeType="String" maxValueString="50" indexed="YES" syncable="YES"/>
         <attribute name="productNotes" optional="YES" attributeType="String" syncable="YES"/>
@@ -103,12 +111,12 @@
     <elements>
         <element name="Brand" positionX="-27" positionY="126" width="128" height="73"/>
         <element name="CalYearWeek" positionX="27" positionY="162" width="128" height="58"/>
-        <element name="Collection" positionX="-63" positionY="-18" width="128" height="148"/>
+        <element name="Collection" positionX="-63" positionY="-18" width="128" height="193"/>
         <element name="Colour" positionX="18" positionY="153" width="128" height="73"/>
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
         <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="223"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="298"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>

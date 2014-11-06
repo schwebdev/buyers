@@ -59,7 +59,13 @@
             NSError *error;
             
             _collection.collectionNotes = _collectionNotes.text;
-            
+           _collection.collectionLastUpdateDate = [NSDate date];
+        
+            //get user's full name from app settings
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *creatorName = [defaults objectForKey:@"username"];
+            _collection.collectionLastUpdatedBy = creatorName;
+        
             if(![managedContext save:&error]) {
                 NSLog(@"Could not save collection notes: %@", [error localizedDescription]);
                 //display this in uilabel in red as per mocks
