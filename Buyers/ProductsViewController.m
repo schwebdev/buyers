@@ -402,7 +402,7 @@ static const float sProductColumnSpacer = 5.0;
     }
     
     
-    NSLog(@"count: %d",[_fetchedResultsController.fetchedObjects count]);
+    //NSLog(@"count: %d",[_fetchedResultsController.fetchedObjects count]);
     
     productText = @"products";
     if([_fetchedResultsController.fetchedObjects count] ==1) {

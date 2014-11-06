@@ -59,10 +59,6 @@ static const float kPageHeight = 576.0;
     _itemChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
     
-    UICollectionViewFlowLayout *flowLayout = [[UICollectionViewFlowLayout alloc] init];
-    [flowLayout setItemSize:CGSizeMake(341.5, 288.0)];
-    
-    
     self.navigationItem.titleView = [BaseViewController genNavWithTitle:@"your" title2:@"collections" image:@"homePaperClipLogo.png"];
     
     [self.view addSubview:[BaseViewController genTopBarWithTitle:@"List of Collections"]];
@@ -528,14 +524,7 @@ static const float kPageHeight = 576.0;
     Collection *collection = (Collection*)object; //self.collections[indexPath.item];
     CollectionCell *collectionCell = [collectionView dequeueReusableCellWithReuseIdentifier:@"CollectionCell" forIndexPath:indexPath];
     collectionCell.collection = collection;
-    
-    collectionCell.layer.borderWidth =1.0f;
-    collectionCell.layer.borderColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
-    collectionCell.collectionNameLabel.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
-    
-    collectionCell.productsView.layer.borderColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
-    collectionCell.productsView.layer.borderWidth=1.0f;
-    
+
     [collectionCell.collectionDeleteButton addTarget:self action:@selector(deleteButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [collectionCell.collectionDeleteButton setTag:indexPath.item];
             

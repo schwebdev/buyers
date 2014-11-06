@@ -17,7 +17,20 @@
 
 - (void)setCollection:(Collection *)collection {
     _collection = collection;
+    CALayer *cellBottomBorder = [CALayer layer];
+    cellBottomBorder.frame = CGRectMake(0, 287.0, 341.5, 1);
+    cellBottomBorder.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
+    [self.layer addSublayer:cellBottomBorder];
+    
+    if(self.frame.origin.x < 683.0){
+        CALayer *cellRightBorder = [CALayer layer];
+        cellRightBorder.frame = CGRectMake(340.5, 0, 1, 287.0);
+        cellRightBorder.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1].CGColor;
+        [self.layer addSublayer:cellRightBorder];
+    }
+
     self.collectionNameLabel.text = [NSString stringWithFormat: @" %@", _collection.collectionName];
+    self.collectionNameLabel.layer.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
     [dateFormat setDateFormat:@"dd MMM yyyy"];
     NSDate *creationDate = _collection.collectionCreationDate;
@@ -63,7 +76,7 @@
             }
             UIImage *image = [UIImage imageWithData:(productElement.productImageData)];
             UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
-            imageView.frame = CGRectMake(px+((pCol -1) * 12.0), py, 68.0, 68.0);
+            imageView.frame = CGRectMake(px+((pCol -1) * 12.0), py+2.0, 68.0, 68.0);
             [self.productsView addSubview:imageView];
             pCol++;
             
@@ -74,6 +87,15 @@
         }
     }
 
+    CALayer *topBorder = [CALayer layer];
+    topBorder.frame = CGRectMake(0, 0, 341.5, 1);
+    topBorder.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
+    [self.productsView.layer addSublayer:topBorder];
+    
+    CALayer *bottomBorder = [CALayer layer];
+    bottomBorder.frame = CGRectMake(0, 212.0, 341.5, 1);
+    bottomBorder.backgroundColor = [UIColor colorWithRed:229.0/255.0 green:229.0/255.0 blue:229.0/255.0 alpha:1].CGColor;
+    [self.productsView.layer addSublayer:bottomBorder];
     
     [self.collectionDeleteButton setSelected:NO];
     
