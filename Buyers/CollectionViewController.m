@@ -399,7 +399,7 @@
         
         
     } else {
-        //alert user that there are no products to delete
+        //alert user that there are no collections to delete
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Product Error" message:@"There are no products to delete!" delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
     }

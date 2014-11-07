@@ -34,6 +34,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     // Do any additional setup after loading the view.
     _collectionName.delegate = self;
     self.preferredContentSize = CGSizeMake(340.0, 380.0);
@@ -54,10 +55,6 @@
     _collectionError.hidden = true;
     [_collectionName resignFirstResponder];
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-    NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
-    NSError *error;
-    Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
     
     _isValid = YES;
     NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
@@ -68,30 +65,32 @@
     if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
         _isValid = NO;
         [errorMsg appendString:@"please add your name to app settings\n"];
-    } else {
-        collection.collectionCreator= creatorName;
-        collection.collectionLastUpdatedBy = creatorName;
     }
     if([self.collectionName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please enter a name for this collection\n"];
-    } else {
-        collection.collectionName = self.collectionName.text;
     }
     if([self.collectionBrandRef.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please select a brand\n"];
-    } else {
-        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.collectionBrandRef.getSelectedObject[@"IDURI"]];
-        Brand *brandElement = (Brand*)[managedContext objectWithID:c];
-        collection.collectionBrandRef  = brandElement.brandRef;
     }
     
     if(_isValid) {
        
         //save the new collection
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+        NSError *error;
+        Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:managedContext];
+        collection.collectionCreator= creatorName;
+        collection.collectionLastUpdatedBy = creatorName;
         collection.collectionCreationDate = [NSDate date];
         collection.collectionLastUpdateDate = [NSDate date];
+        collection.collectionName = self.collectionName.text;
+        
+        NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.collectionBrandRef.getSelectedObject[@"IDURI"]];
+        Brand *brandElement = (Brand*)[managedContext objectWithID:c];
+        collection.collectionBrandRef  = brandElement.brandRef;
         
         //add unique identifier for custom product syncing
         NSString *UUID = [[NSUUID UUID] UUIDString];

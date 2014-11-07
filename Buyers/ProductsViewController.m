@@ -202,10 +202,10 @@ static const float sProductColumnSpacer = 5.0;
     
     [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(onKeyboardHide:) name:UIKeyboardWillHideNotification object:nil];
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
     NSFetchRequest *pickerRequest = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
-    NSArray *collections = [managedContext executeFetchRequest:pickerRequest error:&error];
+    NSArray *collections = [self.managedContext executeFetchRequest:pickerRequest error:&error];
     
     
     NSString *title2 = _collection.collectionName;
@@ -348,7 +348,6 @@ static const float sProductColumnSpacer = 5.0;
         return _fetchedResultsController;
     }
     
-    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
 
     //fetch request to retrieve all products

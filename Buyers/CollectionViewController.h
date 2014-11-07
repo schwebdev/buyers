@@ -12,6 +12,7 @@
 @property (nonatomic, retain) CollectionNotesViewController *collectionNotes;
 @property (nonatomic, retain) UIPopoverController *displayNotesPopover;
 
+
 @property(nonatomic,retain) UIButton *notesButton;
 @property (strong, nonatomic) NSMutableArray *products;
 @property (weak, nonatomic) Collection *collection;

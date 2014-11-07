@@ -56,6 +56,8 @@ static const float kPageHeight = 576.0;
 {
     [super viewDidLoad];
     
+     self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
     _itemChanges = [NSMutableArray array];
     _sectionChanges = [NSMutableArray array];
     
@@ -434,15 +436,14 @@ static const float kPageHeight = 576.0;
     
     if([deletions count] > 0) {
      
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         NSError *error;
         
         for (int i = 0, ic = [deletions count]; i < ic; i++) {
             Collection *collection = [deletions objectAtIndex:i];
-            [managedContext deleteObject:collection];
+            [self.managedContext deleteObject:collection];
         }
         
-        if(![managedContext save:&error]) {
+        if(![self.managedContext save:&error]) {
             NSLog(@"Could not save deleted collections: %@", [error localizedDescription]);
             
         }
