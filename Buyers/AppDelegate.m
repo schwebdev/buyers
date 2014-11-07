@@ -25,6 +25,7 @@
     [self.reachability startNotifier];
     
     NSLog(@"documents path: %@",[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0]);
+
     
     return YES;
 }
@@ -165,6 +166,7 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+
 
 
 @end

@@ -119,6 +119,7 @@
 + (BOOL)syncTable:(NSString *)type {
     //type = @"Supplier"
     NSError *error;
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSURL *url;
     UIImage *defaultImage = [UIImage imageNamed:@"shoeOutlineNoImage.png"];
     NSData *defaultImageData = [NSData dataWithData:UIImagePNGRepresentation(defaultImage)];
@@ -146,7 +147,6 @@
         return NO;
     }
     
-    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];    
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:type];
     NSArray *currentResults = [managedContext executeFetchRequest:request error:&error];
     
@@ -155,86 +155,107 @@
         for (NSManagedObject *currentResult in currentResults) {
             [managedContext deleteObject:currentResult];
         }
-     }
-    
-    for (NSDictionary *result in results) {
-        if([type isEqualToString:@"Supplier"]) {
-            Supplier *supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:managedContext];
-            supplier.supplierCode = result[@"Sup_Code"];
-            supplier.supplierName = result[@"Sup_Name"];
-        }
-        if([type isEqualToString:@"Brand"]) {
-            Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:managedContext];
-            brand.brandRef = result[@"brandRef"];
-            brand.brandName = result[@"brandName"];
-        }
-        if([type isEqualToString:@"CalYearWeek"]) {
-            CalYearWeek *yearWeek = [NSEntityDescription insertNewObjectForEntityForName:@"CalYearWeek" inManagedObjectContext:managedContext];
-            yearWeek.calYearWeek = result[@"Cal_Year_Week"];
-        }
-        if([type isEqualToString:@"Merch"]) {
-            Merch *merch = [NSEntityDescription insertNewObjectForEntityForName:@"Merch" inManagedObjectContext:managedContext];
-            merch.merchRef = result[@"MerchRef"];
-            merch.merchName = result[@"MerchName"];
-        }
-        if([type isEqualToString:@"Department"]) {
-            Department *department = [NSEntityDescription insertNewObjectForEntityForName:@"Department" inManagedObjectContext:managedContext];
-            department.depCode = [NSNumber numberWithInt:[result[@"DepCode"] intValue]];
-            department.depDesc = result[@"Desc"];
-        }
-        
-        if([type isEqualToString:@"ProductCategory"]) {
-            ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:managedContext];
-            category.category2Ref = result[@"c2_ref"];
-            category.categoryName = result[@"CategoryName"];
-        }
-        if([type isEqualToString:@"Colour"]) {
-            Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:managedContext];
-            colour.colourRef= result[@"c_ref"];
-            colour.colourName = result[@"c_name"];
-        }
-        if([type isEqualToString:@"Material"]) {
-            Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:managedContext];
-            material.materialRef= result[@"m_ref"];
-            material.materialName = result[@"m_name"];
-        }
-        if([type isEqualToString:@"Product"]) {
-            NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
-            if(lastSync == nil) {
-                //get all product data
-                Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:managedContext];
-                product.productCode =result[@"i_Code"];
-                product.productName = result[@"i_name"];
-                product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
-                product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
-                product.productSupplierCode = result[@"main_sup_code"];
-                product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
-                product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
-                product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
-                product.productNotes = @"test notes"; //result[@"productNotes"];
-                product.productCreator = @"SHARK";
-                product.productCreationDate = [NSDate date];
-                product.productLastUpdatedBy = @"SHARK"; //result[@"lastUpdatedBy"];
-                product.productLastUpdateDate = [NSDate date]; //result[@"lastUpdateDate"];
-                product.productGUID = @""; //result[@"customProductGUID"];
-                
-                NSError *error = nil;
-                NSString *strURL = result[@"ImageURL"];
-                NSURL *url = [[NSURL alloc] initWithString:strURL];
-                NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
-                if(error) {
-                    product.productImageData = defaultImageData;
-                } else {
-                    product.productImageData = imageData;
-                    NSLog(@"image: %@",strURL);
-                }
-            }
-        }
-        
     }
     
+    //run imports on background thread then merge into main context s
+    NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
+    NSManagedObjectContext *backgroundContext = [[NSManagedObjectContext alloc] initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    backgroundContext.persistentStoreCoordinator = persistentStoreCoordinator;
+    backgroundContext.undoManager = nil;
+    
+    [[NSNotificationCenter defaultCenter]
+     addObserverForName:NSManagedObjectContextDidSaveNotification
+     object:backgroundContext
+     queue:[NSOperationQueue mainQueue]
+     usingBlock:^(NSNotification *note)
+     {
+         [managedContext mergeChangesFromContextDidSaveNotification:note];
+     }];
+    
+    [backgroundContext performBlockAndWait:^
+    {
+        //import
+        for (NSDictionary *result in results) {
+            if([type isEqualToString:@"Supplier"]) {
+                Supplier *supplier = [NSEntityDescription insertNewObjectForEntityForName:@"Supplier" inManagedObjectContext:backgroundContext];
+                supplier.supplierCode = result[@"Sup_Code"];
+                supplier.supplierName = result[@"Sup_Name"];
+            }
+            if([type isEqualToString:@"Brand"]) {
+                Brand *brand = [NSEntityDescription insertNewObjectForEntityForName:@"Brand" inManagedObjectContext:backgroundContext];
+                brand.brandRef = result[@"brandRef"];
+                brand.brandName = result[@"brandName"];
+            }
+            if([type isEqualToString:@"CalYearWeek"]) {
+                CalYearWeek *yearWeek = [NSEntityDescription insertNewObjectForEntityForName:@"CalYearWeek" inManagedObjectContext:backgroundContext];
+                yearWeek.calYearWeek = result[@"Cal_Year_Week"];
+            }
+            if([type isEqualToString:@"Merch"]) {
+                Merch *merch = [NSEntityDescription insertNewObjectForEntityForName:@"Merch" inManagedObjectContext:backgroundContext];
+                merch.merchRef = result[@"MerchRef"];
+                merch.merchName = result[@"MerchName"];
+            }
+            if([type isEqualToString:@"Department"]) {
+                Department *department = [NSEntityDescription insertNewObjectForEntityForName:@"Department" inManagedObjectContext:backgroundContext];
+                department.depCode = [NSNumber numberWithInt:[result[@"DepCode"] intValue]];
+                department.depDesc = result[@"Desc"];
+            }
+            
+            if([type isEqualToString:@"ProductCategory"]) {
+                ProductCategory *category = [NSEntityDescription insertNewObjectForEntityForName:@"ProductCategory" inManagedObjectContext:backgroundContext];
+                category.category2Ref = result[@"c2_ref"];
+                category.categoryName = result[@"CategoryName"];
+            }
+            if([type isEqualToString:@"Colour"]) {
+                Colour *colour = [NSEntityDescription insertNewObjectForEntityForName:@"Colour" inManagedObjectContext:backgroundContext];
+                colour.colourRef= result[@"c_ref"];
+                colour.colourName = result[@"c_name"];
+            }
+            if([type isEqualToString:@"Material"]) {
+                Material *material = [NSEntityDescription insertNewObjectForEntityForName:@"Material" inManagedObjectContext:backgroundContext];
+                material.materialRef= result[@"m_ref"];
+                material.materialName = result[@"m_name"];
+            }
+            if([type isEqualToString:@"Product"]) {
+                NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
+                if(lastSync == nil) {
+                    //get all product data
+                    Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
+                    product.productCode =result[@"i_Code"];
+                    product.productName = result[@"i_name"];
+                    product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+                    product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+                    product.productSupplierCode = result[@"main_sup_code"];
+                    product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
+                    product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
+                    product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
+                    product.productNotes = @"test notes"; //result[@"productNotes"];
+                    product.productCreator = @"SHARK";
+                    product.productCreationDate = [NSDate date];
+                    product.productLastUpdatedBy = @"SHARK"; //result[@"lastUpdatedBy"];
+                    product.productLastUpdateDate = [NSDate date]; //result[@"lastUpdateDate"];
+                    product.productGUID = @""; //result[@"customProductGUID"];
+                    
+                    NSError *error = nil;
+                    NSString *strURL = result[@"ImageURL"];
+                    NSURL *url = [[NSURL alloc] initWithString:strURL];
+                    NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+                    if(error) {
+                        product.productImageData = defaultImageData;
+                    } else {
+                        product.productImageData = imageData;
+                        NSLog(@"image: %@",strURL);
+                    }
+                }
+            }
+            
+        }
+      
+   }];
+    
+
     NSError *saveError;
-    if(![managedContext save:&saveError]) {
+    if(![backgroundContext save:&saveError]) {
         NSLog(@"Could not save %@ data: %@",type, [saveError localizedDescription]);
         
         NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
@@ -252,11 +273,14 @@
         NSLog(@"%lu %@ entries created",(unsigned long)results.count, type);
     }
     
+    
     [self updateSyncStatus:type];
     
     return YES;
+    
 }
-//
+
+
 //
 //+ (BOOL)syncReportsOrderVsIntake {
 //    

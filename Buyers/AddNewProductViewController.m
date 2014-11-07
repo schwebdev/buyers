@@ -226,7 +226,7 @@ static const float kPageWidth = 680.0;
 
 - (void)saveCustomProduct:(id)sender {
     
-    NSString *pName, *pCreatorName;
+    NSString *pName, *pCreatorName, *pNotes;
     ProductCategory *pCategory;
     Brand *pBrand;
     Supplier *pSupplier;
@@ -323,6 +323,13 @@ static const float kPageWidth = 680.0;
         pPrice = [NSNumber numberWithDouble:[self.txtProductPrice.text doubleValue]];
     }
     
+    if(self.txtProductNotes.text.length > 300) {
+        _isValid = NO;
+        [errorMsg appendString:@"please enter a maximum of 300 characters only for notes\n"];
+    } else {
+        pNotes=self.txtProductNotes.text;
+    }
+    
     /*if([self.txtProductCode.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please enter a product code\n"];
@@ -368,7 +375,7 @@ static const float kPageWidth = 680.0;
 
              product.productImageData = imageData;
              
-             product.productNotes =self.txtProductNotes.text;
+             product.productNotes =pNotes;
              
              
              //add unique identifier for custom product syncing

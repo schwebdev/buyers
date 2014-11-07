@@ -48,7 +48,7 @@
         <attribute name="productLastUpdatedBy" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productMaterialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="productName" attributeType="String" maxValueString="50" indexed="YES" syncable="YES"/>
-        <attribute name="productNotes" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productNotes" optional="YES" attributeType="String" maxValueString="300" syncable="YES"/>
         <attribute name="productPrice" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
         <attribute name="productSupplierCode" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Collection" inverseName="products" inverseEntity="Collection" syncable="YES"/>

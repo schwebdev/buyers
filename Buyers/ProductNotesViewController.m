@@ -53,6 +53,9 @@
     if ([_productNotes.text isEqualToString:(@"")]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter some notes for this product!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
+    } else if (_productNotes.text.length > 300) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Only a maximum of 300 characters allowed, please remove some characters!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+        [alert show];
     } else  if([creatorName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length ==0) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Collection Error" message:@"Please add your name to app settings." delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
         [alert show];
