@@ -593,9 +593,7 @@ static const float sProductColumnSpacer = 5.0;
     
     if([selectedProducts count] > 0) {
     
-        self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
-        NSError *error;
+         NSError *error;
         //get user's full name from app settings
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *creatorName = [defaults objectForKey:@"username"];
@@ -644,6 +642,7 @@ static const float sProductColumnSpacer = 5.0;
                     } else {
                         //set collection from picker
                         isNewCollection = YES;
+                        NSPersistentStoreCoordinator *persistentStoreCoordinator =[(AppDelegate *)[[UIApplication sharedApplication] delegate] persistentStoreCoordinator];
                         NSManagedObjectID *c = [persistentStoreCoordinator managedObjectIDForURIRepresentation:(NSURL*)self.collectionList.getSelectedValue];
                         NSManagedObject *collectionElement = [self.managedContext objectWithID:c];
                         _collection = (Collection*)collectionElement;

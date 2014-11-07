@@ -234,7 +234,6 @@ static const float kPageHeight = 576.0;
     _downArrow.hidden = YES;
     
     //fetch request to retrieve all collections
-    self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
     NSError *error;
     
