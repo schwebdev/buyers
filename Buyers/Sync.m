@@ -275,7 +275,7 @@
                         product.productImageData = defaultImageData;
                     } else {
                         product.productImageData = imageData;
-                        NSLog(@"image: %@",strURL);
+                        //NSLog(@"image: %@",strURL);
                     }
                 } else {
                     //check for deletion and delete first
@@ -445,7 +445,7 @@
     //convert string to date object
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     
-    NSLog(@"Date: %@",dateStr);
+    //NSLog(@"Date: %@",dateStr);
     
     [dateFormat setDateFormat:@"MM/dd/yyyy hh:mm:ss a"];
     NSDate *date = [dateFormat dateFromString:dateStr];
