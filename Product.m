@@ -2,7 +2,7 @@
 //  Product.m
 //  Buyers
 //
-//  Created by Web Development on 06/11/2014.
+//  Created by Web Development on 10/11/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
@@ -17,17 +17,17 @@
 @dynamic productCategoryRef;
 @dynamic productCode;
 @dynamic productColourRef;
+@dynamic productCreationDate;
+@dynamic productCreator;
+@dynamic productGUID;
 @dynamic productImageData;
+@dynamic productLastUpdateDate;
+@dynamic productLastUpdatedBy;
 @dynamic productMaterialRef;
 @dynamic productName;
 @dynamic productNotes;
 @dynamic productPrice;
 @dynamic productSupplierCode;
-@dynamic productLastUpdateDate;
-@dynamic productLastUpdatedBy;
-@dynamic productGUID;
-@dynamic productCreationDate;
-@dynamic productCreator;
 @dynamic collections;
 @dynamic productOrder;
 

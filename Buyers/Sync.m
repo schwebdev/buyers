@@ -117,7 +117,6 @@
 }
 
 + (BOOL)syncTable:(NSString *)type {
-    //type = @"Supplier"
     NSError *error;
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSURL *url;
@@ -131,7 +130,18 @@
     if([type isEqualToString:@"ProductCategory"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcategory"];
     if([type isEqualToString:@"Colour"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getcolour"];
     if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterial"];
-    if([type isEqualToString:@"Product"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem"];
+    if([type isEqualToString:@"Product"]) {
+        NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
+        if(lastProductSync == nil) {
+            url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/-1"];
+        } else {
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd%20HH_mm"];
+            NSString *formatDate = [dateFormat stringFromDate:lastProductSync];
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/%@",formatDate]];
+   
+        }
+    }
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -229,14 +239,35 @@
                     product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
                     product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
                     product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
-                    product.productNotes = @"test notes"; //result[@"productNotes"];
-                    product.productCreator = @"SHARK";
-                    product.productCreationDate = [NSDate date];
-                    product.productLastUpdatedBy = @"SHARK"; //result[@"lastUpdatedBy"];
-                    product.productLastUpdateDate = [NSDate date]; //result[@"lastUpdateDate"];
-                    product.productGUID = @""; //result[@"customProductGUID"];
+                    product.productNotes = result[@"Notes"];
+                    product.productGUID =result[@"Guid"];
+                    NSString *createdBy = result[@"CreatedBy"];
+                    NSString *lastUpdateBy = result[@"LastUpdateBy"];
+                    NSString *createdDate = result[@"CreatedDate"];
+                    NSString *lastUpdated = result[@"LastUpdated"];
                     
-                    NSError *error = nil;
+                    if([createdBy  isEqual: @""]) {
+                        product.productCreator = @"SHARK";
+                    } else {
+                          product.productCreator = result[@"CreatedBy"];
+                    }
+                    if([lastUpdateBy  isEqual: @""]) {
+                        product.productLastUpdatedBy = @"SHARK";
+                    } else {
+                        product.productLastUpdatedBy = result[@"LastUpdateBy"];
+                    }
+                    if([createdDate  isEqual: @"1/1/1900"] || [createdDate  isEqual:@""]) {
+                         product.productCreationDate = [NSDate date];
+                    } else {
+                        product.productCreationDate = [Sync dateWithJSONString:createdDate];
+                    }
+                    if([lastUpdated   isEqual: @"1/1/1900"] || [lastUpdated  isEqual: @""]) {
+                        product.productLastUpdateDate = [NSDate date];
+                    } else {
+                        product.productLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+                    }
+                    
+                    NSError *error;
                     NSString *strURL = result[@"ImageURL"];
                     NSURL *url = [[NSURL alloc] initWithString:strURL];
                     NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
@@ -246,6 +277,76 @@
                         product.productImageData = imageData;
                         NSLog(@"image: %@",strURL);
                     }
+                } else {
+                    //check for deletion and delete first
+                    //get the object from currentResults using predicate with guid
+                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",result[@"Guid"]];
+                    NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                    if([findObject count] > 0) {
+                        Product *product = (Product*)[findObject objectAtIndex:0];
+                        NSString *deleteProduct = result[@"Deleted"];
+                        if([deleteProduct isEqual:@"true"]) {
+                            
+                            
+                                //delete from collections and product orders
+                                NSError *error;
+                                NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"products contains %@",product];
+                            
+                                NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+                                NSArray *collections = [backgroundContext executeFetchRequest:requestCollections error:&error];
+                                NSArray *findCollections = [collections filteredArrayUsingPredicate:predicate2];
+                                
+                                 for (Collection *collection in findCollections) {
+                                     [collection removeProductsObject:product];
+                                     collection.collectionLastUpdateDate = [NSDate date];
+                                     collection.collectionLastUpdatedBy = @"SHARK";
+                                 }
+                            
+                                //delete the product
+                                [backgroundContext deleteObject:product];
+                           
+
+                        } else {
+                            //update fields
+                            product.productName = result[@"i_name"];
+                            product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+                            product.productNotes = result[@"Notes"];
+                            
+                            NSString *lastUpdateBy = result[@"LastUpdateBy"];;
+                            NSString *lastUpdated = result[@"LastUpdated"];
+                            
+                            if([lastUpdateBy  isEqual: @""]) {
+                                product.productLastUpdatedBy = @"SHARK";
+                            } else {
+                                product.productLastUpdatedBy = result[@"LastUpdateBy"];
+                            }
+                            if([lastUpdated   isEqual: @"1/1/1900"] || [lastUpdated  isEqual: @""]) {
+                                product.productLastUpdateDate = [NSDate date];
+                            } else {
+                                product.productLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+                            }
+
+                            
+                            if([result[@"i_Code"] isEqual:@""] || [result[@"i_Code"] isEqual:@"0000000000"]){
+                                product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+                                product.productSupplierCode = result[@"main_sup_code"];
+                                product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
+                                product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
+                                product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
+       
+                                NSError *error;
+                                NSString *strURL = result[@"ImageURL"];
+                                NSURL *url = [[NSURL alloc] initWithString:strURL];
+                                NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+                                if(error) {
+                                    product.productImageData = defaultImageData;
+                                } else {
+                                    product.productImageData = imageData;
+                                }
+                            }
+                        }
+                    }
+                
                 }
             }
             
@@ -280,6 +381,18 @@
     
 }
 
+
++(NSDate*)dateWithJSONString:(NSString*)dateStr {
+    //convert string to date object
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+    
+    NSLog(@"Date: %@",dateStr);
+    
+    [dateFormat setDateFormat:@"MM/dd/yyyy hh:mm:ss a"];
+    NSDate *date = [dateFormat dateFromString:dateStr];
+    
+    return date;
+}
 
 //
 //+ (BOOL)syncReportsOrderVsIntake {

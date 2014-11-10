@@ -36,21 +36,21 @@
         <attribute name="merchRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
     <entity name="Product" representedClassName="Product" syncable="YES">
-        <attribute name="productBrandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
-        <attribute name="productCategoryRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="productBrandRef" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
+        <attribute name="productCategoryRef" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="productCode" attributeType="String" minValueString="0" maxValueString="10" indexed="YES" syncable="YES"/>
-        <attribute name="productColourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="productColourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="productCreationDate" optional="YES" attributeType="Date" syncable="YES"/>
-        <attribute name="productCreator" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productCreator" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <attribute name="productGUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productImageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="productLastUpdateDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="productLastUpdatedBy" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="productMaterialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
+        <attribute name="productMaterialRef" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="productName" attributeType="String" maxValueString="50" indexed="YES" syncable="YES"/>
         <attribute name="productNotes" optional="YES" attributeType="String" maxValueString="300" syncable="YES"/>
-        <attribute name="productPrice" optional="YES" attributeType="Float" defaultValueString="0.0" syncable="YES"/>
-        <attribute name="productSupplierCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="productPrice" optional="YES" attributeType="Float" defaultValueString="0.0" indexed="YES" syncable="YES"/>
+        <attribute name="productSupplierCode" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
         <relationship name="collections" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Collection" inverseName="products" inverseEntity="Collection" syncable="YES"/>
         <relationship name="productOrder" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ProductOrder" inverseName="orderProduct" inverseEntity="ProductOrder" syncable="YES"/>
     </entity>
@@ -116,7 +116,7 @@
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
         <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="298"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="300"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>
