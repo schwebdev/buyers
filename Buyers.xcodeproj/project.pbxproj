@@ -156,6 +156,7 @@
 		C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */; };
 		C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */; };
 		C60B0A271A11132400E42442 /* checkboxSML-checked@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C60B0A261A11132400E42442 /* checkboxSML-checked@2x.png */; };
+		C60B0A2A1A111ADB00E42442 /* DeletedProducts.m in Sources */ = {isa = PBXBuildFile; fileRef = C60B0A291A111ADB00E42442 /* DeletedProducts.m */; };
 		C618D3A019DEEBC7005977D6 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D39F19DEEBC7005977D6 /* camera.png */; };
 		C618D3A219DEEC7F005977D6 /* gallery.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A119DEEC7F005977D6 /* gallery.png */; };
 		C618D3A419DEF114005977D6 /* camera_lg.png in Resources */ = {isa = PBXBuildFile; fileRef = C618D3A319DEF114005977D6 /* camera_lg.png */; };
@@ -387,6 +388,8 @@
 		C60A7AFC19E6E2F1000ABE88 /* PhotoCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PhotoCell.h; sourceTree = "<group>"; };
 		C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PhotoCell.m; sourceTree = "<group>"; };
 		C60B0A261A11132400E42442 /* checkboxSML-checked@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkboxSML-checked@2x.png"; path = "../../../../Desktop/checkboxSML-checked@2x.png"; sourceTree = "<group>"; };
+		C60B0A281A111ADB00E42442 /* DeletedProducts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeletedProducts.h; sourceTree = "<group>"; };
+		C60B0A291A111ADB00E42442 /* DeletedProducts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeletedProducts.m; sourceTree = "<group>"; };
 		C618D39F19DEEBC7005977D6 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		C618D3A119DEEC7F005977D6 /* gallery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gallery.png; sourceTree = "<group>"; };
 		C618D3A319DEF114005977D6 /* camera_lg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera_lg.png; sourceTree = "<group>"; };
@@ -778,6 +781,8 @@
 		5B43EDF31A00D88A00730158 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				C60B0A281A111ADB00E42442 /* DeletedProducts.h */,
+				C60B0A291A111ADB00E42442 /* DeletedProducts.m */,
 				5BB8DC441A10B816007C4D63 /* Product.h */,
 				5BB8DC451A10B816007C4D63 /* Product.m */,
 				5B072F8B1A0B92B8007E41E1 /* Collection.h */,
@@ -1060,6 +1065,7 @@
 				0B52FC8B19E56E0C00D1D747 /* ReportData.m in Sources */,
 				0B76309C199A31F700949155 /* SchTextField.m in Sources */,
 				0BC95669198FDE3E00CD45D5 /* SWRevealViewController.m in Sources */,
+				C60B0A2A1A111ADB00E42442 /* DeletedProducts.m in Sources */,
 				0B7630A619A2121700949155 /* ReportViewController.m in Sources */,
 				0B7630961998DDEC00949155 /* CustomHomeViewController.m in Sources */,
 				0B52FC9119ED171100D1D747 /* BestsellersReportViewController.m in Sources */,
