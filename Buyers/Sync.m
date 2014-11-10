@@ -288,19 +288,28 @@
                         if([deleteProduct isEqual:@"true"]) {
                             
                             
-                                //delete from collections and product orders
+                                //delete from any collections that contain the product
                                 NSError *error;
                                 NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"products contains %@",product];
                             
                                 NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
                                 NSArray *collections = [backgroundContext executeFetchRequest:requestCollections error:&error];
-                                NSArray *findCollections = [collections filteredArrayUsingPredicate:predicate2];
+                                NSArray *foundCollections = [collections filteredArrayUsingPredicate:predicate2];
                                 
-                                 for (Collection *collection in findCollections) {
+                                 for (Collection *collection in foundCollections) {
                                      [collection removeProductsObject:product];
                                      collection.collectionLastUpdateDate = [NSDate date];
                                      collection.collectionLastUpdatedBy = @"SHARK";
                                  }
+                            
+                                //delete from product order
+                                NSPredicate *predicate3 =[NSPredicate predicateWithFormat:@"orderProduct = %@",product];
+                                NSFetchRequest *requestProductOrders = [[NSFetchRequest alloc] initWithEntityName:@"ProductOrder"];
+                                NSArray *orders = [managedContext executeFetchRequest:requestProductOrders error:&error];
+                                NSArray *foundOrders = [orders filteredArrayUsingPredicate:predicate3];
+                                for (ProductOrder *pOrder in foundOrders) {
+                                    [backgroundContext deleteObject:pOrder];
+                                }
                             
                                 //delete the product
                                 [backgroundContext deleteObject:product];
@@ -345,6 +354,56 @@
                                 }
                             }
                         }
+                    } else {
+                        //insert the product
+                        Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
+                        product.productCode =result[@"i_Code"];
+                        product.productName = result[@"i_name"];
+                        product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+                        product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+                        product.productSupplierCode = result[@"main_sup_code"];
+                        product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
+                        product.productColourRef= [NSNumber numberWithInt:[result[@"c_ref"] intValue]];
+                        product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
+                        product.productNotes = result[@"Notes"];
+                        product.productGUID =result[@"Guid"];
+                        NSString *createdBy = result[@"CreatedBy"];
+                        NSString *lastUpdateBy = result[@"LastUpdateBy"];
+                        NSString *createdDate = result[@"CreatedDate"];
+                        NSString *lastUpdated = result[@"LastUpdated"];
+                        
+                        if([createdBy  isEqual: @""]) {
+                            product.productCreator = @"SHARK";
+                        } else {
+                            product.productCreator = result[@"CreatedBy"];
+                        }
+                        if([lastUpdateBy  isEqual: @""]) {
+                            product.productLastUpdatedBy = @"SHARK";
+                        } else {
+                            product.productLastUpdatedBy = result[@"LastUpdateBy"];
+                        }
+                        if([createdDate  isEqual: @"1/1/1900"] || [createdDate  isEqual:@""]) {
+                            product.productCreationDate = [NSDate date];
+                        } else {
+                            product.productCreationDate = [Sync dateWithJSONString:createdDate];
+                        }
+                        if([lastUpdated   isEqual: @"1/1/1900"] || [lastUpdated  isEqual: @""]) {
+                            product.productLastUpdateDate = [NSDate date];
+                        } else {
+                            product.productLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+                        }
+                        
+                        NSError *error;
+                        NSString *strURL = result[@"ImageURL"];
+                        NSURL *url = [[NSURL alloc] initWithString:strURL];
+                        NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
+                        if(error) {
+                            product.productImageData = defaultImageData;
+                        } else {
+                            product.productImageData = imageData;
+                        }
+
+                        
                     }
                 
                 }
