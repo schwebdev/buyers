@@ -269,27 +269,32 @@ static const float kPageWidth = 680.0;
             [_product.material removeProductMaterialObject:_product];
         }*/
         
+        /*
+         NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"products contains %@",product];
+         
+         NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+         NSArray *collections = [backgroundContext executeFetchRequest:requestCollections error:&error];
+         NSArray *findCollections = [collections filteredArrayUsingPredicate:predicate2];
+
+         */
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"products contains %@",_product];
         NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
         NSArray *collections = [managedContext executeFetchRequest:requestCollections error:&error];
-        for (int i = 0, ic = [collections count]; i < ic; i++) {
-            Collection *collection = [collections objectAtIndex:i];
-            if([collection.products containsObject:_product]) {
+        NSArray *foundCollections = [collections filteredArrayUsingPredicate:predicate];
+        for (Collection *collection in foundCollections) {
                 [collection removeProductsObject:_product];
                 collection.collectionLastUpdateDate = [NSDate date];
                 //get user's full name from app settings
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 NSString *creatorName = [defaults objectForKey:@"username"];
                 collection.collectionLastUpdatedBy = creatorName;
-            }
         }
-        
+        NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"orderProduct = %@",_product];
         NSFetchRequest *requestProductOrders = [[NSFetchRequest alloc] initWithEntityName:@"ProductOrder"];
         NSArray *orders = [managedContext executeFetchRequest:requestProductOrders error:&error];
-        for (int i = 0, ip = [orders count]; i < ip; i++) {
-            ProductOrder *pOrder = [orders objectAtIndex:i];
-            if([pOrder.orderProduct isEqual:_product]) {
-                [managedContext deleteObject:pOrder];
-            }
+        NSArray *foundOrders = [orders filteredArrayUsingPredicate:predicate2];
+        for (ProductOrder *pOrder in foundOrders) {
+            [managedContext deleteObject:pOrder];
         }
         
         [managedContext deleteObject:_product];
