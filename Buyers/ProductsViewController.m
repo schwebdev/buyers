@@ -670,8 +670,8 @@ static const float sProductColumnSpacer = 5.0;
                 for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
                     Product *product = [selectedProducts objectAtIndex:p];
         
-                    //check it doesn't exist in the collection already
-                    if(![_collection.products containsObject:product]){
+                    //check it doesn't exist in the collection already and is not flagged for deletion
+                    if(![_collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
         
                         //add collection
                         [product addCollectionsObject:_collection];

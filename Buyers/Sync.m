@@ -511,6 +511,8 @@ NSDate *globalProductSync;
     //convert string to date object
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
     
+    //NSLog(@"Date: %@",dateStr);
+    
     [dateFormat setDateFormat:@"MM/dd/yyyy hh:mm:ss a"];
     NSDate *date = [dateFormat dateFromString:dateStr];
     
@@ -599,10 +601,13 @@ NSDate *globalProductSync;
         [request setPredicate:predicate];
         NSArray *products = [managedContext executeFetchRequest:request error:&error];
         
-        //NSData *jsonProductData = [NSJSONSerialization dataWithJSONObject:products options:kNilOptions error:&error];
-        //NSString *productData = [[NSString alloc] initWithData:jsonProductData encoding:NSUTF8StringEncoding];
         NSLog(@"product count: %d",[products count]);
-        //NSLog(@"JSON: %@",productData);
+        NSData *jsonProductData = [NSJSONSerialization dataWithJSONObject:products options:kNilOptions error:&error];
+        NSString *productData = [[NSString alloc] initWithData:jsonProductData encoding:NSUTF8StringEncoding];
+       
+        NSLog(@"JSON: %@",productData);
+               
+        }
 
         
     }
@@ -821,6 +826,7 @@ NSDate *globalProductSync;
     NSMutableArray *resultsArray = [NSMutableArray array];
     
     for (NSObject *row in results) {
+        
         [resultsArray addObject:[self dictionaryWithPropertiesOfObject:row]];
     }
     
