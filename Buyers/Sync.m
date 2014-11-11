@@ -132,7 +132,7 @@ NSDate *globalProductSync;
     if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterial"];
     if([type isEqualToString:@"Product"]) {
         NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
-        globalProductSync=lastProductSync;
+        globalProductSync = lastProductSync;
         if(lastProductSync == nil) {
             url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/-1"];
         } else {
@@ -240,9 +240,9 @@ NSDate *globalProductSync;
                 material.materialName = result[@"m_name"];
             }
             if([type isEqualToString:@"Product"]) {
-                NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
-                globalProductSync=lastSync;
-                if(lastSync == nil) {
+                NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
+                globalProductSync = lastProductSync;
+                if(lastProductSync == nil) {
                     //insert all product data
                     Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
                      
@@ -591,24 +591,50 @@ NSDate *globalProductSync;
 
 + (BOOL)syncProductData {
     
-    //NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
-    if(globalProductSync != nil) {
+       if(globalProductSync != nil) {
          //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
         NSError *error;
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productLastUpdateDate < %@ OR productDeleted == %@",globalProductSync,[NSNumber numberWithBool:YES]];
-        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
-        [request setPredicate:predicate];
-        NSArray *products = [managedContext executeFetchRequest:request error:&error];
+        //NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productLastUpdateDate < %@ OR productDeleted == %@",globalProductSync,[NSNumber numberWithBool:YES]];
+        NSArray *products = [Sync getTable:@"Product" sortWith:@"productName" withPredicate:[NSPredicate predicateWithFormat:@"productDeleted == %@",[NSNumber numberWithBool:YES]]];
         
-        NSLog(@"product count: %d",[products count]);
-        NSData *jsonProductData = [NSJSONSerialization dataWithJSONObject:products options:kNilOptions error:&error];
-        NSString *productData = [[NSString alloc] initWithData:jsonProductData encoding:NSUTF8StringEncoding];
+          
+        if([products count] > 0 ) {
+           
+        //get modified data for upload
+        for (NSMutableDictionary *product in products) {
+            [product removeObjectForKey:@"collections"];
+            [product removeObjectForKey:@"productOrder"];
+            //[product removeObjectForKey:@"productImageData"];
+            for (NSString *key in [product allKeys]) {
+                id object = product[key];
+                if([object isKindOfClass:[NSData class]]) {
+                    NSString *imageString = [product[key] base64EncodedStringWithOptions:0];
+                    //NSLog(@"image: %@", imageString);
+                    product[key] = imageString;
+                 }
+               
+                if([object isKindOfClass:[NSDate class]]) {
+                    
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                    dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                    
+                    product[key] = [dateFormat stringFromDate:(NSDate*)product[key]];
+                }
+            }
+            NSLog(@"uploading product %@ - %@", product[@"productName"], product[@"productGUID"]);
+        }
+        
+        
+        //NSLog(@"product count: %d",[products count]);
+        //NSData *jsonProductData = [NSJSONSerialization dataWithJSONObject:products options:kNilOptions error:&error];
+        //NSString *productData = [[NSString alloc] initWithData:jsonProductData encoding:NSUTF8StringEncoding];
        
-        NSLog(@"JSON: %@",productData);
+        //NSLog(@"JSON: %@",productData);
                
         }
-    
+
+        
+    }
     
     return YES;
 }
