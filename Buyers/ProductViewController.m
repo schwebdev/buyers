@@ -297,7 +297,15 @@ static const float kPageWidth = 680.0;
             [managedContext deleteObject:pOrder];
         }
         
-        [managedContext deleteObject:_product];
+        //flag for deletion
+        //get user's full name from app settings
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *creatorName = [defaults objectForKey:@"username"];
+        
+        _product.productDeleted =  [NSNumber numberWithBool:YES];
+        _product.productLastUpdateDate = [NSDate date];
+        _product.productLastUpdatedBy = creatorName;
+        _product.productDeleted =  [NSNumber numberWithBool:YES];
         
         if (![managedContext save:&error]) {
             NSLog(@"Could not delete custom product: %@", [error localizedDescription]);

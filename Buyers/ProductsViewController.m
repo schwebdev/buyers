@@ -162,6 +162,10 @@ static const float sProductColumnSpacer = 5.0;
         [preds addObject:pricePred];
     }
     
+    //always need to filter out products flagged for deletion
+    NSPredicate *deletionPred =[NSPredicate predicateWithFormat:@"productDeleted == %@", [NSNumber numberWithBool:NO]];
+    [preds addObject:deletionPred];
+    
     predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
     
     [selectedProducts removeAllObjects];
@@ -377,13 +381,13 @@ static const float sProductColumnSpacer = 5.0;
     
     if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0 && customProductsButton.selected) {
         //get only custom products
-        NSPredicate *pred =[NSPredicate predicateWithFormat:@"productCode ='0000000000'"];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"productCode ='0000000000' AND productDeleted ==%@",[NSNumber numberWithBool:NO]];
         [request setPredicate:pred];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && customProductsButton.selected) {
-        NSPredicate *pred =[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='0000000000'", txtSearch.text, txtSearch.text];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) AND productCode ='0000000000' AND productDeleted ==%@", txtSearch.text, txtSearch.text, [NSNumber numberWithBool:NO]];
         [request setPredicate:pred];
     } else if([txtSearch.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length > 0 && allProductsButton.selected) {
-        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) OR (productCode CONTAINS[cd] %@ OR productCode LIKE[cd] %@)", txtSearch.text, txtSearch.text, txtSearch.text, txtSearch.text];
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"(productName CONTAINS[cd] %@ OR productName LIKE[cd] %@) OR (productCode CONTAINS[cd] %@ OR productCode LIKE[cd] %@) AND productDeleted ==%@", txtSearch.text, txtSearch.text, txtSearch.text, txtSearch.text, [NSNumber numberWithBool:NO]];
         [request setPredicate:pred];
     }
     }

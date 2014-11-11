@@ -156,7 +156,7 @@
 		5B52F82119F80524007D5943 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82019F80524007D5943 /* Colour.m */; };
 		5B52F82719FE7047007D5943 /* AdvancedSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */; };
 		5B65017919B0B518003F03F8 /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B65017819B0B518003F03F8 /* ProductCell.m */; };
-		5BB8DC461A10B816007C4D63 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8DC451A10B816007C4D63 /* Product.m */; };
+		5BB8DC4C1A121739007C4D63 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8DC4B1A121739007C4D63 /* Product.m */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
 		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
@@ -389,8 +389,8 @@
 		5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedSearchViewController.m; sourceTree = "<group>"; };
 		5B65017719B0B518003F03F8 /* ProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
 		5B65017819B0B518003F03F8 /* ProductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCell.m; sourceTree = "<group>"; };
-		5BB8DC441A10B816007C4D63 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
-		5BB8DC451A10B816007C4D63 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
+		5BB8DC4A1A121739007C4D63 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Product.h; sourceTree = "<group>"; };
+		5BB8DC4B1A121739007C4D63 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Product.m; sourceTree = "<group>"; };
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
@@ -796,8 +796,8 @@
 		5B43EDF31A00D88A00730158 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				5BB8DC441A10B816007C4D63 /* Product.h */,
-				5BB8DC451A10B816007C4D63 /* Product.m */,
+				5BB8DC4A1A121739007C4D63 /* Product.h */,
+				5BB8DC4B1A121739007C4D63 /* Product.m */,
 				5B072F8B1A0B92B8007E41E1 /* Collection.h */,
 				5B072F8C1A0B92B8007E41E1 /* Collection.m */,
 				5B43EE0D1A01074B00730158 /* ReportData.h */,
@@ -1054,7 +1054,7 @@
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
 				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
 				5B072F8D1A0B92B8007E41E1 /* Collection.m in Sources */,
-				5BB8DC461A10B816007C4D63 /* Product.m in Sources */,
+				5BB8DC4C1A121739007C4D63 /* Product.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,

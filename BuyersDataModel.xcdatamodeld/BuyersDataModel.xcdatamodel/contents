@@ -42,6 +42,7 @@
         <attribute name="productColourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" indexed="YES" syncable="YES"/>
         <attribute name="productCreationDate" optional="YES" attributeType="Date" syncable="YES"/>
         <attribute name="productCreator" optional="YES" attributeType="String" indexed="YES" syncable="YES"/>
+        <attribute name="productDeleted" optional="YES" attributeType="Boolean" defaultValueString="NO" syncable="YES"/>
         <attribute name="productGUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="productImageData" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="productLastUpdateDate" optional="YES" attributeType="Date" syncable="YES"/>
@@ -116,7 +117,7 @@
         <element name="Department" positionX="-18" positionY="144" width="128" height="73"/>
         <element name="Material" positionX="0" positionY="144" width="128" height="73"/>
         <element name="Merch" positionX="-27" positionY="135" width="128" height="73"/>
-        <element name="Product" positionX="-54" positionY="27" width="128" height="300"/>
+        <element name="Product" positionX="-54" positionY="27" width="128" height="315"/>
         <element name="ProductCategory" positionX="-27" positionY="99" width="128" height="73"/>
         <element name="ProductOrder" positionX="-27" positionY="135" width="128" height="90"/>
         <element name="ReportData" positionX="18" positionY="153" width="128" height="180"/>

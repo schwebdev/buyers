@@ -142,6 +142,18 @@
    
         }
     }
+    if([type isEqualToString:@"Collection"]) {
+        NSDate *lastCollectionSync = [Sync getLastSyncForTable:@"Collection"];
+        if(lastCollectionSync == nil) {
+            url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/-1"];
+        } else {
+            NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+            [dateFormat setDateFormat:@"yyyy-MM-dd%20HH_mm"];
+            NSString *formatDate = [dateFormat stringFromDate:lastCollectionSync];
+            url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/%@",formatDate]];
+            
+        }
+    }
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -160,8 +172,8 @@
     NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:type];
     NSArray *currentResults = [managedContext executeFetchRequest:request error:&error];
     
-    //only remove support table data for support table items - not products (collections and productOrders will also not be removed but synced separately)
-    if(![type isEqualToString:@"Product"]) {
+    //only remove support table data for support table items - not products or collections
+    if(![type isEqualToString:@"Product"]) { //&& ![type isEqualToString:@"Collection"]) {
         for (NSManagedObject *currentResult in currentResults) {
             [managedContext deleteObject:currentResult];
         }
@@ -313,9 +325,70 @@
                     }
                 
                 }
+                
             }
             
+            if([type isEqualToString:@"Collection"]) {
+                NSDate *lastSync = [Sync getLastSyncForTable:@"Collection"];
+                if(lastSync == nil) {
+                    //insert all collection data
+                    Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
+                    
+                    [Sync insertCollection:collection withData:result];
+                } else {
+                    //check for deletion and delete first
+                    //get the object from currentResults using predicate with guid
+                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"collectionGUID == %@",result[@"Guid"]];
+                    NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                    if([findObject count] > 0) {
+                        Collection *collection = (Collection*)[findObject objectAtIndex:0];
+                        NSString *deleteCollection = result[@"Deleted"];
+                        if([deleteCollection isEqual:@"true"]) {
+                            
+                            //delete from any product orders
+                            
+                            //delete the collection
+                            [backgroundContext deleteObject:collection];
+                            
+                            
+                        } else {
+                            //update fields
+                            collection.collectionName = result[@"collectionName"];
+                            collection.collectionBrandRef = result[@"brandRef"];
+                            collection.collectionNotes = result[@"Notes"];
+                            
+                            NSString *lastUpdateBy = result[@"LastUpdateBy"];;
+                            NSString *lastUpdated = result[@"LastUpdated"];
+                            
+                            if([lastUpdateBy  isEqual: @""]) {
+                                collection.collectionLastUpdatedBy = @"SHARK";
+                            } else {
+                                collection.collectionLastUpdatedBy = result[@"LastUpdateBy"];
+                            }
+                            if([lastUpdated  isEqual: @""]) {
+                                collection.collectionLastUpdateDate = [NSDate date];
+                            } else {
+                                collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+                            }
+                            
+                            //update products
+                            
+                            //update product ordering
+                            
+                            
+                        }
+                    } else {
+                        //insert the collection
+                        Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
+                        [Sync insertCollection:collection withData:result];
+                    }
+                    
+                }
+            }
+           
+            
         }
+        
       
    }];
     
@@ -344,7 +417,43 @@
     return YES;
     
 }
-
+     
++(void)insertCollection:(Collection*)collection withData:(NSDictionary*)result {
+        collection.collectionName = result[@"collectionName"];
+        collection.collectionGUID =result[@"Guid"];
+        collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+        collection.collectionNotes = result[@"Notes"];
+    
+        NSString *createdBy = result[@"CreatedBy"];
+        NSString *lastUpdateBy = result[@"LastUpdateBy"];
+        NSString *createdDate = result[@"CreatedDate"];
+        NSString *lastUpdated = result[@"LastUpdated"];
+    
+        if([createdBy  isEqual: @""]) {
+            collection.collectionCreator = @"SHARK";
+        } else {
+            collection.collectionCreator = result[@"CreatedBy"];
+        }
+        if([lastUpdateBy  isEqual: @""]) {
+            collection.collectionLastUpdatedBy = @"SHARK";
+        } else {
+            collection.collectionLastUpdatedBy = result[@"LastUpdateBy"];
+        }
+        if([createdDate  isEqual:@""]) {
+            collection.collectionCreationDate = [NSDate date];
+        } else {
+            collection.collectionCreationDate = [Sync dateWithJSONString:createdDate];
+        }
+        if([lastUpdated  isEqual: @""]) {
+            collection.collectionLastUpdateDate = [NSDate date];
+        } else {
+            collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+        }
+    
+        //insert products
+    
+        //insert product ordering
+}
 
 +(void)insertProduct:(Product*)product withData:(NSDictionary*)result {
     product.productCode =result[@"i_Code"];
@@ -474,6 +583,30 @@
 //    [self updateSyncStatus:@"reportordervsintake"];
 //    return YES;
 //}
+
+
++ (BOOL)syncProductData {
+    
+    NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
+    if(lastSync != nil) {
+         //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
+        NSError *error;
+        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productLastUpdateDate < %@ OR productDeleted == %@",lastSync,[NSNumber numberWithBool:YES]];
+        NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+        [request setPredicate:predicate];
+        NSArray *products = [managedContext executeFetchRequest:request error:&error];
+        
+        //NSData *jsonProductData = [NSJSONSerialization dataWithJSONObject:products options:kNilOptions error:&error];
+        //NSString *productData = [[NSString alloc] initWithData:jsonProductData encoding:NSUTF8StringEncoding];
+        NSLog(@"product count: %d",[products count]);
+        //NSLog(@"JSON: %@",productData);
+
+        
+    }
+    
+    return YES;
+}
 
 + (BOOL)syncReportData {
     NSError *error;

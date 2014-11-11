@@ -166,7 +166,7 @@
     
     //internet check
     
-    CGFloat syncCount = 11;
+    CGFloat syncCount = 13;
     
     if(success) {
         success = [Sync syncTable:@"Supplier"];
@@ -217,6 +217,15 @@
     if(success) {
         success = [Sync syncTable:@"Product"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:11/syncCount] waitUntilDone:YES];
+    }
+    /*if(success) {
+        success = [Sync syncTable:@"Collection"];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:12/syncCount] waitUntilDone:YES];
+    }*/
+    
+    if(success) {
+        success = [Sync syncProductData];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:13/syncCount] waitUntilDone:YES];
     }
     
     if(success) {
