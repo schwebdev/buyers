@@ -10,7 +10,6 @@
 
 @interface Sync : NSObject
 
-
 + (BOOL)syncTable:(NSString *)type;
 
 + (BOOL)syncProductData;
