@@ -143,7 +143,7 @@ NSDate *globalProductSync;
    
         }
     }
-    if([type isEqualToString:@"Collection"]) {
+    /*if([type isEqualToString:@"Collection"]) {
         NSDate *lastCollectionSync = [Sync getLastSyncForTable:@"Collection"];
         if(lastCollectionSync == nil) {
             url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/-1"];
@@ -154,7 +154,7 @@ NSDate *globalProductSync;
             url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/%@",formatDate]];
             
         }
-    }
+    }*/
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -330,7 +330,7 @@ NSDate *globalProductSync;
                 
             }
             
-            if([type isEqualToString:@"Collection"]) {
+           /* if([type isEqualToString:@"Collection"]) {
                 NSDate *lastSync = [Sync getLastSyncForTable:@"Collection"];
                 if(lastSync == nil) {
                     //insert all collection data
@@ -386,7 +386,7 @@ NSDate *globalProductSync;
                     }
                     
                 }
-            }
+            }*/
            
             
         }
@@ -602,13 +602,21 @@ NSDate *globalProductSync;
            
         //get modified data for upload
         for (NSMutableDictionary *product in products) {
-            [product removeObjectForKey:@"IDURI"];
+            [product removeObjectForKey:@"collections"];
+            [product removeObjectForKey:@"productOrder"];
+            [product removeObjectForKey:@"productImageData"];
             for (NSString *key in [product allKeys]) {
                 id object = product[key];
-                if([object isKindOfClass:[NSSet class]]) {
-                      product[key] = @"";
+                if([object isKindOfClass:[NSData class]]) {
+                    
+                    NSData *imageData = product[key];
+                    
+                    NSString *imageString = [[NSString alloc] initWithData:imageData encoding:NSUTF8StringEncoding];
+                    NSLog(@"image: %@", imageString);
+                    
+                    product[key] = imageString;
                  }
-                NSLog(@"product key: %@ object: %@", product[key], object);
+               
                 if([object isKindOfClass:[NSDate class]]) {
                     
                     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
