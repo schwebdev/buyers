@@ -608,9 +608,7 @@ NSDate *globalProductSync;
         NSLog(@"JSON: %@",productData);
                
         }
-
-        
-    }
+    
     
     return YES;
 }
