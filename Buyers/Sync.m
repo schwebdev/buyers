@@ -31,7 +31,7 @@
 #import "ProductOrder.h"
 
 @implementation Sync
-
+NSDate *globalProductSync;
 
 + (NSDate *)getLastSyncDate {
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -132,6 +132,7 @@
     if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterial"];
     if([type isEqualToString:@"Product"]) {
         NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
+        globalProductSync=lastProductSync;
         if(lastProductSync == nil) {
             url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/-1"];
         } else {
@@ -240,6 +241,7 @@
             }
             if([type isEqualToString:@"Product"]) {
                 NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
+                globalProductSync=lastSync;
                 if(lastSync == nil) {
                     //insert all product data
                     Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
@@ -587,12 +589,12 @@
 
 + (BOOL)syncProductData {
     
-    NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
-    if(lastSync != nil) {
+    //NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
+    if(globalProductSync != nil) {
          //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
         NSError *error;
         NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productLastUpdateDate < %@ OR productDeleted == %@",lastSync,[NSNumber numberWithBool:YES]];
+        NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productLastUpdateDate < %@ OR productDeleted == %@",globalProductSync,[NSNumber numberWithBool:YES]];
         NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
         [request setPredicate:predicate];
         NSArray *products = [managedContext executeFetchRequest:request error:&error];

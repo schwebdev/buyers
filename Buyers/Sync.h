@@ -17,6 +17,7 @@
 + (BOOL)syncFilterReports;
 
 
+
 + (void)updateSyncStatus:(NSString *)type;
 + (NSDate *)getLastSyncDate;
 + (NSDate *)getLastSyncForTable:(NSString *)table;
