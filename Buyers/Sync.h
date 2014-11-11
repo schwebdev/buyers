@@ -10,12 +10,12 @@
 
 @interface Sync : NSObject
 
-
 + (BOOL)syncTable:(NSString *)type;
 
 + (BOOL)syncProductData;
 + (BOOL)syncReportData;
 + (BOOL)syncFilterReports;
+
 
 
 + (void)updateSyncStatus:(NSString *)type;

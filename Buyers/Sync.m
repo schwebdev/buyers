@@ -132,7 +132,7 @@ NSDate *globalProductSync;
     if([type isEqualToString:@"Material"]) url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getmaterial"];
     if([type isEqualToString:@"Product"]) {
         NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
-        globalProductSync = lastProductSync;
+        globalProductSync=lastProductSync;
         if(lastProductSync == nil) {
             url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/-1"];
         } else {
@@ -240,9 +240,9 @@ NSDate *globalProductSync;
                 material.materialName = result[@"m_name"];
             }
             if([type isEqualToString:@"Product"]) {
-                NSDate *lastProductSync = [Sync getLastSyncForTable:@"Product"];
-                globalProductSync = lastProductSync;
-                if(lastProductSync == nil) {
+                NSDate *lastSync = [Sync getLastSyncForTable:@"Product"];
+                globalProductSync=lastSync;
+                if(lastSync == nil) {
                     //insert all product data
                     Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
                      
