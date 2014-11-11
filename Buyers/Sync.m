@@ -440,7 +440,6 @@
     
 }
 
-
 +(NSDate*)dateWithJSONString:(NSString*)dateStr {
     //convert string to date object
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];

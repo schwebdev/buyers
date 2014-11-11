@@ -23,9 +23,6 @@
         <attribute name="colourName" attributeType="String" maxValueString="100" syncable="YES"/>
         <attribute name="colourRef" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
     </entity>
-    <entity name="DeletedProducts" representedClassName="DeletedProducts" syncable="YES">
-        <attribute name="productGUID" optional="YES" attributeType="String" syncable="YES"/>
-    </entity>
     <entity name="Department" representedClassName="Department" syncable="YES">
         <attribute name="depCode" optional="YES" attributeType="Integer 32" defaultValueString="0" syncable="YES"/>
         <attribute name="depDesc" optional="YES" attributeType="String" syncable="YES"/>
@@ -127,6 +124,5 @@
         <element name="ReportOrderVsIntake" positionX="-27" positionY="108" width="128" height="285"/>
         <element name="Supplier" positionX="-18" positionY="135" width="128" height="75"/>
         <element name="SyncStatus" positionX="9" positionY="144" width="128" height="75"/>
-        <element name="DeletedProducts" positionX="-27" positionY="135" width="128" height="58"/>
     </elements>
 </model>
