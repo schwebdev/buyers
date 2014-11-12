@@ -605,7 +605,8 @@ NSDate *globalProductSync;
            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
          //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
         NSError *error;
-        NSArray *products = [Sync getTable:@"Product" sortWith:@"productName" withPredicate:[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName]];
+        NSArray *products = [Sync getTable:@"Product" sortWith:@"productName" withPredicate:[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@  AND productLastUpdatedBy = %@",globalProductSync,creatorName]];
+           
         if([products count] > 0 ) {
            
         //get modified data for upload and remove relationship keys for collections and product ordering
@@ -664,34 +665,29 @@ NSDate *globalProductSync;
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         
         NSLog(@"response: %@", response);
+         
+        NSFetchRequest *productRequest = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName];
+        [productRequest setPredicate:pred];
+        NSArray *updatedProducts = [managedContext executeFetchRequest:productRequest error:&error];
             if([response  statusCode] != 200) {
                 syncSuccess = NO;
             }
-        for (Product *p in products) {
+        for (Product *product in updatedProducts) {
+
             if([response  statusCode] == 200) {
-                if(p.productDeleted == [NSNumber numberWithBool:YES]) {
-                    [managedContext deleteObject:p];
+                if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                    [managedContext deleteObject:product];
                 }
             } else {
-                NSString *note = [NSString stringWithFormat:@"\nProduct updates failed to  sync on last sync on %@. Please resave changes and syn again.",[dateFormat stringFromDate:[NSDate date]]];
-                
-                /*if ([product valueForKey:@"productDeleted"]){
-                    [product setValue:[NSNumber numberWithBool:NO] forKey:@"productDeleted"];
-                    note = [NSString stringWithFormat:@"\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                    //product.productDeleted = [NSNumber numberWithBool:NO];
-                }
-                [product setValue:[[product valueForKey:@"productNotes"] stringByAppendingString:note] forKey:@"productNotes"];
-                [product setValue:[NSDate date] forKey:@"productLastUpdateDate"];
-                [product setValue:@"Sync" forKey:@"productLastUpdatedBy"];*/
-                
-                /*if(product.productDeleted == [NSNumber numberWithBool:YES]) {
-                    product.productDeleted = [NSNumber numberWithBool:NO];
-                    note = [NSString stringWithFormat:@"\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                }*/
-                //product.productNotes = [product.productNotes stringByAppendingString:note];
-                //product.productLastUpdateDate = [NSDate date];
-                //product.productLastUpdatedBy = @"Sync";
-                
+                NSString *note = [NSString stringWithFormat:@"\n\nProduct updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                    if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                        product.productDeleted = [NSNumber numberWithBool:NO];
+                        note = [NSString stringWithFormat:@"\n\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                    }
+                product.productNotes = [product.productNotes stringByAppendingString:note];
+                product.productLastUpdateDate = [NSDate date];
+                product.productLastUpdatedBy = @"Sync";
             }
         }
             
