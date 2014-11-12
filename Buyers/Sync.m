@@ -642,7 +642,7 @@ NSDate *globalProductSync;
 //    return YES;
 //}
 
-+ (BOOL)syncCollectionsData {
++ (BOOL)syncCollectionData {
     //get user's full name from app settings
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *creatorName = [defaults objectForKey:@"username"];
