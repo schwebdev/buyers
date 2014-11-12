@@ -794,10 +794,6 @@ NSDate *globalProductSync;
     return syncSuccess;
 }
 
-+ (BOOL)syncCollectionData {
-    return YES;
-}
-
 + (BOOL)syncReportData {
     NSError *error;
     NSArray *reports = [Sync getTable:@"ReportData" sortWith:@"reportID" withPredicate:[NSPredicate predicateWithFormat:@"(requiresSync == 1)"]];
