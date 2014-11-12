@@ -612,7 +612,7 @@ NSDate *globalProductSync;
     //get user's full name from app settings
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *creatorName = [defaults objectForKey:@"username"];
-
+    BOOL syncSuccess = YES;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
     [dateFormat setDateFormat:@"dd/MM/yyyy HH:mm:ss"];
@@ -690,7 +690,9 @@ NSDate *globalProductSync;
         NSPredicate *pred =[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName];
         [productRequest setPredicate:pred];
         NSArray *updatedProducts = [managedContext executeFetchRequest:productRequest error:&error];
-            
+            if([response  statusCode] != 200) {
+                syncSuccess = NO;
+            }
         for (Product *product in updatedProducts) {
 
             if([response  statusCode] == 200) {
@@ -732,7 +734,9 @@ NSDate *globalProductSync;
        } //sync
     
     
-    return YES;
+    
+    
+    return syncSuccess;
 }
 
 + (BOOL)syncCollectionData {
