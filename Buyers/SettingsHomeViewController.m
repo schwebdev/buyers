@@ -229,6 +229,11 @@
     }
     
     if(success) {
+        success = [Sync syncCollectionsData];
+        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:13/syncCount] waitUntilDone:YES];
+    }
+    
+    if(success) {
         
         [Sync updateSyncStatus:@"global"];
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"" message:@"sync success" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];

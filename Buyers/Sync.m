@@ -606,6 +606,25 @@ NSDate *globalProductSync;
 //    return YES;
 //}
 
++ (BOOL)syncCollectionsData {
+    //get user's full name from app settings
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSString *creatorName = [defaults objectForKey:@"username"];
+    BOOL syncSuccess = YES;
+    
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
+    NSError *error;
+    NSArray *collections = [Sync getTable:@"Collection" sortWith:@"collectionName" withPredicate:[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@  AND collectionLastUpdatedBy = %@",globalProductSync,creatorName]];
+    
+    if([collections count] > 0 ) {
+        
+    }
+    
+    
+    return syncSuccess;
+}
+
 
 + (BOOL)syncProductData {
     
