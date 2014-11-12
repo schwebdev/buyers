@@ -452,9 +452,27 @@ NSDate *globalProductSync;
             collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
         }
     
-        //insert products
-    
+        //  insert products
+        
         //insert product ordering
+    
+    /*for (int p = 0, pc = [products count]; p < pc; p++) {
+        Product *product = [products objectAtIndex:p];
+        
+        //check it doesn't exist in the collection already and is not flagged for deletion
+        if(![collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
+            
+            //add collection
+            [product addCollectionsObject:collection];
+            
+            //add product order
+            //ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
+            //productOrder.productOrder = [NSNumber numberWithInt:number];
+            //productOrder.orderCollection = collection;
+            //productOrder.orderProduct = product;
+        }
+    }*/
+    
 }
 
 +(void)insertProduct:(Product*)product withData:(NSDictionary*)result {
@@ -661,6 +679,8 @@ NSDate *globalProductSync;
         [request setValue:[NSString stringWithFormat:@"%d", [jsonParams length]]  forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:jsonParams];
             
+        NSLog(@"request: %@", productData);
+            
         NSHTTPURLResponse *response;
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         
@@ -712,6 +732,10 @@ NSDate *globalProductSync;
        } //sync
     
     
+    return YES;
+}
+
++ (BOOL)syncCollectionData {
     return YES;
 }
 
