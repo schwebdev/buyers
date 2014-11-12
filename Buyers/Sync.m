@@ -605,7 +605,7 @@ NSDate *globalProductSync;
            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
          //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
         NSError *error;
-        NSArray *products = [Sync getTable:@"Product" sortWith:@"productName" withPredicate:[NSPredicate predicateWithFormat:@"(productLastUpdateDate > %@  OR productDeleted == %@) AND productLastUpdatedBy = %@",globalProductSync,[NSNumber numberWithBool:YES],creatorName]];
+        NSArray *products = [Sync getTable:@"Product" sortWith:@"productName" withPredicate:[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName]];
         if([products count] > 0 ) {
            
         //get modified data for upload and remove relationship keys for collections and product ordering
