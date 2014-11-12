@@ -452,6 +452,7 @@ NSDate *globalProductSync;
     collection.collectionGUID =result[@"Guid"];
     collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     collection.collectionNotes = result[@"Notes"];
+    collection.collectionDeleted = [NSNumber numberWithBool:NO];
     
     NSString *createdBy = result[@"CreatedBy"];
     NSString *lastUpdateBy = result[@"LastUpdateBy"];
