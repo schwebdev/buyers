@@ -609,10 +609,13 @@ NSDate *globalProductSync;
             [product removeObjectForKey:@"productOrder"];
             
             
+            //if product is a schuh product or is flagged for deletion don't send the image data
             NSString *p_iCode = [product valueForKey:@"productCode"];
             NSNumber *p_delete = [product valueForKey:@"productDeleted"];
             
-           // [product removeObjectForKey:@"productImageData"];
+            if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithBool:YES]) {
+                 [product removeObjectForKey:@"productImageData"];
+            }
             for (NSString *key in [product allKeys]) {
                 id object = product[key];
                 if([object isKindOfClass:[NSData class]]) {
@@ -655,7 +658,6 @@ NSDate *globalProductSync;
         NSURLResponse *response;
         NSData *responseData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         if(response) {
-            
         //request deletions and then delete products
         NSFetchRequest *requestDeletions = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productDeleted == %@",[NSNumber numberWithBool:YES]];
@@ -664,7 +666,6 @@ NSDate *globalProductSync;
             for (Product *product in deletedProducts) {
                 [managedContext deleteObject:product];
             }
-        }
             
             
             NSError *saveError;
@@ -685,6 +686,10 @@ NSDate *globalProductSync;
             } else {
                 NSLog(@"product data entry sync");
             }
+        }
+            
+            
+            
             
         } else {
             return NO;

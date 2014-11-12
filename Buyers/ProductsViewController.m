@@ -209,9 +209,10 @@ static const float sProductColumnSpacer = 5.0;
     self.managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     NSError *error;
     NSFetchRequest *pickerRequest = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+    NSPredicate *deletionPred =[NSPredicate predicateWithFormat:@"collectionDeleted == %@", [NSNumber numberWithBool:NO]];
+    [pickerRequest setPredicate:deletionPred];
     NSArray *collections = [self.managedContext executeFetchRequest:pickerRequest error:&error];
-    
-    
+        
     NSString *title2 = _collection.collectionName;
     if(title2.length > 15) {
         NSString *substring = [title2 substringWithRange:NSMakeRange(0,15)];

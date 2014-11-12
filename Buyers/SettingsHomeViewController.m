@@ -240,10 +240,6 @@
     
     [self updateLastSync];
     
-
-    
-   
-    
     [self performSelectorOnMainThread:@selector(endSync) withObject:nil waitUntilDone:YES];
 
 }

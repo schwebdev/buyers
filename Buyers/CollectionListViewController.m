@@ -197,6 +197,10 @@ static const float kPageHeight = 576.0;
         [preds addObject:brandPred];
     }
     
+    NSPredicate *deletionPred =[NSPredicate predicateWithFormat:@"collectionDeleted == %@", [NSNumber numberWithBool:NO]];
+    [preds addObject:deletionPred];
+
+    
     predicate=[NSCompoundPredicate andPredicateWithSubpredicates:preds];
     
     self.fetchedResultsController = nil;
@@ -244,6 +248,7 @@ static const float kPageHeight = 576.0;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Collection" inManagedObjectContext:self.managedContext];
     [request setEntity:entity];
     
+    
     // Set batch size
     [request setFetchBatchSize:6];
     
@@ -254,6 +259,10 @@ static const float kPageHeight = 576.0;
         
         [request setPredicate:predicate];
         
+    } else {
+        NSPredicate *deletionPred =[NSPredicate predicateWithFormat:@"collectionDeleted == %@", [NSNumber numberWithBool:NO]];
+        [request setPredicate:deletionPred];
+
     }
     
     // Edit the section name key path and cache name if appropriate.
@@ -439,13 +448,20 @@ static const float kPageHeight = 576.0;
         
         for (int i = 0, ic = [deletions count]; i < ic; i++) {
             Collection *collection = [deletions objectAtIndex:i];
-            [self.managedContext deleteObject:collection];
+            collection.collectionDeleted = [NSNumber numberWithBool:YES];
+            //get user's full name from app settings
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            NSString *creatorName = [defaults objectForKey:@"username"];
+            collection.collectionLastUpdatedBy = creatorName;
+            collection.collectionLastUpdateDate = [NSDate date];
+            [collection removeProducts:collection.products];
+            [collection removeCollectionProductOrder:collection.collectionProductOrder];
+            if(![self.managedContext save:&error]) {
+                NSLog(@"Could not save deleted collection: %@ error: %@", collection.collectionName,[error localizedDescription]);
+                
+            }
         }
         
-        if(![self.managedContext save:&error]) {
-            NSLog(@"Could not save deleted collections: %@", [error localizedDescription]);
-            
-        }
        
         self.fetchedResultsController = nil;
         self.fetchedResultsController = [self constructsCollections];

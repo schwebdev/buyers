@@ -133,7 +133,6 @@
 		0BC956721990CF3200CD45D5 /* CollectionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC9566B1990CF3200CD45D5 /* CollectionListViewController.m */; };
 		0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956711990CF3200CD45D5 /* SidebarViewController.m */; };
 		0BC956781990F28500CD45D5 /* HomeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0BC956771990F28500CD45D5 /* HomeViewController.m */; };
-		5B072F8D1A0B92B8007E41E1 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B072F8C1A0B92B8007E41E1 /* Collection.m */; };
 		5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */; };
 		5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */; };
 		5B14383519ADE40800A68865 /* CollectionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14383419ADE40800A68865 /* CollectionButton.m */; };
@@ -152,6 +151,7 @@
 		5BB8DC4C1A121739007C4D63 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BB8DC4B1A121739007C4D63 /* Product.m */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
+		5BFAA3B51A13509C00772370 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BFAA3B41A13509C00772370 /* Collection.m */; };
 		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
 		C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */; };
 		C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */; };
@@ -347,8 +347,6 @@
 		0BC956711990CF3200CD45D5 /* SidebarViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SidebarViewController.m; sourceTree = "<group>"; };
 		0BC956761990F28500CD45D5 /* HomeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HomeViewController.h; sourceTree = "<group>"; };
 		0BC956771990F28500CD45D5 /* HomeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HomeViewController.m; sourceTree = "<group>"; };
-		5B072F8B1A0B92B8007E41E1 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
-		5B072F8C1A0B92B8007E41E1 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
 		5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search.png"; path = "../../checkbox-checked-search.png"; sourceTree = "<group>"; };
 		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search@2x.png"; path = "../../checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
 		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionButton.h; sourceTree = "<group>"; };
@@ -380,6 +378,8 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
+		5BFAA3B31A13509C00772370 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Collection.h; sourceTree = "<group>"; };
+		5BFAA3B41A13509C00772370 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Collection.m; sourceTree = "<group>"; };
 		C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRollViewController.h; sourceTree = "<group>"; };
 		C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraRollViewController.m; sourceTree = "<group>"; };
 		C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -775,10 +775,10 @@
 		5B43EDF31A00D88A00730158 /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				5BFAA3B31A13509C00772370 /* Collection.h */,
+				5BFAA3B41A13509C00772370 /* Collection.m */,
 				5BB8DC4A1A121739007C4D63 /* Product.h */,
 				5BB8DC4B1A121739007C4D63 /* Product.m */,
-				5B072F8B1A0B92B8007E41E1 /* Collection.h */,
-				5B072F8C1A0B92B8007E41E1 /* Collection.m */,
 				5B43EE0D1A01074B00730158 /* ReportData.h */,
 				5B43EE0E1A01074B00730158 /* ReportFilterSet.h */,
 				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
@@ -1025,7 +1025,7 @@
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
 				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
-				5B072F8D1A0B92B8007E41E1 /* Collection.m in Sources */,
+				5BFAA3B51A13509C00772370 /* Collection.m in Sources */,
 				5BB8DC4C1A121739007C4D63 /* Product.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
