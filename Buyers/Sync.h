@@ -11,7 +11,7 @@
 @interface Sync : NSObject
 
 + (BOOL)syncTable:(NSString *)type;
-+ (BOOL)syncCollectionsData;
++ (BOOL)syncCollectionData;
 + (BOOL)syncProductData;
 + (BOOL)syncReportData;
 + (BOOL)syncFilterReports;
