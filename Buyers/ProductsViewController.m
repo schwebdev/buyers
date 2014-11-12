@@ -629,7 +629,7 @@ static const float sProductColumnSpacer = 5.0;
                     collection.collectionLastUpdatedBy = creatorName;
                     collection.collectionLastUpdateDate = [NSDate date];
                         
-                    //add unique identifier for custom product syncing
+                    //add unique identifier for syncing
                     NSString *UUID = [[NSUUID UUID] UUIDString];
                     collection.collectionGUID = UUID;
 
