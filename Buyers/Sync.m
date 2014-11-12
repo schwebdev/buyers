@@ -662,6 +662,7 @@ NSDate *globalProductSync;
             
         NSHTTPURLResponse *response;
         [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        
         NSLog(@"response: %@", response);
             if([response  statusCode] != 200) {
                 syncSuccess = NO;
