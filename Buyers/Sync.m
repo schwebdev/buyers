@@ -655,7 +655,24 @@ NSDate *globalProductSync;
     
     if([collections count] > 0 ) {
         for (NSMutableDictionary *collection in collections) {
+            
+            //NSMutableArray *products = [[NSMutableArray alloc] init];
+            NSMutableDictionary *main_dictionary = [NSMutableDictionary dictionary];
+            NSMutableDictionary *item_dictionary = [NSMutableDictionary dictionary];
+            [item_dictionary setObject:@"ABCDEFGHI" forKey:@"GUID"];
+            [item_dictionary setObject:@"1" forKey:@"productOrder"];
+            [main_dictionary setObject:item_dictionary forKey:@"product1"];
+            
+            [item_dictionary setObject:@"JKLMNOPQR" forKey:@"GUID"];
+            [item_dictionary setObject:@"2" forKey:@"productOrder"];
+            [main_dictionary setObject:item_dictionary forKey:@"product2"];
+            
+            
             [collection removeObjectForKey:@"IDURI"];
+            [collection removeObjectForKey:@"products"];
+            [collection removeObjectForKey:@"collectionProductOrder"];
+            
+            [collection setObject:main_dictionary forKey:@"products"];
             
             for (NSString *key in [collection allKeys]) {
                 id object = collection[key];
@@ -1061,6 +1078,7 @@ NSDate *globalProductSync;
     NSMutableArray *resultsArray = [NSMutableArray array];
     
     for (NSObject *row in results) {
+        
         
         [resultsArray addObject:[self dictionaryWithPropertiesOfObject:row]];
     }

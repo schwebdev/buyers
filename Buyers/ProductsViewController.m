@@ -672,13 +672,8 @@ static const float sProductColumnSpacer = 5.0;
                     Product *product = [selectedProducts objectAtIndex:p];
                     
                     //check it doesn't exist in the collection already and is not flagged for deletion
-                    if(![_collection.products containsObject:product]){
-        
-                        /*if(product.productDeleted == [NSNumber numberWithInt:0]){
-                            NSString *bah;
-                            bah=@"dd";
-                        }*/
-                        
+                    if(![_collection.products containsObject:product] && !product.productDeleted.boolValue){
+
                         //add collection
                         [product addCollectionsObject:_collection];
          
