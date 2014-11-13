@@ -692,8 +692,9 @@ NSDate *globalProductSync;
             NSString *p_iCode = [product valueForKey:@"productCode"];
             NSNumber *p_delete = [product valueForKey:@"productDeleted"];
             
-            if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithBool:YES]) {
+            if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithInt:1]) {
                  [product removeObjectForKey:@"productImageData"];
+                NSLog(@"removed image data");
             }
             for (NSString *key in [product allKeys]) {
                 id object = product[key];
