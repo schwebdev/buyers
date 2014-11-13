@@ -606,7 +606,7 @@ NSDate *globalProductSync;
 //    return YES;
 //}
 
-+ (BOOL)syncCollectionsData {
++ (BOOL)syncCollectionData {
     //get user's full name from app settings
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSString *creatorName = [defaults objectForKey:@"username"];
@@ -615,10 +615,37 @@ NSDate *globalProductSync;
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
     NSError *error;
-    NSArray *collections = [Sync getTable:@"Collection" sortWith:@"collectionName" withPredicate:[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@  AND collectionLastUpdatedBy = %@",globalProductSync,creatorName]];
+    NSArray *collections = [Sync getNestedTable:@"Collection" sortWith:@"collectionName" withPredicate:[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@  AND collectionLastUpdatedBy = %@",globalProductSync,creatorName]];
     
     if([collections count] > 0 ) {
+        for (NSMutableDictionary *collection in collections) {
+            [collection removeObjectForKey:@"IDURI"];
+            
+            for (NSString *key in [collection allKeys]) {
+                id object = collection[key];
+              
+                if([object isKindOfClass:[NSDate class]]) {
+                    
+                    NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
+                    dateFormat.dateFormat = @"yyyy-MM-dd HH:mm:ss";
+                    
+                    collection[key] = [dateFormat stringFromDate:(NSDate*)collection[key]];
+                }
+                
+                if([object isKindOfClass:[NSSet class]]) {
+                    
+                    NSLog(@"NSSET:  %@",object);
+                }
+
+            }
+        }
         
+        NSData *jsonCollectionData = [NSJSONSerialization dataWithJSONObject:collections options:kNilOptions error:&error];
+        NSString *collectionData = [[NSString alloc] initWithData:jsonCollectionData encoding:NSUTF8StringEncoding];
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/postItem"]];
+        NSMutableDictionary *params = [NSMutableDictionary dictionary];
+        [params setObject:collectionData forKey:@"JsonData"];
     }
     
     
@@ -758,9 +785,6 @@ NSDate *globalProductSync;
     return syncSuccess;
 }
 
-+ (BOOL)syncCollectionData {
-    return YES;
-}
 
 + (BOOL)syncReportData {
     NSError *error;
@@ -954,6 +978,33 @@ NSDate *globalProductSync;
 }
 
 + (NSArray *)getTable:(NSString*)entityName sortWith:(NSString*)column withPredicate:(NSPredicate *)predicate {
+    //fetch request to retrieve all collections
+    NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:entityName];
+    if(predicate != nil) {
+        [request setPredicate:predicate];
+    }
+    
+    NSError *error;
+    NSArray *results = [managedContext executeFetchRequest:request error:&error];
+    
+    //NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"collectionID" ascending:YES];
+    NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:column ascending:YES];
+    NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:alphaSort,nil];
+    results = [results sortedArrayUsingDescriptors:sortDescriptors];
+    
+    NSMutableArray *resultsArray = [NSMutableArray array];
+    
+    for (NSObject *row in results) {
+        
+        [resultsArray addObject:[self dictionaryWithPropertiesOfObject:row]];
+    }
+    
+    return [NSArray arrayWithArray:resultsArray];
+}
+
++ (NSArray *)getNestedTable:(NSString*)entityName sortWith:(NSString*)column withPredicate:(NSPredicate *)predicate {
     //fetch request to retrieve all collections
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     

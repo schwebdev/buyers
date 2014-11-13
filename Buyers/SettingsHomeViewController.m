@@ -229,7 +229,7 @@
     }
     
     if(success) {
-        success = [Sync syncCollectionsData];
+        success = [Sync syncCollectionData];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:13/syncCount] waitUntilDone:YES];
     }
     

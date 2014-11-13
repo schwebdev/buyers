@@ -594,7 +594,7 @@ static const float sProductColumnSpacer = 5.0;
 }
 -(IBAction)saveProducts:(id)sender{
     
-    BOOL isNewCollection = NO;
+    bool isNewCollection = NO;
     
     if([selectedProducts count] > 0) {
     
@@ -670,10 +670,15 @@ static const float sProductColumnSpacer = 5.0;
                 
                 for (int p = 0, pc = [selectedProducts count]; p < pc; p++) {
                     Product *product = [selectedProducts objectAtIndex:p];
-        
+                    
                     //check it doesn't exist in the collection already and is not flagged for deletion
-                    if(![_collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
+                    if(![_collection.products containsObject:product]){
         
+                        /*if(product.productDeleted == [NSNumber numberWithInt:0]){
+                            NSString *bah;
+                            bah=@"dd";
+                        }*/
+                        
                         //add collection
                         [product addCollectionsObject:_collection];
          
