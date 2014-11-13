@@ -245,7 +245,6 @@ NSDate *globalProductSync;
                 if(lastProductSync == nil) {
                     //insert all product data
                     Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
-                     
                     [Sync insertProduct:product withData:result];
                 } else {
                     //check for deletion and delete first
@@ -330,13 +329,12 @@ NSDate *globalProductSync;
                 
             }
             
-           /* if([type isEqualToString:@"Collection"]) {
+           if([type isEqualToString:@"Collection"]) {
                 NSDate *lastSync = [Sync getLastSyncForTable:@"Collection"];
                 if(lastSync == nil) {
                     //insert all collection data
                     Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
-                    
-                    [Sync insertCollection:collection withData:result];
+                    [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
                 } else {
                     //check for deletion and delete first
                     //get the object from currentResults using predicate with guid
@@ -348,15 +346,14 @@ NSDate *globalProductSync;
                         if([deleteCollection isEqual:@"true"]) {
                             
                             //delete from any product orders
+                            [collection removeProducts:collection.products];
+                            [collection removeCollectionProductOrder:collection.collectionProductOrder];
                             
                             //delete the collection
                             [backgroundContext deleteObject:collection];
                             
-                            
                         } else {
                             //update fields
-                            collection.collectionName = result[@"collectionName"];
-                            collection.collectionBrandRef = result[@"brandRef"];
                             collection.collectionNotes = result[@"Notes"];
                             
                             NSString *lastUpdateBy = result[@"LastUpdateBy"];;
@@ -372,21 +369,50 @@ NSDate *globalProductSync;
                             } else {
                                 collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
                             }
+                            //delete product and ordering in case they have changed
+                            [collection removeProducts:collection.products];
+                            [collection removeCollectionProductOrder:collection.collectionProductOrder];
                             
-                            //update products
-                            
-                            //update product ordering
+                            //insert products with order number to create Product Ordering part
+                            NSError *error;
+                            NSArray *products = [NSJSONSerialization JSONObjectWithData:result[@"products"] options:kNilOptions error:&error];
+                            if(products != nil) {
+                                
+                                for (NSDictionary *po in products) {
+                                    
+                                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"Guid"]];
+                                    NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                                    if([findObject count] > 0) {
+                                        Product *product = (Product*)[findObject objectAtIndex:0];
+                                        
+                                        //check it doesn't exist in the collection already and is not flagged for deletion
+                                        if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
+                                            
+                                            //add collection
+                                            [product addCollectionsObject:collection];
+                                            
+                                            //add product order
+                                            ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
+                                            int number = (int)po[@"orderNumber"];
+                                            productOrder.productOrder = [NSNumber numberWithInt:number];
+                                            productOrder.orderCollection = collection;
+                                            productOrder.orderProduct = product;
+                                        }
+                                    }
+                                }
+                            }
                             
                             
                         }
                     } else {
-                        //insert the collection
+                        //insert the collection data
                         Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
-                        [Sync insertCollection:collection withData:result];
+                        [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
+
                     }
                     
                 }
-            }*/
+            }
            
             
         }
@@ -420,59 +446,68 @@ NSDate *globalProductSync;
     
 }
      
-+(void)insertCollection:(Collection*)collection withData:(NSDictionary*)result {
-        collection.collectionName = result[@"collectionName"];
-        collection.collectionGUID =result[@"Guid"];
-        collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
-        collection.collectionNotes = result[@"Notes"];
++(void)insertCollection:(Collection*)collection withData:(NSDictionary*)result withContext:(NSManagedObjectContext*)context withResults:(NSArray*)currentResults {
+   
+    collection.collectionName = result[@"collectionName"];
+    collection.collectionGUID =result[@"Guid"];
+    collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
+    collection.collectionNotes = result[@"Notes"];
+    collection.collectionDeleted = [NSNumber numberWithBool:NO];
     
-        NSString *createdBy = result[@"CreatedBy"];
-        NSString *lastUpdateBy = result[@"LastUpdateBy"];
-        NSString *createdDate = result[@"CreatedDate"];
-        NSString *lastUpdated = result[@"LastUpdated"];
+    NSString *createdBy = result[@"CreatedBy"];
+    NSString *lastUpdateBy = result[@"LastUpdateBy"];
+    NSString *createdDate = result[@"CreatedDate"];
+    NSString *lastUpdated = result[@"LastUpdated"];
     
-        if([createdBy  isEqual: @""]) {
-            collection.collectionCreator = @"SHARK";
-        } else {
-            collection.collectionCreator = result[@"CreatedBy"];
-        }
-        if([lastUpdateBy  isEqual: @""]) {
-            collection.collectionLastUpdatedBy = @"SHARK";
-        } else {
-            collection.collectionLastUpdatedBy = result[@"LastUpdateBy"];
-        }
-        if([createdDate  isEqual:@""]) {
-            collection.collectionCreationDate = [NSDate date];
-        } else {
-            collection.collectionCreationDate = [Sync dateWithJSONString:createdDate];
-        }
-        if([lastUpdated  isEqual: @""]) {
-            collection.collectionLastUpdateDate = [NSDate date];
-        } else {
-            collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
-        }
+    if([createdBy  isEqual: @""]) {
+        collection.collectionCreator = @"SHARK";
+    } else {
+        collection.collectionCreator = result[@"CreatedBy"];
+    }
+    if([lastUpdateBy  isEqual: @""]) {
+        collection.collectionLastUpdatedBy = @"SHARK";
+    } else {
+        collection.collectionLastUpdatedBy = result[@"LastUpdateBy"];
+    }
+    if([createdDate  isEqual:@""]) {
+        collection.collectionCreationDate = [NSDate date];
+    } else {
+        collection.collectionCreationDate = [Sync dateWithJSONString:createdDate];
+    }
+    if([lastUpdated  isEqual: @""]) {
+        collection.collectionLastUpdateDate = [NSDate date];
+    } else {
+        collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
+    }
     
-        //  insert products
+    //  insert products with order number to create Product Ordering part
+    NSError *error;
+    NSArray *products = [NSJSONSerialization JSONObjectWithData:result[@"products"] options:kNilOptions error:&error];
+    if(products != nil) {
         
-        //insert product ordering
-    
-    /*for (int p = 0, pc = [products count]; p < pc; p++) {
-        Product *product = [products objectAtIndex:p];
-        
-        //check it doesn't exist in the collection already and is not flagged for deletion
-        if(![collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
+        for (NSDictionary *po in products) {
             
-            //add collection
-            [product addCollectionsObject:collection];
-            
-            //add product order
-            //ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
-            //productOrder.productOrder = [NSNumber numberWithInt:number];
-            //productOrder.orderCollection = collection;
-            //productOrder.orderProduct = product;
+            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"Guid"]];
+            NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+            if([findObject count] > 0) {
+                Product *product = (Product*)[findObject objectAtIndex:0];
+                
+                //check it doesn't exist in the collection already and is not flagged for deletion
+                if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
+                    
+                    //add collection
+                    [product addCollectionsObject:collection];
+                    
+                    //add product order
+                    ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
+                    int number = (int)po[@"orderNumber"];
+                    productOrder.productOrder = [NSNumber numberWithInt:number];
+                    productOrder.orderCollection = collection;
+                    productOrder.orderProduct = product;
+                }
+            }
         }
-    }*/
-    
+    }
 }
 
 +(void)insertProduct:(Product*)product withData:(NSDictionary*)result {
@@ -486,6 +521,7 @@ NSDate *globalProductSync;
     product.productMaterialRef = [NSNumber numberWithInt:[result[@"m_ref"] intValue]];
     product.productNotes = result[@"Notes"];
     product.productGUID =result[@"Guid"];
+    product.productDeleted = [NSNumber numberWithBool:NO];
     NSString *createdBy = result[@"CreatedBy"];
     NSString *lastUpdateBy = result[@"LastUpdateBy"];
     NSString *createdDate = result[@"CreatedDate"];
@@ -683,15 +719,16 @@ NSDate *globalProductSync;
             NSString *p_iCode = [product valueForKey:@"productCode"];
             NSNumber *p_delete = [product valueForKey:@"productDeleted"];
             
-            if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithBool:YES]) {
-                 [product removeObjectForKey:@"productImageData"];
-            }
             for (NSString *key in [product allKeys]) {
                 id object = product[key];
                 if([object isKindOfClass:[NSData class]]) {
                     
-                    NSString *imageString = [product[key] base64EncodedStringWithOptions:0];
-                    product[key] = imageString;
+                    if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithInt:1]) {
+                         product[key] = @"";
+                    } else {
+                        NSString *imageString = [product[key] base64EncodedStringWithOptions:0];
+                        product[key] = imageString;
+                    }
                  }
                
                 if([object isKindOfClass:[NSDate class]]) {
@@ -742,12 +779,12 @@ NSDate *globalProductSync;
         for (Product *product in updatedProducts) {
 
             if([response  statusCode] == 200) {
-                if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                if(product.productDeleted.boolValue) {
                     [managedContext deleteObject:product];
                 }
             } else {
                 NSString *note = [NSString stringWithFormat:@"\n\nProduct updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                    if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                    if(product.productDeleted.boolValue) {
                         product.productDeleted = [NSNumber numberWithBool:NO];
                         note = [NSString stringWithFormat:@"\n\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
                     }
