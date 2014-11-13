@@ -692,16 +692,16 @@ NSDate *globalProductSync;
             NSString *p_iCode = [product valueForKey:@"productCode"];
             NSNumber *p_delete = [product valueForKey:@"productDeleted"];
             
-            if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithInt:1]) {
-                 [product removeObjectForKey:@"productImageData"];
-                NSLog(@"removed image data");
-            }
             for (NSString *key in [product allKeys]) {
                 id object = product[key];
                 if([object isKindOfClass:[NSData class]]) {
                     
-                    NSString *imageString = [product[key] base64EncodedStringWithOptions:0];
-                    product[key] = imageString;
+                    if(![p_iCode isEqual:@"0000000000"] || p_delete == [NSNumber numberWithInt:1]) {
+                         product[key] = @"";
+                    } else {
+                        NSString *imageString = [product[key] base64EncodedStringWithOptions:0];
+                        product[key] = imageString;
+                    }
                  }
                
                 if([object isKindOfClass:[NSDate class]]) {
