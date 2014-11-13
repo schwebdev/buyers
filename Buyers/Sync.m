@@ -386,7 +386,7 @@ NSDate *globalProductSync;
                                         Product *product = (Product*)[findObject objectAtIndex:0];
                                         
                                         //check it doesn't exist in the collection already and is not flagged for deletion
-                                        if(![collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
+                                        if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
                                             
                                             //add collection
                                             [product addCollectionsObject:collection];
@@ -493,7 +493,7 @@ NSDate *globalProductSync;
                 Product *product = (Product*)[findObject objectAtIndex:0];
                 
                 //check it doesn't exist in the collection already and is not flagged for deletion
-                if(![collection.products containsObject:product] && product.productDeleted == [NSNumber numberWithBool:NO]){
+                if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
                     
                     //add collection
                     [product addCollectionsObject:collection];
@@ -751,12 +751,12 @@ NSDate *globalProductSync;
         for (Product *product in updatedProducts) {
 
             if([response  statusCode] == 200) {
-                if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                if(product.productDeleted.boolValue) {
                     [managedContext deleteObject:product];
                 }
             } else {
                 NSString *note = [NSString stringWithFormat:@"\n\nProduct updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                    if(product.productDeleted == [NSNumber numberWithBool:YES]) {
+                    if(product.productDeleted.boolValue) {
                         product.productDeleted = [NSNumber numberWithBool:NO];
                         note = [NSString stringWithFormat:@"\n\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
                     }
