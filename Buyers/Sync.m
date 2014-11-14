@@ -32,6 +32,7 @@
 
 @implementation Sync
 NSDate *globalProductSync;
+NSDate *globalCollectionSync;
 
 + (NSDate *)getLastSyncDate {
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -143,8 +144,10 @@ NSDate *globalProductSync;
    
         }
     }
-    /*if([type isEqualToString:@"Collection"]) {
+    if([type isEqualToString:@"Collection"]) {
         NSDate *lastCollectionSync = [Sync getLastSyncForTable:@"Collection"];
+        globalCollectionSync = lastCollectionSync;
+
         if(lastCollectionSync == nil) {
             url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/-1"];
         } else {
@@ -154,7 +157,7 @@ NSDate *globalProductSync;
             url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getCollection/%@",formatDate]];
             
         }
-    }*/
+    }
     
     NSData *data=[NSURLConnection sendSynchronousRequest:[[NSURLRequest alloc] initWithURL:url] returningResponse:nil error:&error];
     
@@ -174,7 +177,7 @@ NSDate *globalProductSync;
     NSArray *currentResults = [managedContext executeFetchRequest:request error:&error];
     
     //only remove support table data for support table items - not products or collections
-    if(![type isEqualToString:@"Product"]) { //&& ![type isEqualToString:@"Collection"]) {
+    if(![type isEqualToString:@"Product"] && ![type isEqualToString:@"Collection"]) {
         for (NSManagedObject *currentResult in currentResults) {
             [managedContext deleteObject:currentResult];
         }
@@ -331,8 +334,9 @@ NSDate *globalProductSync;
             }
             
            if([type isEqualToString:@"Collection"]) {
-                NSDate *lastSync = [Sync getLastSyncForTable:@"Collection"];
-                if(lastSync == nil) {
+                NSDate *lastCollectionSync = [Sync getLastSyncForTable:@"Collection"];
+               globalCollectionSync = lastCollectionSync;
+                if(lastCollectionSync == nil) {
                     //insert all collection data
                     Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
                     [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
@@ -648,10 +652,18 @@ NSDate *globalProductSync;
     NSString *creatorName = [defaults objectForKey:@"username"];
     BOOL syncSuccess = YES;
     
+    NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
+    [dateFormat setDateFormat:@"dd/MM/yyyy HH:mm:ss"];
+    NSString *formatDate = [dateFormat stringFromDate:globalCollectionSync];
+    NSLog(@"global collection sync: %@", formatDate);
+    
+    if(globalCollectionSync != nil) {
+
+    
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
     //get modified data for upload which include products that have been flagged for deletion and products that have been updated since last sync date
     NSError *error;
-    NSArray *collections = [Sync getNestedTable:@"Collection" sortWith:@"collectionName" withPredicate:[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@  AND collectionLastUpdatedBy = %@",globalProductSync,creatorName]];
+    NSArray *collections = [Sync getTable:@"Collection" sortWith:@"collectionName" withPredicate:[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@  AND collectionLastUpdatedBy = %@",globalCollectionSync,creatorName]];
     
     if([collections count] > 0 ) {
         for (NSMutableDictionary *collection in collections) {
@@ -707,7 +719,71 @@ NSDate *globalProductSync;
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/postCollection"]];
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:collectionData forKey:@"JsonData"];
-    }
+        NSData *jsonParams = [NSJSONSerialization dataWithJSONObject:params options:kNilOptions error:&error];
+        
+        [request setHTTPMethod:@"POST"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+        [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+        [request setValue:@"json" forHTTPHeaderField:@"Data-Type"];
+        [request setValue:[NSString stringWithFormat:@"%d", [jsonParams length]]  forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:jsonParams];
+        
+        //NSLog(@"request: %@", collectionData);
+        
+        NSHTTPURLResponse *response;
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+        
+        NSString *returnString=[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+        
+        NSLog(@"response: %@", returnString);
+        
+        NSFetchRequest *collectionRequest = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+        NSPredicate *pred =[NSPredicate predicateWithFormat:@"collectionLastUpdateDate > %@ AND collectionLastUpdatedBy = %@",globalCollectionSync,creatorName];
+        [collectionRequest setPredicate:pred];
+        NSArray *updatedCollections = [managedContext executeFetchRequest:collectionRequest error:&error];
+        if([response  statusCode] != 200) {
+            syncSuccess = NO;
+        }
+        for (Collection *collection in updatedCollections) {
+            
+            if([response  statusCode] == 200) {
+                if(collection.collectionDeleted.boolValue) {
+                    [managedContext deleteObject:collection];
+                }
+            } else {
+                NSString *note = [NSString stringWithFormat:@"\n\nCollection updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                if(collection.collectionDeleted.boolValue) {
+                    collection.collectionDeleted = [NSNumber numberWithBool:NO];
+                    note = [NSString stringWithFormat:@"\n\nCollection failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                }
+                collection.collectionNotes = [collection.collectionNotes stringByAppendingString:note];
+                collection.collectionLastUpdateDate = [NSDate date];
+                collection.collectionLastUpdatedBy = @"Sync";
+            }
+        }
+        
+        NSError *saveError;
+        if(![managedContext save:&saveError]) {
+            NSLog(@"Could not sync collection data");
+            
+            NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+            if(detailedErrors != nil && [detailedErrors count] > 0) {
+                for(NSError* detailedError in detailedErrors) {
+                    NSLog(@" detailed error:%@", [detailedError userInfo]);
+                    NSLog(@" detailed error:%ld", (long)[detailedError code]);
+                }
+            } else {
+                NSLog(@" detailed error:%@", [saveError userInfo]);
+            }
+            
+            return NO;
+        } else {
+            NSLog(@"collection data entry sync");
+        }
+        
+    } //collection count
+    } //sync
+
     
     
     return syncSuccess;
@@ -724,7 +800,7 @@ NSDate *globalProductSync;
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
     [dateFormat setDateFormat:@"dd/MM/yyyy HH:mm:ss"];
     NSString *formatDate = [dateFormat stringFromDate:globalProductSync];
-    NSLog(@"global product sync: %@", formatDate);
+    //NSLog(@"global product sync: %@", formatDate);
     
        if(globalProductSync != nil) {
            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
