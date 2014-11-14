@@ -221,20 +221,15 @@
 }
 - (NSMutableArray *)constructsProducts {
     
-    
     NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
     //NSSortDescriptor *alphaSort = [[NSSortDescriptor alloc] initWithKey:@"productName" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
-    NSArray *products = [self.collection.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
-    
-   // NSLog(@"products: %d", [products count]);
+    NSArray *products = [self.collection.products sortedArrayUsingDescriptors:sortDescriptors];
     
     NSMutableArray *newProducts = [[NSMutableArray alloc] initWithCapacity:[products count]];
     
-    for (int i = 0, ic = [products count]; i < ic; i++) {
-        ProductOrder *productOrder = [products objectAtIndex:i];
-        Product *productElement = productOrder.orderProduct;
-        [newProducts addObject:productElement];
+    for (ProductOrder *productOrder in products) {
+        [newProducts addObject:productOrder.orderProduct];
     }
     
     if([products count] == 0){
@@ -353,7 +348,7 @@
         
         //remove set of products and ordering from collection - had to do this as object is not removed from relationship by calling the accessor methods above
         [_collection removeProducts:_collection.products];
-        [_collection removeCollectionProductOrder:_collection.collectionProductOrder];
+        //[_collection removeCollectionProductOrder:_collection.collectionProductOrder];
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         NSString *creatorName = [defaults objectForKey:@"username"];
         _collection.collectionLastUpdateDate = [NSDate date];
@@ -371,7 +366,7 @@
             //NSLog(@"product: %@", product.productName);
             
             //add  product back into collection
-            [product addCollectionsObject:_collection];
+            //[product addCollectionsObject:_collection];
             
             //add product order
             ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:managedContext];
@@ -489,7 +484,7 @@
      NSError *error;
     
      //remove set of product ordering from collection
-     [_collection removeCollectionProductOrder:_collection.collectionProductOrder];
+     [_collection removeProducts:_collection.products];
      if(![managedContext save:&error]) {
          NSLog(@"Error removing product ordering from collection: %@",[error localizedDescription]);
          

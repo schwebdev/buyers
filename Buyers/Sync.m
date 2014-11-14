@@ -253,6 +253,7 @@ NSDate *globalProductSync;
                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
                     if([findObject count] > 0) {
                         Product *product = (Product*)[findObject objectAtIndex:0];
+                        ProductOrder *po = (ProductOrder*)[findObject objectAtIndex:0];
                         NSString *deleteProduct = result[@"Deleted"];
                         if([deleteProduct isEqual:@"true"]) {
                             
@@ -265,7 +266,7 @@ NSDate *globalProductSync;
                                 NSArray *foundCollections = [collections filteredArrayUsingPredicate:predicate2];
                                 
                                  for (Collection *collection in foundCollections) {
-                                     [collection removeProductsObject:product];
+                                     [collection removeProductsObject:po];
                                      collection.collectionLastUpdateDate = [NSDate date];
                                      collection.collectionLastUpdatedBy = @"SHARK";
                                  }
@@ -345,9 +346,9 @@ NSDate *globalProductSync;
                         NSString *deleteCollection = result[@"Deleted"];
                         if([deleteCollection isEqual:@"true"]) {
                             
-                            //delete from any product orders
+                            //delete products
                             [collection removeProducts:collection.products];
-                            [collection removeCollectionProductOrder:collection.collectionProductOrder];
+                            //[collection removeCollectionProductOrder:collection.collectionProductOrder];
                             
                             //delete the collection
                             [backgroundContext deleteObject:collection];
@@ -371,7 +372,6 @@ NSDate *globalProductSync;
                             }
                             //delete product and ordering in case they have changed
                             [collection removeProducts:collection.products];
-                            [collection removeCollectionProductOrder:collection.collectionProductOrder];
                             
                             //insert products with order number to create Product Ordering part
                             NSError *error;
@@ -380,7 +380,7 @@ NSDate *globalProductSync;
                                 
                                 for (NSDictionary *po in products) {
                                     
-                                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"Guid"]];
+                                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"productGUID"]];
                                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
                                     if([findObject count] > 0) {
                                         Product *product = (Product*)[findObject objectAtIndex:0];
@@ -389,11 +389,11 @@ NSDate *globalProductSync;
                                         if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
                                             
                                             //add collection
-                                            [product addCollectionsObject:collection];
+                                            //[product addCollectionsObject:collection];
                                             
                                             //add product order
                                             ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
-                                            int number = (int)po[@"orderNumber"];
+                                            int number = (int)po[@"productOrder"];
                                             productOrder.productOrder = [NSNumber numberWithInt:number];
                                             productOrder.orderCollection = collection;
                                             productOrder.orderProduct = product;
@@ -487,7 +487,7 @@ NSDate *globalProductSync;
         
         for (NSDictionary *po in products) {
             
-            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"Guid"]];
+            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"productGUID"]];
             NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
             if([findObject count] > 0) {
                 Product *product = (Product*)[findObject objectAtIndex:0];
@@ -496,11 +496,11 @@ NSDate *globalProductSync;
                 if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
                     
                     //add collection
-                    [product addCollectionsObject:collection];
+                    //[product addCollectionsObject:collection];
                     
                     //add product order
                     ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
-                    int number = (int)po[@"orderNumber"];
+                    int number = (int)po[@"productOrder"];
                     productOrder.productOrder = [NSNumber numberWithInt:number];
                     productOrder.orderCollection = collection;
                     productOrder.orderProduct = product;
@@ -655,24 +655,35 @@ NSDate *globalProductSync;
     
     if([collections count] > 0 ) {
         for (NSMutableDictionary *collection in collections) {
-            
-            //NSMutableArray *products = [[NSMutableArray alloc] init];
-            NSMutableDictionary *main_dictionary = [NSMutableDictionary dictionary];
-            NSMutableDictionary *item_dictionary = [NSMutableDictionary dictionary];
-            [item_dictionary setObject:@"ABCDEFGHI" forKey:@"GUID"];
-            [item_dictionary setObject:@"1" forKey:@"productOrder"];
-            [main_dictionary setObject:item_dictionary forKey:@"product1"];
-            
-            [item_dictionary setObject:@"JKLMNOPQR" forKey:@"GUID"];
-            [item_dictionary setObject:@"2" forKey:@"productOrder"];
-            [main_dictionary setObject:item_dictionary forKey:@"product2"];
-            
-            
+
             [collection removeObjectForKey:@"IDURI"];
-            [collection removeObjectForKey:@"products"];
-            [collection removeObjectForKey:@"collectionProductOrder"];
+            [collection removeObjectForKey:@"products"];//remove this as it's an array of pointers to productOrder objects - create our own key for products
             
-            [collection setObject:main_dictionary forKey:@"products"];
+            //get the object from currentResults using predicate with guid
+            NSString *c_GUID = [collection valueForKey:@"collectionGUID"];
+            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"collectionGUID == %@",c_GUID];
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
+            [request setPredicate:predicate];
+            NSArray *findObject = [managedContext executeFetchRequest:request error:&error];
+            
+            NSMutableArray *productsArray = [[NSMutableArray alloc] init];
+            
+            if([findObject count] > 0) {
+                Collection *col = (Collection*)[findObject objectAtIndex:0];
+                NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
+                NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
+                NSArray *products = [col.products sortedArrayUsingDescriptors:sortDescriptors];
+               
+                for (ProductOrder *pOrder in products) {
+                    NSDictionary *dict = @{@"productGUID" : pOrder.orderProduct.productGUID,
+                                           @"productOrder": pOrder.productOrder};
+                    
+                    [productsArray addObject: dict];
+                    
+                }
+            }
+            
+            [collection setObject:productsArray forKey:@"products"];
             
             for (NSString *key in [collection allKeys]) {
                 id object = collection[key];
@@ -684,11 +695,6 @@ NSDate *globalProductSync;
                     
                     collection[key] = [dateFormat stringFromDate:(NSDate*)collection[key]];
                 }
-                
-                if([object isKindOfClass:[NSSet class]]) {
-                    
-                    NSLog(@"NSSET:  %@",object);
-                }
 
             }
         }
@@ -696,7 +702,9 @@ NSDate *globalProductSync;
         NSData *jsonCollectionData = [NSJSONSerialization dataWithJSONObject:collections options:kNilOptions error:&error];
         NSString *collectionData = [[NSString alloc] initWithData:jsonCollectionData encoding:NSUTF8StringEncoding];
         
-        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/postItem"]];
+        //NSLog(@"JSON for Collection: %@",collectionData);
+        
+        NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/postCollection"]];
         NSMutableDictionary *params = [NSMutableDictionary dictionary];
         [params setObject:collectionData forKey:@"JsonData"];
     }
@@ -726,10 +734,9 @@ NSDate *globalProductSync;
            
         if([products count] > 0 ) {
            
-        //get modified data for upload and remove relationship keys for collections and product ordering
+        //get modified data for upload and remove relationship keys for associated collections/product ordering
         for (NSMutableDictionary *product in products) {
             [product removeObjectForKey:@"IDURI"];
-            [product removeObjectForKey:@"collections"];
             [product removeObjectForKey:@"productOrder"];
             
             //if product is a schuh product or is flagged for deletion don't send the image data
@@ -779,12 +786,15 @@ NSDate *globalProductSync;
         [request setValue:[NSString stringWithFormat:@"%d", [jsonParams length]]  forHTTPHeaderField:@"Content-Length"];
         [request setHTTPBody:jsonParams];
             
-        NSLog(@"request: %@", productData);
+        //NSLog(@"request: %@", productData);
             
         NSHTTPURLResponse *response;
-        [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
-        
-        NSLog(@"response: %@", response);
+        //NSURLResponse * repsonse;
+        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+            
+        NSString *returnString=[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            
+        NSLog(@"response: %@", returnString);
          
         NSFetchRequest *productRequest = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
         NSPredicate *pred =[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName];

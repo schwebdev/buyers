@@ -47,7 +47,7 @@
     
     NSSortDescriptor *numericSort = [[NSSortDescriptor alloc] initWithKey:@"productOrder" ascending:YES];
     NSArray *sortDescriptors = [[NSArray alloc] initWithObjects:numericSort,nil];
-    products = [_collection.collectionProductOrder sortedArrayUsingDescriptors:sortDescriptors];
+    products = [_collection.products sortedArrayUsingDescriptors:sortDescriptors];
     
     for(UIImageView *IV in [self.productsView subviews]){
         [IV removeFromSuperview];

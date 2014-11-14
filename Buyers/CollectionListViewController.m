@@ -455,7 +455,6 @@ static const float kPageHeight = 576.0;
             collection.collectionLastUpdatedBy = creatorName;
             collection.collectionLastUpdateDate = [NSDate date];
             [collection removeProducts:collection.products];
-            [collection removeCollectionProductOrder:collection.collectionProductOrder];
             if(![self.managedContext save:&error]) {
                 NSLog(@"Could not save deleted collection: %@ error: %@", collection.collectionName,[error localizedDescription]);
                 

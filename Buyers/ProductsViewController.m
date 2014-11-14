@@ -675,7 +675,7 @@ static const float sProductColumnSpacer = 5.0;
                     if(![_collection.products containsObject:product] && !product.productDeleted.boolValue){
 
                         //add collection
-                        [product addCollectionsObject:_collection];
+                        //[product addCollectionsObject:_collection];
          
                         //add product order
                         ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:self.managedContext];

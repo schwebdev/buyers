@@ -2,14 +2,14 @@
 //  Product.h
 //  Buyers
 //
-//  Created by Web Development on 11/11/2014.
+//  Created by Web Development on 14/11/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
-@class Collection, ProductOrder;
+@class ProductOrder;
 
 @interface Product : NSManagedObject
 
@@ -19,6 +19,7 @@
 @property (nonatomic, retain) NSNumber * productColourRef;
 @property (nonatomic, retain) NSDate * productCreationDate;
 @property (nonatomic, retain) NSString * productCreator;
+@property (nonatomic, retain) NSNumber * productDeleted;
 @property (nonatomic, retain) NSString * productGUID;
 @property (nonatomic, retain) NSData * productImageData;
 @property (nonatomic, retain) NSDate * productLastUpdateDate;
@@ -28,17 +29,10 @@
 @property (nonatomic, retain) NSString * productNotes;
 @property (nonatomic, retain) NSNumber * productPrice;
 @property (nonatomic, retain) NSString * productSupplierCode;
-@property (nonatomic, retain) NSNumber * productDeleted;
-@property (nonatomic, retain) NSSet *collections;
 @property (nonatomic, retain) NSSet *productOrder;
 @end
 
 @interface Product (CoreDataGeneratedAccessors)
-
-- (void)addCollectionsObject:(Collection *)value;
-- (void)removeCollectionsObject:(Collection *)value;
-- (void)addCollections:(NSSet *)values;
-- (void)removeCollections:(NSSet *)values;
 
 - (void)addProductOrderObject:(ProductOrder *)value;
 - (void)removeProductOrderObject:(ProductOrder *)value;
