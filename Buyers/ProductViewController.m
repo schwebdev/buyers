@@ -277,19 +277,21 @@ static const float kPageWidth = 680.0;
          NSArray *findCollections = [collections filteredArrayUsingPredicate:predicate2];
 
          */
+        ProductOrder *po = (ProductOrder*)_product;
         NSPredicate *predicate =[NSPredicate predicateWithFormat:@"products contains %@",_product];
         NSFetchRequest *requestCollections = [[NSFetchRequest alloc] initWithEntityName:@"Collection"];
         NSArray *collections = [managedContext executeFetchRequest:requestCollections error:&error];
         NSArray *foundCollections = [collections filteredArrayUsingPredicate:predicate];
         for (Collection *collection in foundCollections) {
-                [collection removeProductsObject:_product];
+            
+                [collection removeProductsObject:po];
                 collection.collectionLastUpdateDate = [NSDate date];
                 //get user's full name from app settings
                 NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
                 NSString *creatorName = [defaults objectForKey:@"username"];
                 collection.collectionLastUpdatedBy = creatorName;
         }
-        NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"orderProduct = %@",_product];
+        NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"orderProduct = %@",po];
         NSFetchRequest *requestProductOrders = [[NSFetchRequest alloc] initWithEntityName:@"ProductOrder"];
         NSArray *orders = [managedContext executeFetchRequest:requestProductOrders error:&error];
         NSArray *foundOrders = [orders filteredArrayUsingPredicate:predicate2];

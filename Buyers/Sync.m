@@ -789,7 +789,6 @@ NSDate *globalProductSync;
         //NSLog(@"request: %@", productData);
             
         NSHTTPURLResponse *response;
-        //NSURLResponse * repsonse;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
             
         NSString *returnString=[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
