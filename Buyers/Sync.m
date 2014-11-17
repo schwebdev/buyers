@@ -141,6 +141,7 @@ NSDate *globalCollectionSync;
             [dateFormat setDateFormat:@"yyyy-MM-dd%20HH_mm"];
             NSString *formatDate = [dateFormat stringFromDate:lastProductSync];
             url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/%@",formatDate]];
+            //url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/2014-11-14%2015_40"];
    
         }
     }
@@ -259,7 +260,7 @@ NSDate *globalCollectionSync;
                         ProductOrder *po = (ProductOrder*)[findObject objectAtIndex:0];
                         NSString *deleteProduct = result[@"Deleted"];
                         if([deleteProduct isEqual:@"true"]) {
-                            
+                             //NSLog(@"delete product");
                                 //delete from any collections that contain the product
                                 NSError *error;
                                 NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"products contains %@",product];
@@ -282,7 +283,7 @@ NSDate *globalCollectionSync;
                                 for (ProductOrder *pOrder in foundOrders) {
                                     [backgroundContext deleteObject:pOrder];
                                 }
-                            
+                                // NSLog(@"delete product:%@",product.productName);
                                 //delete the product
                                 [backgroundContext deleteObject:product];
                            
