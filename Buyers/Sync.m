@@ -255,10 +255,11 @@ NSDate *globalCollectionSync;
                     //get the object from currentResults using predicate with guid
                     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",result[@"Guid"]];
                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                    BOOL deleteProduct = [result[@"Deleted"] boolValue];
                     if([findObject count] > 0) {
                         Product *product = (Product*)[findObject objectAtIndex:0];
                         ProductOrder *po = (ProductOrder*)[findObject objectAtIndex:0];
-                        BOOL deleteProduct = [result[@"Deleted"] boolValue];
+                        
                         if(deleteProduct) {
                              NSLog(@"delete product");
                                 //delete from any collections that contain the product
@@ -340,9 +341,11 @@ NSDate *globalCollectionSync;
 
                         }
                     } else {
+                        if (!deleteProduct) {
                         //insert the product
                         Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
                          [Sync insertProduct:product withData:result];
+                        }
                     }
                 
                 }
@@ -362,9 +365,10 @@ NSDate *globalCollectionSync;
                     NSError *error;
                     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"collectionGUID == %@",result[@"Guid"]];
                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                    BOOL deleteCollection = [result[@"Deleted"] boolValue];
                     if([findObject count] > 0) {
                         Collection *collection = (Collection*)[findObject objectAtIndex:0];
-                        BOOL deleteCollection = [result[@"Deleted"] boolValue];
+                       
                         if(deleteCollection) {
                             
                             //delete products
@@ -440,9 +444,11 @@ NSDate *globalCollectionSync;
                             
                         }
                     } else {
+                        if(!deleteCollection) {
                         //insert the collection data
                         Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
                         [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
+                        }
 
                     }
                     
