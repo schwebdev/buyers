@@ -258,9 +258,9 @@ NSDate *globalCollectionSync;
                     if([findObject count] > 0) {
                         Product *product = (Product*)[findObject objectAtIndex:0];
                         ProductOrder *po = (ProductOrder*)[findObject objectAtIndex:0];
-                        NSString *deleteProduct = result[@"Deleted"];
-                        if([deleteProduct isEqual:@"true"]) {
-                             //NSLog(@"delete product");
+                        BOOL deleteProduct = [result[@"Deleted"] boolValue];
+                        if(deleteProduct) {
+                             NSLog(@"delete product");
                                 //delete from any collections that contain the product
                                 NSError *error;
                                 NSPredicate *predicate2 =[NSPredicate predicateWithFormat:@"products contains %@",product];
@@ -281,11 +281,26 @@ NSDate *globalCollectionSync;
                                 NSArray *orders = [managedContext executeFetchRequest:requestProductOrders error:&error];
                                 NSArray *foundOrders = [orders filteredArrayUsingPredicate:predicate3];
                                 for (ProductOrder *pOrder in foundOrders) {
-                                    [backgroundContext deleteObject:pOrder];
+                                    [managedContext deleteObject:pOrder];
                                 }
-                                // NSLog(@"delete product:%@",product.productName);
+                                NSLog(@"delete product:%@",product.productName);
                                 //delete the product
-                                [backgroundContext deleteObject:product];
+                                [managedContext deleteObject:product];
+                            
+                                if(![managedContext save:&error]) {
+                                    NSLog(@"Failed to save to managedContext: %@", [error localizedDescription]);
+                                    NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+                                    if(detailedErrors != nil && [detailedErrors count] > 0) {
+                                        for(NSError* detailedError in detailedErrors) {
+                                            NSLog(@"  DetailedError: %@", [detailedError userInfo]);
+                                        }
+                                    }
+                                    else {
+                                        NSLog(@"  %@", [error userInfo]);
+                                    }
+                                    
+                                }
+
                            
 
                         } else {
@@ -344,19 +359,34 @@ NSDate *globalCollectionSync;
                 } else {
                     //check for deletion and delete first
                     //get the object from currentResults using predicate with guid
+                    NSError *error;
                     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"collectionGUID == %@",result[@"Guid"]];
                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
                     if([findObject count] > 0) {
                         Collection *collection = (Collection*)[findObject objectAtIndex:0];
-                        NSString *deleteCollection = result[@"Deleted"];
-                        if([deleteCollection isEqual:@"true"]) {
+                        BOOL deleteCollection = [result[@"Deleted"] boolValue];
+                        if(deleteCollection) {
                             
                             //delete products
                             [collection removeProducts:collection.products];
                             //[collection removeCollectionProductOrder:collection.collectionProductOrder];
                             
                             //delete the collection
-                            [backgroundContext deleteObject:collection];
+                            [managedContext deleteObject:collection];
+                            
+                            if(![managedContext save:&error]) {
+                                NSLog(@"Failed to save to managedContext: %@", [error localizedDescription]);
+                                NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+                                if(detailedErrors != nil && [detailedErrors count] > 0) {
+                                    for(NSError* detailedError in detailedErrors) {
+                                        NSLog(@"  DetailedError: %@", [detailedError userInfo]);
+                                    }
+                                }
+                                else {
+                                    NSLog(@"  %@", [error userInfo]);
+                                }
+                                
+                            }
                             
                         } else {
                             //update fields
