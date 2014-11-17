@@ -867,60 +867,61 @@ NSDate *globalCollectionSync;
         NSHTTPURLResponse *response;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
             
-        NSString *returnString=[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            
-        NSLog(@"response: %@", returnString);
-         
-        NSFetchRequest *productRequest = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
-        NSPredicate *pred =[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName];
-        [productRequest setPredicate:pred];
-        NSArray *updatedProducts = [managedContext executeFetchRequest:productRequest error:&error];
-            if([response  statusCode] != 200) {
+            if(response) {
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+                NSString *jsonString = [json objectForKey:@"PostItemResult"];
+                
+                NSFetchRequest *productRequest = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+                NSPredicate *pred =[NSPredicate predicateWithFormat:@"productLastUpdateDate > %@ AND productLastUpdatedBy = %@",globalProductSync,creatorName];
+                [productRequest setPredicate:pred];
+                NSArray *updatedProducts = [managedContext executeFetchRequest:productRequest error:&error];
+                if(![jsonString  isEqualToString:(@"Success")]) {
+                    syncSuccess = NO;
+                }
+                for (Product *product in updatedProducts) {
+                    
+                    if([jsonString isEqualToString:(@"Success")]) {
+                        if(product.productDeleted.boolValue) {
+                            [managedContext deleteObject:product];
+                        }
+                    } else {
+                        NSString *note = [NSString stringWithFormat:@"\n\nProduct updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                        if(product.productDeleted.boolValue) {
+                            product.productDeleted = [NSNumber numberWithBool:NO];
+                            note = [NSString stringWithFormat:@"\n\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
+                        }
+                        product.productNotes = [product.productNotes stringByAppendingString:note];
+                        product.productLastUpdateDate = [NSDate date];
+                        product.productLastUpdatedBy = @"Sync";
+                    }
+                }
+                
+                NSError *saveError;
+                if(![managedContext save:&saveError]) {
+                    NSLog(@"Could not sync product data");
+                    
+                    NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+                    if(detailedErrors != nil && [detailedErrors count] > 0) {
+                        for(NSError* detailedError in detailedErrors) {
+                            NSLog(@" detailed error:%@", [detailedError userInfo]);
+                            NSLog(@" detailed error:%ld", (long)[detailedError code]);
+                        }
+                    } else {
+                        NSLog(@" detailed error:%@", [saveError userInfo]);
+                    }
+                    
+                    return NO;
+                } else {
+                    NSLog(@"product data entry sync");
+                }
+                
+            } //product count
+        } //sync
+
+                
+            } else {
                 syncSuccess = NO;
             }
-        for (Product *product in updatedProducts) {
-
-            if([response  statusCode] == 200) {
-                if(product.productDeleted.boolValue) {
-                    [managedContext deleteObject:product];
-                }
-            } else {
-                NSString *note = [NSString stringWithFormat:@"\n\nProduct updates failed to  sync on last sync on %@. Please resave changes and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                    if(product.productDeleted.boolValue) {
-                        product.productDeleted = [NSNumber numberWithBool:NO];
-                        note = [NSString stringWithFormat:@"\n\nProduct failed to be deleted on last sync on %@. Please delete and sync again.",[dateFormat stringFromDate:[NSDate date]]];
-                    }
-                product.productNotes = [product.productNotes stringByAppendingString:note];
-                product.productLastUpdateDate = [NSDate date];
-                product.productLastUpdatedBy = @"Sync";
-            }
-        }
-            
-            NSError *saveError;
-            if(![managedContext save:&saveError]) {
-                NSLog(@"Could not sync product data");
-                
-                NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
-                if(detailedErrors != nil && [detailedErrors count] > 0) {
-                    for(NSError* detailedError in detailedErrors) {
-                        NSLog(@" detailed error:%@", [detailedError userInfo]);
-                        NSLog(@" detailed error:%ld", (long)[detailedError code]);
-                    }
-                } else {
-                    NSLog(@" detailed error:%@", [saveError userInfo]);
-                }
-                
-                return NO;
-            } else {
-                NSLog(@"product data entry sync");
-            }
-            
-        } //product count
-       } //sync
-    
-    
-    
-    
     return syncSuccess;
 }
 
