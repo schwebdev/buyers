@@ -255,10 +255,10 @@ NSDate *globalCollectionSync;
                     //get the object from currentResults using predicate with guid
                     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",result[@"Guid"]];
                     NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+                    BOOL deleteProduct = [result[@"Deleted"] boolValue];
                     if([findObject count] > 0) {
                         Product *product = (Product*)[findObject objectAtIndex:0];
                         ProductOrder *po = (ProductOrder*)[findObject objectAtIndex:0];
-                        BOOL deleteProduct = [result[@"Deleted"] boolValue];
                         if(deleteProduct) {
                              NSLog(@"delete product");
                                 //delete from any collections that contain the product
@@ -341,8 +341,11 @@ NSDate *globalCollectionSync;
                         }
                     } else {
                         //insert the product
-                        Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
-                         [Sync insertProduct:product withData:result];
+                        if(!deleteProduct) {
+                            Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
+                            [Sync insertProduct:product withData:result];
+                        }
+                        
                     }
                 
                 }
