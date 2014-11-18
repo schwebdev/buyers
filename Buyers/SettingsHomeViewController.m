@@ -218,10 +218,10 @@
         success = [Sync syncTable:@"Product"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:11/syncCount] waitUntilDone:YES];
     }
-    /*if(success) {
+    if(success) {
         success = [Sync syncTable:@"Collection"];
         [self performSelectorOnMainThread:@selector(updateProgress:) withObject:[NSNumber numberWithFloat:12/syncCount] waitUntilDone:YES];
-    }*/
+    }
     
     if(success) {
         success = [Sync syncProductData];
