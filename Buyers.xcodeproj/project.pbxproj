@@ -153,6 +153,8 @@
 		5BA26C8E1A15FF77009065D5 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA26C8D1A15FF77009065D5 /* ProductOrder.m */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
+		5BE3AFA31A1CBB0700B21493 /* checkboxSML-checked.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BE3AFA11A1CBB0700B21493 /* checkboxSML-checked.png */; };
+		5BE3AFA41A1CBB0700B21493 /* checkboxSML.png in Resources */ = {isa = PBXBuildFile; fileRef = 5BE3AFA21A1CBB0700B21493 /* checkboxSML.png */; };
 		C60A7AF919E6E016000ABE88 /* CameraRollViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */; };
 		C60A7AFB19E6E1F7000ABE88 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */; };
 		C60A7AFE19E6E2F1000ABE88 /* PhotoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = C60A7AFD19E6E2F1000ABE88 /* PhotoCell.m */; };
@@ -382,6 +384,8 @@
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		5BDDAA2E19A62B0C00073B10 /* NewCollectionViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewCollectionViewController.h; sourceTree = "<group>"; };
 		5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NewCollectionViewController.m; sourceTree = "<group>"; };
+		5BE3AFA11A1CBB0700B21493 /* checkboxSML-checked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "checkboxSML-checked.png"; sourceTree = "<group>"; };
+		5BE3AFA21A1CBB0700B21493 /* checkboxSML.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = checkboxSML.png; sourceTree = "<group>"; };
 		C60A7AF719E6E016000ABE88 /* CameraRollViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CameraRollViewController.h; sourceTree = "<group>"; };
 		C60A7AF819E6E016000ABE88 /* CameraRollViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CameraRollViewController.m; sourceTree = "<group>"; };
 		C60A7AFA19E6E1F7000ABE88 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
@@ -473,6 +477,8 @@
 		0B970AF1199376C9006D0358 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				5BE3AFA11A1CBB0700B21493 /* checkboxSML-checked.png */,
+				5BE3AFA21A1CBB0700B21493 /* checkboxSML.png */,
 				5B43EE111A0240D800730158 /* shoeOutline.png */,
 				5B43EE0F1A01433D00730158 /* shoeOutlineNoImage.png */,
 				5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */,
@@ -919,6 +925,7 @@
 				0B825E7819F8EB9200939512 /* StockWorksheet.html in Resources */,
 				0B970B41199376C9006D0358 /* d11.png in Resources */,
 				0B970B57199376C9006D0358 /* h7.png in Resources */,
+				5BE3AFA31A1CBB0700B21493 /* checkboxSML-checked.png in Resources */,
 				0B76309F199CB7D200949155 /* leftArrowButtonBG.png in Resources */,
 				0B52FC9A19ED69C200D1D747 /* check.png in Resources */,
 				0B970B5C199376C9006D0358 /* s10.png in Resources */,
@@ -949,6 +956,7 @@
 				0B970B48199376C9006D0358 /* d6.png in Resources */,
 				0B970B53199376C9006D0358 /* h3.png in Resources */,
 				0B970B5B199376C9006D0358 /* s1.png in Resources */,
+				5BE3AFA41A1CBB0700B21493 /* checkboxSML.png in Resources */,
 				5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */,
 				0B970B5D199376C9006D0358 /* s11.png in Resources */,
 				0B970B4C199376C9006D0358 /* ec.png in Resources */,

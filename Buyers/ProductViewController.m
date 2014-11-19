@@ -88,14 +88,14 @@ static const float kPageWidth = 680.0;
     
     UIButton *saveProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [saveProductButton setTitle:@"save" forState:UIControlStateNormal];
-    saveProductButton.frame = CGRectMake(720, 629, 100, 50);
+    saveProductButton.frame = CGRectMake(720, 600, 100, 50);
     [saveProductButton addTarget:self action:@selector(saveCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     saveProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     saveProductButton.backgroundColor = [UIColor colorWithRed:128.0/255.0 green:175.0/255.0 blue:23.0/255.0 alpha:1];
     
     UIButton *deleteProductButton=[UIButton buttonWithType:UIButtonTypeCustom];
     [deleteProductButton setTitle:@"delete" forState:UIControlStateNormal];
-    deleteProductButton.frame = CGRectMake(900, 629, 100, 50);
+    deleteProductButton.frame = CGRectMake(900, 600, 100, 50);
     [deleteProductButton addTarget:self action:@selector(deleteCustomProduct:) forControlEvents:UIControlEventTouchUpInside];
     deleteProductButton.titleLabel.font =  [UIFont fontWithName:@"HelveticaNeue-Thin" size: 18.0f];
     deleteProductButton.backgroundColor = [UIColor redColor];

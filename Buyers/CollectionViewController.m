@@ -361,7 +361,7 @@
         
         for (int p = 0, pc = [self.products count]; p < pc; p++) {
             
-            Product *product = [self.products objectAtIndex:p];
+            Product *product = (Product*)[self.products objectAtIndex:p];
             
             //NSLog(@"product: %@", product.productName);
             
