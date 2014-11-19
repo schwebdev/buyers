@@ -413,35 +413,31 @@ NSDate *globalCollectionSync;
                             [collection removeProducts:collection.products];
                             
                             //insert products with order number to create Product Ordering part
-                            NSError *error;
-                            NSArray *products = [NSJSONSerialization JSONObjectWithData:result[@"products"] options:kNilOptions error:&error];
-                            if(products != nil) {
-                                
+                            NSArray *products = result[@"Products"];
+                            if(products != (id)[NSNull null]) {
+                                //if([products count] >0){
+                                //NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
                                 for (NSDictionary *po in products) {
                                     
-                                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"productGUID"]];
-                                    NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
-                                    if([findObject count] > 0) {
-                                        Product *product = (Product*)[findObject objectAtIndex:0];
-                                        
-                                        //check it doesn't exist in the collection already and is not flagged for deletion
-                                        if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
-                                            
-                                            //add collection
-                                            //[product addCollectionsObject:collection];
-                                            
-                                            //add product order
-                                            ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
-                                            int number = (int)po[@"productOrder"];
-                                            productOrder.productOrder = [NSNumber numberWithInt:number];
-                                            productOrder.orderCollection = collection;
-                                            productOrder.orderProduct = product;
-                                        }
+                                    NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"ProductGuid"]];
+                                    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+                                    NSError *error;
+                                    [request setPredicate:predicate];
+                                    NSArray *collectionProduct = [backgroundContext executeFetchRequest:request error:&error];
+                                    //need to make a product object from the productGuid
+                                    Product *product = [collectionProduct objectAtIndex:0];
+                                    
+                                    //add product order unless it's gonna be deleted
+                                    if(!product.productDeleted.boolValue){
+                                        ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
+                                        int number = (int)po[@"Order"];
+                                        productOrder.productOrder = [NSNumber numberWithInt:number];
+                                        productOrder.orderCollection = collection;
+                                        productOrder.orderProduct = product;
                                     }
+
                                 }
                             }
-                            
-                            
                         }
                     } else {
                         if(!deleteCollection) {
@@ -489,7 +485,7 @@ NSDate *globalCollectionSync;
      
 +(void)insertCollection:(Collection*)collection withData:(NSDictionary*)result withContext:(NSManagedObjectContext*)context withResults:(NSArray*)currentResults {
    
-    collection.collectionName = result[@"collectionName"];
+    collection.collectionName = result[@"Name"];
     collection.collectionGUID =result[@"Guid"];
     collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     collection.collectionNotes = result[@"Notes"];
@@ -522,31 +518,45 @@ NSDate *globalCollectionSync;
     }
     
     //  insert products with order number to create Product Ordering part
-    NSError *error;
-    NSArray *products = [NSJSONSerialization JSONObjectWithData:result[@"products"] options:kNilOptions error:&error];
-    if(products != nil) {
-        
+    //NSError *error;
+    NSArray *products = result[@"Products"];
+    if(products != (id)[NSNull null]) {
+        //if([products count] >0){
+        //NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         for (NSDictionary *po in products) {
             
-            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"productGUID"]];
-            NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
+            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"ProductGuid"]];
+            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+            NSError *error;
+            [request setPredicate:predicate];
+            NSArray *collectionProduct = [context executeFetchRequest:request error:&error];
+            //need to make a product object from the productGuid
+            Product *product = [collectionProduct objectAtIndex:0];
+            
+            //add product order unless it's gonna be deleted
+            if(!product.productDeleted.boolValue){
+                ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
+                int number = (int)po[@"Order"];
+                productOrder.productOrder = [NSNumber numberWithInt:number];
+                productOrder.orderCollection = collection;
+                productOrder.orderProduct = product;
+            }           
+            
+            /*NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
             if([findObject count] > 0) {
                 Product *product = (Product*)[findObject objectAtIndex:0];
                 
-                //check it doesn't exist in the collection already and is not flagged for deletion
+                check it doesn't exist in the collection already and is not flagged for deletion
                 if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
                     
                     //add collection
-                    //[product addCollectionsObject:collection];
+                    [product addCollectionsObject:collection];
                     
-                    //add product order
-                    ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
-                    int number = (int)po[@"productOrder"];
-                    productOrder.productOrder = [NSNumber numberWithInt:number];
-                    productOrder.orderCollection = collection;
-                    productOrder.orderProduct = product;
+                    
+                    
                 }
-            }
+            }*/
+        //}
         }
     }
 }
@@ -770,6 +780,15 @@ NSDate *globalCollectionSync;
         NSHTTPURLResponse *response;
         NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
         
+        if(response){
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
+            NSString *jsonString = [json objectForKey:@"PostCollectionResult"];
+            NSLog(@"response: %@", jsonString);
+        }else{
+            
+        }
+        
+        
         NSString *returnString=[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
         
         NSLog(@"response: %@", returnString);
@@ -966,7 +985,7 @@ NSDate *globalCollectionSync;
 + (BOOL)syncReportData {
     NSError *error;
     NSArray *reports = [Sync getTable:@"ReportData" sortWith:@"reportID" withPredicate:[NSPredicate predicateWithFormat:@"(requiresSync == 1)"]];
-    
+    BOOL syncSuccess = YES;
     //get modified data for upload
     for (NSMutableDictionary *report in reports) {
         [report removeObjectForKey:@"IDURI"];
@@ -1020,72 +1039,82 @@ NSDate *globalCollectionSync;
     NSURLResponse *response;
     NSData *resultData=[NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
     if(response) {
-        //save data
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:resultData options:kNilOptions error:nil];
-        NSString *jsonString = [json objectForKey:@"d"];
-        NSArray *jsonReports = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
-        
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
-        
-        
-        NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
-        jsonDateFormat.dateFormat = @"dd/MM/yyyy HH:mm:ss";
-        for (NSDictionary *jsonReport in jsonReports) {
+        if(resultData){
+            //save data
+            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:resultData options:kNilOptions error:nil];
+            NSString *jsonString = [json objectForKey:@"d"];
+            NSArray *jsonReports = [NSJSONSerialization JSONObjectWithData:[jsonString dataUsingEncoding:NSUTF8StringEncoding] options:kNilOptions error:nil];
             
-            NSString *reportID = [jsonReport[@"reportID"] uppercaseString];
-            //save report
-            NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
-            [request setPredicate:[NSPredicate predicateWithFormat:@"(reportID == %@)", reportID]];
+            NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
             
-            NSError *error;
-            NSArray *reports = [managedContext executeFetchRequest:request error:&error];
-            ReportData *report;
             
-            if(![jsonReport[@"isActive"] isEqualToString:@"True"] && reports.count > 0) {
-                [managedContext deleteObject:reports[0]];
-                NSLog(@"deleted report %@ - %@", jsonReport[@"name"], reportID);
-            } else {
-                if(reports.count > 0) {
-                    report = reports[0];
+            NSDateFormatter *jsonDateFormat = [[NSDateFormatter alloc] init];
+            jsonDateFormat.dateFormat = @"dd/MM/yyyy HH:mm:ss";
+            for (NSDictionary *jsonReport in jsonReports) {
+                
+                NSString *reportID = [jsonReport[@"reportID"] uppercaseString];
+                //save report
+                NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"ReportData"];
+                [request setPredicate:[NSPredicate predicateWithFormat:@"(reportID == %@)", reportID]];
+                
+                NSError *error;
+                NSArray *reports = [managedContext executeFetchRequest:request error:&error];
+                ReportData *report;
+                
+                if(![jsonReport[@"isActive"] isEqualToString:@"True"] && reports.count > 0) {
+                    [managedContext deleteObject:reports[0]];
+                    NSLog(@"deleted report %@ - %@", jsonReport[@"name"], reportID);
                 } else {
-                    report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                    if(reports.count > 0) {
+                        report = reports[0];
+                    } else {
+                        report = [NSEntityDescription insertNewObjectForEntityForName:@"ReportData" inManagedObjectContext:managedContext];
+                    }
+                    report.reportID = reportID;
+                    report.name = jsonReport[@"name"];
+                    report.createdBy = jsonReport[@"createdBy"];
+                    report.content = jsonReport[@"content"];
+                    report.notes = jsonReport[@"notes"];
+                    report.isActive = ([jsonReport[@"isActive"] isEqualToString:@"True"]) ? @YES : @NO;
+                    report.requiresSync = @NO;
+                    report.lastModified = [jsonDateFormat dateFromString:jsonReport[@"lastModified"]];
+                    report.lastSync = [jsonDateFormat dateFromString:jsonReport[@"lastSync"]];
+                    
+                    
+                    NSLog(@"syncing report %@ - %@", jsonReport[@"name"], reportID);
                 }
-                report.reportID = reportID;
-                report.name = jsonReport[@"name"];
-                report.createdBy = jsonReport[@"createdBy"];
-                report.content = jsonReport[@"content"];
-                report.notes = jsonReport[@"notes"];
-                report.isActive = ([jsonReport[@"isActive"] isEqualToString:@"True"]) ? @YES : @NO;
-                report.requiresSync = @NO;
-                report.lastModified = [jsonDateFormat dateFromString:jsonReport[@"lastModified"]];
-                report.lastSync = [jsonDateFormat dateFromString:jsonReport[@"lastSync"]];
-                
-                
-                NSLog(@"syncing report %@ - %@", jsonReport[@"name"], reportID);
             }
-        }
-        
-        
-        NSError *saveError;
-        if(![managedContext save:&saveError]) {
-            NSLog(@"Could not sync reportdata");
-            
-            NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
-            if(detailedErrors != nil && [detailedErrors count] > 0) {
-                for(NSError* detailedError in detailedErrors) {
-                    NSLog(@" detailed error:%@", [detailedError userInfo]);
-                    NSLog(@" detailed error:%ld", (long)[detailedError code]);
+            NSError *saveError;
+            if(![managedContext save:&saveError]) {
+                NSLog(@"Could not sync reportdata");
+                
+                NSArray *detailedErrors = [[saveError userInfo] objectForKey:NSDetailedErrorsKey];
+                if(detailedErrors != nil && [detailedErrors count] > 0) {
+                    for(NSError* detailedError in detailedErrors) {
+                        NSLog(@" detailed error:%@", [detailedError userInfo]);
+                        NSLog(@" detailed error:%ld", (long)[detailedError code]);
+                    }
+                } else {
+                    NSLog(@" detailed error:%@", [saveError userInfo]);
                 }
+                
+                syncSuccess = NO;
             } else {
-                NSLog(@" detailed error:%@", [saveError userInfo]);
+                NSLog(@"reportdata entry sync");
             }
-
-            return NO;
-        } else {
-            NSLog(@"reportdata entry sync");
+        }else{
+            NSLog(@"resultData is nill");
+            syncSuccess = NO;
         }
+        
+        
+        
+        
+    }else{
+        NSLog(@"response is empty");
+        syncSuccess = NO;
     }
-    return YES;
+    return syncSuccess;
 }
 
 + (BOOL)syncFilterReports {
