@@ -336,11 +336,11 @@ NSDate *globalCollectionSync;
                              NSString *strURL = result[@"ImageURL"];
                              NSURL *url = [[NSURL alloc] initWithString:strURL];
                              NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];*/
-
                              if([result[@"image"]  isEqual: @""]) {
                                  product.productImageData = defaultImageData;
                              } else {
-                                 product.productImageData = result[@"image"];
+                                 NSData *imageData = [result[@"image"] base64EncodedDataWithOptions:0];
+                                 product.productImageData = imageData;
                              }
                              
                          }
@@ -611,7 +611,8 @@ NSDate *globalCollectionSync;
     if([result[@"image"]  isEqual: @""]) {
         product.productImageData = defaultImageData;
     } else {
-        product.productImageData = result[@"image"];
+        NSData *imageData = [result[@"image"] base64EncodedDataWithOptions:0];
+        product.productImageData = imageData;
     }
     
 }
