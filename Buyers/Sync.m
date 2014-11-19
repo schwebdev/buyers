@@ -141,7 +141,6 @@ NSDate *globalCollectionSync;
             [dateFormat setDateFormat:@"yyyy-MM-dd%20HH_mm"];
             NSString *formatDate = [dateFormat stringFromDate:lastProductSync];
             url = [NSURL URLWithString:[NSString stringWithFormat:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/%@",formatDate]];
-            //url = [NSURL URLWithString:@"http://aws.schuhshark.com:3000/buyingservice.svc/getItem/2014-11-14%2015_40"];
             
         }
     }
@@ -308,6 +307,7 @@ NSDate *globalCollectionSync;
                              //update fields
                              product.productName = result[@"i_name"];
                              product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+                             product.productCostPrice = [NSNumber numberWithDouble:0.0];//[NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
                              product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
                              product.productSupplierCode = result[@"main_sup_code"];
                              product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
@@ -564,6 +564,7 @@ NSDate *globalCollectionSync;
     product.productCode =result[@"i_Code"];
     product.productName = result[@"i_name"];
     product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
+    product.productCostPrice = [NSNumber numberWithDouble:0.0];//[NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
     product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     product.productSupplierCode = result[@"main_sup_code"];
     product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
@@ -854,7 +855,7 @@ NSDate *globalCollectionSync;
     
     NSDateFormatter *dateFormat = [[NSDateFormatter alloc]init];
     [dateFormat setDateFormat:@"dd/MM/yyyy HH:mm:ss"];
-    NSString *formatDate = [dateFormat stringFromDate:globalProductSync];
+    //NSString *formatDate = [dateFormat stringFromDate:globalProductSync];
     //NSLog(@"global product sync: %@", formatDate);
     
     if(globalProductSync != nil) {
