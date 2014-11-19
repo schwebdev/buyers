@@ -46,6 +46,8 @@
 @property (weak, nonatomic) IBOutlet SchDropDown *productSupplier_edit;
 @property (weak, nonatomic) IBOutlet SchDropDown *productColour_edit;
 @property (weak, nonatomic) IBOutlet SchDropDown *productMaterial_edit;
+@property (weak, nonatomic) IBOutlet SchTextField *productCostPrice_edit;
+@property (weak, nonatomic) IBOutlet UILabel *productCostPrice;
 
 @property (nonatomic,strong) UIImage *selectedImage;
 

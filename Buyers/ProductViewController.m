@@ -56,6 +56,7 @@ static const float kPageWidth = 680.0;
     
     self.productName_edit.hidden = YES;
     self.productPrice_edit.hidden=YES;
+    self.productCostPrice_edit.hidden=YES;
     self.productCategory_edit.hidden=YES;
     self.productBrand_edit.hidden=YES;
     self.productSupplier_edit.hidden=YES;
@@ -119,7 +120,9 @@ static const float kPageWidth = 680.0;
         _productCode.hidden = YES;
         self.productName_edit.hidden = NO;
         self.productPrice_edit.hidden=NO;
+        self.productCostPrice_edit.hidden=NO;
         self.productPrice_edit.delegate = self;
+        self.productCostPrice_edit.delegate = self;
         self.productCategory_edit.hidden=NO;
         self.productBrand_edit.hidden=NO;
         self.productSupplier_edit.hidden=NO;
@@ -128,6 +131,7 @@ static const float kPageWidth = 680.0;
         
         self.productName.hidden = YES;
         self.productPrice.hidden=YES;
+        self.productCostPrice.hidden=YES;
         self.productCategory.hidden=YES;
         self.productBrand.hidden=YES;
         self.productSupplier.hidden=YES;
@@ -194,6 +198,7 @@ static const float kPageWidth = 680.0;
     
     self.productName_edit.text=_product.productName;
     self.productPrice_edit.text=[formatPrice stringFromNumber:_product.productPrice];
+    self.productCostPrice_edit.text=[formatPrice stringFromNumber:_product.productCostPrice];
     
     [self.productCategory_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productCategoryRef]];
     [self.productBrand_edit setSelectedValue:[NSString stringWithFormat:@"%@",_product.productBrandRef]];
@@ -204,6 +209,7 @@ static const float kPageWidth = 680.0;
     self.productName.text = _product.productName;
     self.productCode.text = _product.productCode;
     self.productPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productPrice]];
+    self.productCostPrice.text = [NSString stringWithFormat:@"£%@",[formatPrice stringFromNumber:_product.productCostPrice]];
 
     //set labels for schuh product to the value of the editable field dropdown value
     self.productCategory.text = [self.productCategory_edit getSelectedText];
@@ -349,6 +355,12 @@ static const float kPageWidth = 680.0;
     } else {
         _product.productName = self.productName_edit.text;
     }
+    if(self.productName_edit.text.length > 255) {
+        _isValid = NO;
+        [errorMsg appendString:@"only a maximum of 255 characters allowed, please remove some characters!\n"];
+    } else {
+        _product.productName = self.productName_edit.text;
+    }
     
     if([self.productCategory_edit.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         //_isValid = NO;
@@ -414,7 +426,15 @@ static const float kPageWidth = 680.0;
     } else {
         _product.productPrice = [NSNumber numberWithDouble:[self.productPrice_edit.text doubleValue]];
     }
-    
+    if([self.productCostPrice_edit.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        //_isValid = NO;
+        //[errorMsg appendString:@"please enter a price\n"];
+
+        _product.productCostPrice =  [NSNumber numberWithDouble:0.00];
+    } else {
+
+        _product.productCostPrice = [NSNumber numberWithDouble:[self.productCostPrice_edit.text doubleValue]];
+    }
     
     NSData *imageData;
     if(_selectedImage !=nil){
@@ -508,9 +528,16 @@ static const float kPageWidth = 680.0;
 
 -(void)onKeyboardHide:(NSNotification *)notification {
 
+    NSLog(@"frame: %f",CGRectGetMaxY(self.view.frame));
     //only animate if the view frame's y co-ordinate has been shifted up
     if(CGRectGetMaxY(self.view.frame) < 700) {
-        [self animateTextField:self.productPrice_edit up:NO];
+        
+        if([self.productPrice_edit isFirstResponder]) {
+            [self animateTextField:self.productPrice_edit up:NO];
+        }
+        if([self.productCostPrice_edit isFirstResponder]) {
+            [self animateTextField:self.productCostPrice_edit up:NO];
+        }
     }
 }
 -(void)textFieldDidBeginEditing:(UITextField *)textField{
@@ -523,7 +550,7 @@ static const float kPageWidth = 680.0;
     
    
     
-    const int movementDistance = -316;
+    const int movementDistance = -260;
     const float movementDuration = 0.2f;
     
     int movement = (up ? movementDistance : -movementDistance);

@@ -80,6 +80,7 @@ static const float kPageWidth = 680.0;
     [self.view addSubview:productsInfo];
     
     self.txtProductPrice.delegate = self;
+    self.txtProductCostPrice.delegate = self;
     self.txtProductNotes.delegate = self;
     [[self.txtProductNotes layer] setBorderColor:[[UIColor lightGrayColor] CGColor]];
     [[self.txtProductNotes layer] setBorderWidth:2.0];
@@ -233,7 +234,7 @@ static const float kPageWidth = 680.0;
     Colour *pColour;
     Material *pMaterial;
     NSMutableString *errorMsg = [[NSMutableString alloc] initWithString:@""];
-    NSNumber *pPrice;
+    NSNumber *pPrice, *pCostPrice;
     _isValid = YES;
     
     NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
@@ -255,6 +256,12 @@ static const float kPageWidth = 680.0;
     if([self.txtProductName.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please enter a product name\n"];
+    } else {
+        pName =self.txtProductName.text;
+    }
+    if(self.txtProductName.text.length > 255) {
+        _isValid = NO;
+        [errorMsg appendString:@"only a maximum of 255 characters allowed, please remove some characters!\n"];
     } else {
         pName =self.txtProductName.text;
     }
@@ -322,6 +329,13 @@ static const float kPageWidth = 680.0;
     } else {
         pPrice = [NSNumber numberWithDouble:[self.txtProductPrice.text doubleValue]];
     }
+    if([self.txtProductCostPrice.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
+        //_isValid = NO;
+        //[errorMsg appendString:@"please enter a price\n"];
+        pCostPrice = [NSNumber numberWithDouble:0.00];
+    } else {
+        pCostPrice = [NSNumber numberWithDouble:[self.txtProductCostPrice.text doubleValue]];
+    }
     
     if(self.txtProductNotes.text.length > 300) {
         _isValid = NO;
@@ -355,6 +369,7 @@ static const float kPageWidth = 680.0;
              product.productLastUpdateDate = [NSDate date];
              product.productName = pName;
              product.productPrice = pPrice;
+             product.productCostPrice = pCostPrice;
              product.productCode = @"0000000000";
              product.productCategoryRef = pCategory.category2Ref;
              product.productBrandRef = pBrand.brandRef;
@@ -488,6 +503,9 @@ finishedSavingWithError:(NSError *)error
         if([self.txtProductPrice isFirstResponder]) {
             [self animateTextField:self.txtProductPrice up:NO];
         }
+        if([self.txtProductCostPrice isFirstResponder]) {
+            [self animateTextField:self.txtProductCostPrice up:NO];
+        }
 
         if([self.txtProductNotes isFirstResponder]) {
             [self animateTextView:self.txtProductNotes up:NO];
@@ -504,7 +522,7 @@ finishedSavingWithError:(NSError *)error
 -(void)animateTextField:(UITextField *)textField up:(BOOL)up{
     
     
-    const int movementDistance = -190;
+    const int movementDistance = -204;
     const float movementDuration = 0.2f;
     
     int movement = (up ? movementDistance : -movementDistance);

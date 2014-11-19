@@ -136,9 +136,10 @@
 		5B0E157719F5637E0095DEDA /* checkbox-checked-search.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157519F5637E0095DEDA /* checkbox-checked-search.png */; };
 		5B0E157819F5637E0095DEDA /* checkbox-checked-search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */; };
 		5B14383519ADE40800A68865 /* CollectionButton.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B14383419ADE40800A68865 /* CollectionButton.m */; };
-		5B1A87FF1A16078800400FE0 /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B1A87FE1A16078800400FE0 /* Collection.m */; };
 		5B35503119A49CF40031E33C /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5B35503019A49CF40031E33C /* CoreData.framework */; };
 		5B35503419A49EFE0031E33C /* BuyersDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5B35503219A49EFE0031E33C /* BuyersDataModel.xcdatamodeld */; };
+		5B3B51CF1A1C8E76003B706C /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B51CE1A1C8E76003B706C /* Product.m */; };
+		5B3B51D21A1C8E77003B706C /* Collection.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B3B51D11A1C8E77003B706C /* Collection.m */; };
 		5B43EE101A01433D00730158 /* shoeOutlineNoImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE0F1A01433D00730158 /* shoeOutlineNoImage.png */; };
 		5B43EE121A0240D800730158 /* shoeOutline.png in Resources */ = {isa = PBXBuildFile; fileRef = 5B43EE111A0240D800730158 /* shoeOutline.png */; };
 		5B43EE151A03956000730158 /* CollectionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B43EE141A03956000730158 /* CollectionCell.m */; };
@@ -149,7 +150,6 @@
 		5B52F82119F80524007D5943 /* Colour.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82019F80524007D5943 /* Colour.m */; };
 		5B52F82719FE7047007D5943 /* AdvancedSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */; };
 		5B65017919B0B518003F03F8 /* ProductCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 5B65017819B0B518003F03F8 /* ProductCell.m */; };
-		5BA26C881A15FF0A009065D5 /* Product.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA26C871A15FF0A009065D5 /* Product.m */; };
 		5BA26C8E1A15FF77009065D5 /* ProductOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BA26C8D1A15FF77009065D5 /* ProductOrder.m */; };
 		5BDDAA2D19A5EA7600073B10 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2C19A5EA7600073B10 /* Settings.bundle */; };
 		5BDDAA3019A62B0C00073B10 /* NewCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5BDDAA2F19A62B0C00073B10 /* NewCollectionViewController.m */; };
@@ -351,10 +351,12 @@
 		5B0E157619F5637E0095DEDA /* checkbox-checked-search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "checkbox-checked-search@2x.png"; path = "../../checkbox-checked-search@2x.png"; sourceTree = "<group>"; };
 		5B14383319ADE40800A68865 /* CollectionButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollectionButton.h; sourceTree = "<group>"; };
 		5B14383419ADE40800A68865 /* CollectionButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CollectionButton.m; sourceTree = "<group>"; };
-		5B1A87FD1A16078800400FE0 /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = Buyers/Collection.h; sourceTree = "<group>"; };
-		5B1A87FE1A16078800400FE0 /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Collection.m; path = Buyers/Collection.m; sourceTree = "<group>"; };
 		5B35503019A49CF40031E33C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		5B35503319A49EFE0031E33C /* BuyersDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BuyersDataModel.xcdatamodel; sourceTree = "<group>"; };
+		5B3B51CD1A1C8E76003B706C /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
+		5B3B51CE1A1C8E76003B706C /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
+		5B3B51D01A1C8E77003B706C /* Collection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Collection.h; path = Buyers/Collection.h; sourceTree = "<group>"; };
+		5B3B51D11A1C8E77003B706C /* Collection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Collection.m; path = Buyers/Collection.m; sourceTree = "<group>"; };
 		5B43EE0D1A01074B00730158 /* ReportData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportData.h; path = Buyers/ReportData.h; sourceTree = "<group>"; };
 		5B43EE0E1A01074B00730158 /* ReportFilterSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ReportFilterSet.h; path = Buyers/ReportFilterSet.h; sourceTree = "<group>"; };
 		5B43EE0F1A01433D00730158 /* shoeOutlineNoImage.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = shoeOutlineNoImage.png; sourceTree = "<group>"; };
@@ -375,8 +377,6 @@
 		5B52F82619FE7047007D5943 /* AdvancedSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdvancedSearchViewController.m; sourceTree = "<group>"; };
 		5B65017719B0B518003F03F8 /* ProductCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductCell.h; sourceTree = "<group>"; };
 		5B65017819B0B518003F03F8 /* ProductCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductCell.m; sourceTree = "<group>"; };
-		5BA26C861A15FF0A009065D5 /* Product.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Product.h; path = Buyers/Product.h; sourceTree = "<group>"; };
-		5BA26C871A15FF0A009065D5 /* Product.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Product.m; path = Buyers/Product.m; sourceTree = "<group>"; };
 		5BA26C8C1A15FF77009065D5 /* ProductOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProductOrder.h; sourceTree = "<group>"; };
 		5BA26C8D1A15FF77009065D5 /* ProductOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProductOrder.m; sourceTree = "<group>"; };
 		5BDDAA2C19A5EA7600073B10 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -775,12 +775,12 @@
 		5B43EDF31A00D88A00730158 /* Data */ = {
 			isa = PBXGroup;
 			children = (
-				5B1A87FD1A16078800400FE0 /* Collection.h */,
-				5B1A87FE1A16078800400FE0 /* Collection.m */,
+				5B3B51D01A1C8E77003B706C /* Collection.h */,
+				5B3B51D11A1C8E77003B706C /* Collection.m */,
+				5B3B51CD1A1C8E76003B706C /* Product.h */,
+				5B3B51CE1A1C8E76003B706C /* Product.m */,
 				5BA26C8C1A15FF77009065D5 /* ProductOrder.h */,
 				5BA26C8D1A15FF77009065D5 /* ProductOrder.m */,
-				5BA26C861A15FF0A009065D5 /* Product.h */,
-				5BA26C871A15FF0A009065D5 /* Product.m */,
 				5B43EE0D1A01074B00730158 /* ReportData.h */,
 				5B43EE0E1A01074B00730158 /* ReportFilterSet.h */,
 				0B52FC8A19E56E0C00D1D747 /* ReportData.m */,
@@ -1025,9 +1025,9 @@
 				5B65017919B0B518003F03F8 /* ProductCell.m in Sources */,
 				5BA26C8E1A15FF77009065D5 /* ProductOrder.m in Sources */,
 				0B288A7719B9C83600F62B63 /* BusinessReviewReportViewController.m in Sources */,
-				5B1A87FF1A16078800400FE0 /* Collection.m in Sources */,
+				5B3B51D21A1C8E77003B706C /* Collection.m in Sources */,
 				0B825E6919F5034100939512 /* UIImage+Alpha.m in Sources */,
-				5BA26C881A15FF0A009065D5 /* Product.m in Sources */,
+				5B3B51CF1A1C8E76003B706C /* Product.m in Sources */,
 				0BC956751990CF3200CD45D5 /* SidebarViewController.m in Sources */,
 				0B970B69199376C9006D0358 /* LXReorderableCollectionViewFlowLayout.m in Sources */,
 				0B288A8119B9E73300F62B63 /* Sync.m in Sources */,

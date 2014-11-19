@@ -70,6 +70,10 @@
         _isValid = NO;
         [errorMsg appendString:@"please enter a name for this collection\n"];
     }
+    if(self.collectionName.text.length > 255) {
+        _isValid = NO;
+        [errorMsg appendString:@"only a maximum of 255 characters allowed, please remove some characters!\n"];
+    }
     if([self.collectionBrandRef.getSelectedValue stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]].length == 0) {
         _isValid = NO;
         [errorMsg appendString:@"please select a brand\n"];

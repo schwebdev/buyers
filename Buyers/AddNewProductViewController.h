@@ -32,5 +32,6 @@ UINavigationControllerDelegate,UITextFieldDelegate,UITextViewDelegate>
 @property (weak, nonatomic) IBOutlet SchDropDown *materialList;
 - (void)saveCustomProduct:(id)sender;
 @property (weak, nonatomic) IBOutlet UITextView *txtProductNotes;
+@property (weak, nonatomic) IBOutlet SchTextField *txtProductCostPrice;
 
 @end

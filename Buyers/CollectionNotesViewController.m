@@ -50,8 +50,8 @@
     if ([_collectionNotes.text isEqualToString:(@"")]) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Please enter some notes for this collection!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
-    } else if (_collectionNotes.text.length > 300) {
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Only a maximum of 300 characters allowed, please remove some characters!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
+    } else if (_collectionNotes.text.length > 3000) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Only a maximum of 3000 characters allowed, please remove some characters!" delegate:self cancelButtonTitle:@"Ok" otherButtonTitles:nil];
         [alert show];
     } else {
         

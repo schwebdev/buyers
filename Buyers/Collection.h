@@ -2,7 +2,7 @@
 //  Collection.h
 //  Buyers
 //
-//  Created by Web Development on 14/11/2014.
+//  Created by Web Development on 19/11/2014.
 //  Copyright (c) 2014 schuh. All rights reserved.
 //
 
