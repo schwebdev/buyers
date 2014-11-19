@@ -453,7 +453,6 @@ NSDate *globalCollectionSync;
            
             
         }
-        
       
    }];
     
