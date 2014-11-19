@@ -336,11 +336,11 @@ NSDate *globalCollectionSync;
                              NSString *strURL = result[@"ImageURL"];
                              NSURL *url = [[NSURL alloc] initWithString:strURL];
                              NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];*/
-                             if([result[@"image"]  isEqual: @""]) {
+                             if([result[@"Image"]  isEqual: @""]) {
                                  product.productImageData = defaultImageData;
                              } else {
-                                 NSData *imageData = [result[@"image"] base64EncodedDataWithOptions:0];
-                                 product.productImageData = imageData;
+                                 NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:result[@"Image"] options:0];
+                                 product.productImageData = decodedData;
                              }
                              
                          }
@@ -608,11 +608,11 @@ NSDate *globalCollectionSync;
     NSString *strURL = result[@"ImageURL"];
     NSURL *url = [[NSURL alloc] initWithString:strURL];
     NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];*/
-    if([result[@"image"]  isEqual: @""]) {
+    if([result[@"Image"]  isEqual: @""]) {
         product.productImageData = defaultImageData;
     } else {
-        NSData *imageData = [result[@"image"] base64EncodedDataWithOptions:0];
-        product.productImageData = imageData;
+        NSData *decodedData = [[NSData alloc] initWithBase64EncodedString:result[@"Image"] options:0];
+        product.productImageData = decodedData;
     }
     
 }
@@ -980,9 +980,9 @@ NSDate *globalCollectionSync;
         } //sync
         
         
-    } else {
-        syncSuccess = NO;
-    }
+    } //else {
+        //syncSuccess = NO;
+    //}
     return syncSuccess;
 }
 
