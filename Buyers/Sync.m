@@ -412,35 +412,31 @@ NSDate *globalCollectionSync;
                             [collection removeProducts:collection.products];
                             
                             //insert products with order number to create Product Ordering part
-                            NSError *error;
-                            NSArray *collection_prods = [NSJSONSerialization JSONObjectWithData:result[@"products"] options:kNilOptions  error:&error];
-                            if(collection_prods != nil) {
-                                
-                                for (NSDictionary *po in collection_prods) {
+                            NSArray *products = result[@"Products"];
+                            if(products != (id)[NSNull null]) {
+                                //if([products count] >0){
+                                //NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+                                for (NSDictionary *po in products) {
                                     
                                     NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"ProductGuid"]];
-                                    NSArray *findObject = [currentResults filteredArrayUsingPredicate:predicate];
-                                    if([findObject count] > 0) {
-                                        Product *product = (Product*)[findObject objectAtIndex:0];
-                                        
-                                        //check it doesn't exist in the collection already and is not flagged for deletion
-                                        if(![collection.products containsObject:product] && !product.productDeleted.boolValue){
-                                            
-                                            //add collection
-                                            //[product addCollectionsObject:collection];
-                                            
-                                            //add product order
-                                            ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"productOrder" inManagedObjectContext:backgroundContext];
-                                            int number = (int)po[@"Order"];
-                                            productOrder.productOrder = [NSNumber numberWithInt:number];
-                                            productOrder.orderCollection = collection;
-                                            productOrder.orderProduct = product;
-                                        }
+                                    NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
+                                    NSError *error;
+                                    [request setPredicate:predicate];
+                                    NSArray *collectionProduct = [backgroundContext executeFetchRequest:request error:&error];
+                                    //need to make a product object from the productGuid
+                                    Product *product = [collectionProduct objectAtIndex:0];
+                                    
+                                    //add product order unless it's gonna be deleted
+                                    if(!product.productDeleted.boolValue){
+                                        ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
+                                        int number = (int)po[@"Order"];
+                                        productOrder.productOrder = [NSNumber numberWithInt:number];
+                                        productOrder.orderCollection = collection;
+                                        productOrder.orderProduct = product;
                                     }
+
                                 }
                             }
-                            
-                            
                         }
                     } else {
                         //insert the collection data
@@ -488,7 +484,7 @@ NSDate *globalCollectionSync;
      
 +(void)insertCollection:(Collection*)collection withData:(NSDictionary*)result withContext:(NSManagedObjectContext*)context withResults:(NSArray*)currentResults {
    
-    collection.collectionName = result[@"collectionName"];
+    collection.collectionName = result[@"Name"];
     collection.collectionGUID =result[@"Guid"];
     collection.collectionBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     collection.collectionNotes = result[@"Notes"];
@@ -523,22 +519,23 @@ NSDate *globalCollectionSync;
     //  insert products with order number to create Product Ordering part
     //NSError *error;
     NSArray *products = result[@"Products"];
-    if(products != nil) {
-        NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
+    if(products != (id)[NSNull null]) {
+        //if([products count] >0){
+        //NSManagedObjectContext *managedContext = [(AppDelegate *)[[UIApplication sharedApplication] delegate] managedObjectContext];
         for (NSDictionary *po in products) {
             
-            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"ProductGuid == %@",po[@"productGUID"]];
+            NSPredicate *predicate =[NSPredicate predicateWithFormat:@"productGUID == %@",po[@"ProductGuid"]];
             NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
             NSError *error;
             [request setPredicate:predicate];
-            NSArray *collectionProduct = [managedContext executeFetchRequest:request error:&error];
+            NSArray *collectionProduct = [context executeFetchRequest:request error:&error];
             //need to make a product object from the productGuid
             Product *product = [collectionProduct objectAtIndex:0];
             
             //add product order unless it's gonna be deleted
             if(!product.productDeleted.boolValue){
-                ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"Order" inManagedObjectContext:context];
-                int number = (int)po[@"productOrder"];
+                ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:context];
+                int number = (int)po[@"Order"];
                 productOrder.productOrder = [NSNumber numberWithInt:number];
                 productOrder.orderCollection = collection;
                 productOrder.orderProduct = product;
@@ -558,6 +555,7 @@ NSDate *globalCollectionSync;
                     
                 }
             }*/
+        //}
         }
     }
 }
@@ -783,7 +781,8 @@ NSDate *globalCollectionSync;
         
         if(response){
             NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData options:kNilOptions error:nil];
-            NSString *jsonString = [json objectForKey:@"PostItemResult"];
+            NSString *jsonString = [json objectForKey:@"PostCollectionResult"];
+            NSLog(@"response: %@", jsonString);
         }else{
             
         }
