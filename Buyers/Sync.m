@@ -310,7 +310,7 @@ NSDate *globalCollectionSync;
                              //update fields
                              product.productName = result[@"i_name"];
                              product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
-                             product.productCostPrice = [NSNumber numberWithDouble:0.0];//[NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
+                             product.productCostPrice = [NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
                              product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
                              product.productSupplierCode = result[@"main_sup_code"];
                              product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
@@ -332,14 +332,15 @@ NSDate *globalCollectionSync;
                                  product.productLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
                              }
                              
-                             NSError *error;
+                             /*NSError *error;
                              NSString *strURL = result[@"ImageURL"];
                              NSURL *url = [[NSURL alloc] initWithString:strURL];
-                             NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
-                             if(error) {
+                             NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];*/
+
+                             if([result[@"image"]  isEqual: @""]) {
                                  product.productImageData = defaultImageData;
                              } else {
-                                 product.productImageData = imageData;
+                                 product.productImageData = result[@"image"];
                              }
                              
                          }
@@ -567,7 +568,7 @@ NSDate *globalCollectionSync;
     product.productCode =result[@"i_Code"];
     product.productName = result[@"i_name"];
     product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
-    product.productCostPrice = [NSNumber numberWithDouble:0.0];//[NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
+    product.productCostPrice = [NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
     product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     product.productSupplierCode = result[@"main_sup_code"];
     product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
@@ -603,14 +604,14 @@ NSDate *globalCollectionSync;
     }
     UIImage *defaultImage = [UIImage imageNamed:@"shoeOutlineNoImage.png"];
     NSData *defaultImageData = [NSData dataWithData:UIImagePNGRepresentation(defaultImage)];
-    NSError *error;
+    /*NSError *error;
     NSString *strURL = result[@"ImageURL"];
     NSURL *url = [[NSURL alloc] initWithString:strURL];
-    NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];
-    if(error) {
+    NSData *imageData = [NSData dataWithContentsOfURL:url options:NSDataReadingUncached error:&error];*/
+    if([result[@"image"]  isEqual: @""]) {
         product.productImageData = defaultImageData;
     } else {
-        product.productImageData = imageData;
+        product.productImageData = result[@"image"];
     }
     
 }
