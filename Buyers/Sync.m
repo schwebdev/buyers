@@ -180,6 +180,9 @@ NSDate *globalCollectionSync;
     if(![type isEqualToString:@"Product"] && ![type isEqualToString:@"Collection"]) {
         for (NSManagedObject *currentResult in currentResults) {
             [managedContext deleteObject:currentResult];
+            if(![managedContext save:&error]){
+                NSLog(@"Could not process deletion of type: %@. Error: %@",type, [error localizedDescription]);
+            }
         }
     }
     
