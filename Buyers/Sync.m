@@ -343,9 +343,11 @@ NSDate *globalCollectionSync;
                     } else {
                         if (!deleteProduct) {
                         //insert the product
-                        Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
-                         [Sync insertProduct:product withData:result];
+                        if(!deleteProduct) {
+                            Product *product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:backgroundContext];
+                            [Sync insertProduct:product withData:result];
                         }
+                        
                     }
                 
                 }
@@ -442,8 +444,9 @@ NSDate *globalCollectionSync;
                     } else {
                         if(!deleteCollection) {
                         //insert the collection data
-                        Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
-                        [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
+                        if(!deleteCollection) {
+                            Collection *collection = [NSEntityDescription insertNewObjectForEntityForName:@"Collection" inManagedObjectContext:backgroundContext];
+                            [Sync insertCollection:collection withData:result withContext:backgroundContext withResults:currentResults];
                         }
 
                     }
@@ -453,9 +456,9 @@ NSDate *globalCollectionSync;
            
             
         }
-        
       
    }];
+            
     
     NSError *saveError;
     if(![backgroundContext save:&saveError]) {
