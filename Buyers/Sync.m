@@ -310,7 +310,7 @@ NSDate *globalCollectionSync;
                              //update fields
                              product.productName = result[@"i_name"];
                              product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
-                             product.productCostPrice = [NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
+                             product.productCostPrice = [NSNumber numberWithDouble:[result[@"Cost"] doubleValue]];
                              product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
                              product.productSupplierCode = result[@"main_sup_code"];
                              product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
@@ -428,7 +428,6 @@ NSDate *globalCollectionSync;
                                      NSError *error;
                                      [request setPredicate:predicate];
                                      NSArray *collectionProduct = [managedContext executeFetchRequest:request error:&error];
-                                     
                                      
                                      //need to make a product object from the productGuid
                                      Product *product = [collectionProduct objectAtIndex:0];
@@ -571,7 +570,7 @@ NSDate *globalCollectionSync;
     product.productCode =result[@"i_Code"];
     product.productName = result[@"i_name"];
     product.productPrice = [NSNumber numberWithDouble:[result[@"sellin"] doubleValue]];
-    product.productCostPrice = [NSNumber numberWithDouble:[result[@"cost"] doubleValue]];
+    product.productCostPrice = [NSNumber numberWithDouble:[result[@"Cost"] doubleValue]];
     product.productBrandRef = [NSNumber numberWithInt:[result[@"BrandRef"] intValue]];
     product.productSupplierCode = result[@"main_sup_code"];
     product.productCategoryRef = [NSNumber numberWithInt:[result[@"c2_ref"] intValue]];
