@@ -427,13 +427,15 @@ NSDate *globalCollectionSync;
                                      NSFetchRequest *request = [[NSFetchRequest alloc] initWithEntityName:@"Product"];
                                      NSError *error;
                                      [request setPredicate:predicate];
-                                     NSArray *collectionProduct = [backgroundContext executeFetchRequest:request error:&error];
+                                     NSArray *collectionProduct = [managedContext executeFetchRequest:request error:&error];
+                                     
+                                     
                                      //need to make a product object from the productGuid
                                      Product *product = [collectionProduct objectAtIndex:0];
                                      
                                      //add product order unless it's gonna be deleted
                                      if(!product.productDeleted.boolValue){
-                                         ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:backgroundContext];
+                                         ProductOrder *productOrder = [NSEntityDescription insertNewObjectForEntityForName:@"ProductOrder" inManagedObjectContext:managedContext];
                                          int number = (int)po[@"Order"];
                                          productOrder.productOrder = [NSNumber numberWithInt:number];
                                          productOrder.orderCollection = collection;
@@ -519,6 +521,7 @@ NSDate *globalCollectionSync;
     } else {
         collection.collectionLastUpdateDate = [Sync dateWithJSONString:lastUpdated];
     }
+    
     
     //  insert products with order number to create Product Ordering part
     //NSError *error;
