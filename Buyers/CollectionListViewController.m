@@ -566,6 +566,15 @@ static const float kPageHeight = 576.0;
         case NSFetchedResultsChangeDelete:
             change[@(type)] = @(sectionIndex);
             break;
+        case NSFetchedResultsChangeUpdate:
+            change[@(type)] = @(sectionIndex);
+            break;
+        case NSFetchedResultsChangeMove:
+        default:
+        break;
+
+
+
     }
     
     [_sectionChanges addObject:change];
@@ -618,6 +627,9 @@ static const float kPageHeight = 576.0;
                         case NSFetchedResultsChangeUpdate:
                             [_scrollView reloadSections:[NSIndexSet indexSetWithIndex:[obj unsignedIntegerValue]]];
                            break;
+                        case NSFetchedResultsChangeMove:
+                        default:
+                        break;
                     }
                 }];
             }

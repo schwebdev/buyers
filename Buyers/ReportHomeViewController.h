@@ -18,7 +18,7 @@
 @property (weak, nonatomic) IBOutlet UILabel *FilterLabel;
 
 @property (weak, nonatomic) IBOutlet UIView *ReportFilterView;
-- (IBAction)reportFilterChange:(id)sender;
+/*- (IBAction)reportFilterChange:(id)sender;*/
 
 
 @end
